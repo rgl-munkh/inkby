@@ -64,7 +64,7 @@ function BackButton({ onClick }: { onClick: () => void }) {
     <button
       onClick={onClick}
       className="flex items-center justify-center w-8 h-8 rounded-full transition-colors hover:opacity-70 cursor-pointer"
-      style={{ background: "#e8e4dc", color: "#6b6b6b" }}
+      style={{ background: "var(--inkby-surface-neutral)", color: "var(--inkby-fg-secondary)" }}
       aria-label="Back"
     >
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -92,9 +92,9 @@ function PillSelect({
           onClick={() => onChange(opt)}
           className="rounded-full px-3 py-1.5 text-xs font-medium border transition-all cursor-pointer"
           style={{
-            background: value === opt ? "#1a1a1a" : "transparent",
-            color: value === opt ? "#fff" : "#6b6b6b",
-            borderColor: value === opt ? "#1a1a1a" : "#d1cdc6",
+            background: value === opt ? "var(--inkby-fg)" : "transparent",
+            color: value === opt ? "var(--inkby-surface)" : "var(--inkby-fg-secondary)",
+            borderColor: value === opt ? "var(--inkby-fg)" : "var(--inkby-border-medium)",
           }}
         >
           {opt}
@@ -118,13 +118,13 @@ function QuestionCard({
   children: React.ReactNode;
 }) {
   return (
-    <div className="rounded-2xl p-5" style={{ background: "#fff" }}>
-      <p className="text-[10px] font-semibold tracking-widest uppercase mb-2" style={{ color: "#b0aca6" }}>
+    <div className="rounded-2xl p-5 bg-inkby-surface">
+      <p className="text-[10px] font-semibold tracking-widest uppercase mb-2 text-inkby-fg-placeholder">
         Question {index}/{total}
       </p>
-      <h3 className="text-sm font-semibold mb-1" style={{ color: "#1a1a1a" }}>{title}</h3>
+      <h3 className="text-sm font-semibold mb-1 text-inkby-fg">{title}</h3>
       {description && (
-        <p className="text-xs mb-3" style={{ color: "#9e9a94" }}>{description}</p>
+        <p className="text-xs mb-3 text-inkby-fg-muted">{description}</p>
       )}
       {children}
     </div>
@@ -142,20 +142,17 @@ export default function ArtistProfilePage() {
   const [loadingArtist, setLoadingArtist] = useState(true);
   const [notFound, setNotFound] = useState(false);
 
-  // Step 1
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
 
-  // Step 2
   const [idea, setIdea] = useState("");
   const [photoFiles, setPhotoFiles] = useState<File[]>([]);
   const [photoUrls, setPhotoUrls] = useState<string[]>([]);
   const [size, setSize] = useState("");
   const [placement, setPlacement] = useState("");
 
-  // Submission
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
 
@@ -261,7 +258,7 @@ export default function ArtistProfilePage() {
 
   if (loadingArtist) {
     return (
-      <main className="min-h-screen flex items-center justify-center" style={{ background: "#f0ece6" }}>
+      <main className="min-h-screen flex items-center justify-center bg-inkby-profile-canvas">
         <Spinner />
       </main>
     );
@@ -269,15 +266,15 @@ export default function ArtistProfilePage() {
 
   if (notFound || !artist) {
     return (
-      <main className="min-h-screen flex flex-col items-center justify-center gap-4" style={{ background: "#f0ece6" }}>
+      <main className="min-h-screen flex flex-col items-center justify-center gap-4 bg-inkby-profile-canvas">
         <SmileyIcon />
-        <p className="text-sm font-medium" style={{ color: "#6b6b6b" }}>Artist not found</p>
+        <p className="text-sm font-medium text-inkby-fg-secondary">Artist not found</p>
       </main>
     );
   }
 
   return (
-    <main className="min-h-screen flex flex-col" style={{ background: "#f0ece6" }}>
+    <main className="min-h-screen flex flex-col bg-inkby-profile-canvas">
       {/* ── Step 0: Profile landing ── */}
       {step === 0 && (
         <>
@@ -286,7 +283,7 @@ export default function ArtistProfilePage() {
             <div className="flex items-center gap-1">
               <button
                 className="flex items-center gap-1 rounded-full border px-3 py-1.5 text-xs font-medium cursor-pointer transition-opacity hover:opacity-70"
-                style={{ borderColor: "#d1cdc6", color: "#1a1a1a", background: "transparent" }}
+                style={{ borderColor: "var(--inkby-border-medium)", color: "var(--inkby-fg)", background: "transparent" }}
               >
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                   <path d="M15 18l-6-6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -295,7 +292,7 @@ export default function ArtistProfilePage() {
               </button>
               <button
                 className="flex items-center gap-1 rounded-full border px-3 py-1.5 text-xs font-medium cursor-pointer transition-opacity hover:opacity-70"
-                style={{ borderColor: "transparent", color: "#9e9a94", background: "transparent" }}
+                style={{ borderColor: "transparent", color: "var(--inkby-fg-muted)", background: "transparent" }}
               >
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                   <path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -329,16 +326,16 @@ export default function ArtistProfilePage() {
             ) : (
               <SmileyIcon size={96} />
             )}
-            <p className="text-2xl font-bold tracking-tight" style={{ color: "#1a1a1a" }}>
+            <p className="text-2xl font-bold tracking-tight text-inkby-fg">
               @{artist.slug}
             </p>
             {artist.bio && (
-              <p className="text-sm text-center max-w-xs" style={{ color: "#6b6b6b" }}>{artist.bio}</p>
+              <p className="text-sm text-center max-w-xs text-inkby-fg-secondary">{artist.bio}</p>
             )}
             <Button
               onClick={() => setStep(1)}
               className="w-full max-w-xs rounded-full h-12 text-sm font-semibold cursor-pointer mt-2"
-              style={{ background: "#1a1a1a", color: "#fff" }}
+              style={{ background: "var(--inkby-fg)", color: "var(--inkby-surface)" }}
             >
               Book a tattoo
             </Button>
@@ -347,12 +344,12 @@ export default function ArtistProfilePage() {
             {flashDeals.length > 0 && (
               <div className="w-full max-w-xs mt-2">
                 <div className="flex items-center gap-2 mb-3">
-                  <span className="text-[10px] font-bold tracking-widest uppercase" style={{ color: "#9e9a94" }}>
+                  <span className="text-[10px] font-bold tracking-widest uppercase text-inkby-fg-muted">
                     Flash
                   </span>
                   <span
                     className="text-[10px] font-semibold rounded-full px-1.5 py-0.5 leading-none"
-                    style={{ background: "#e8e4dc", color: "#6b6b6b" }}
+                    style={{ background: "var(--inkby-surface-neutral)", color: "var(--inkby-fg-secondary)" }}
                   >
                     {flashDeals.length}
                   </span>
@@ -370,24 +367,23 @@ export default function ArtistProfilePage() {
                           setIdea(`I'm interested in your flash: ${deal.title ?? "Untitled"}`);
                           setStep(1);
                         }}
-                        className="flex flex-col rounded-2xl overflow-hidden text-left transition-opacity hover:opacity-80 cursor-pointer"
-                        style={{ background: "#fff" }}
+                        className="flex flex-col rounded-2xl overflow-hidden text-left transition-opacity hover:opacity-80 cursor-pointer bg-inkby-surface"
                       >
-                        <div className="relative aspect-square w-full" style={{ background: "#f0ede8" }}>
+                        <div className="relative aspect-square w-full bg-inkby-surface-soft">
                           <Image src={deal.photoUrl} alt={deal.title ?? "Flash"} fill className="object-cover" unoptimized />
                         </div>
                         <div className="px-2.5 py-2 flex flex-col gap-0.5">
-                          <p className="text-xs font-semibold truncate" style={{ color: "#1a1a1a" }}>
+                          <p className="text-xs font-semibold truncate text-inkby-fg">
                             {deal.title ?? "Flash"}
                           </p>
-                          <p className="text-[10px]" style={{ color: "#9e9a94" }}>
+                          <p className="text-[10px] text-inkby-fg-muted">
                             {deal.isRepeatable ? "Repeatable" : "Non-repeatable"}
                           </p>
                           {minAmt !== null && (
-                            <p className="text-xs font-semibold" style={{ color: "#1a1a1a" }}>
+                            <p className="text-xs font-semibold text-inkby-fg">
                               ₮{minAmt.toLocaleString("en-US")}
                               {deal.sizes.length > 1 && (
-                                <span className="text-[10px] font-normal" style={{ color: "#9e9a94" }}> from</span>
+                                <span className="text-[10px] font-normal text-inkby-fg-muted"> from</span>
                               )}
                             </p>
                           )}
@@ -407,9 +403,9 @@ export default function ArtistProfilePage() {
                 <rect width="36" height="36" rx="8" fill="#1a1a1a" />
                 <path d="M18 7C18 7 11 15.5 11 21a7 7 0 0 0 14 0c0-5.5-7-14-7-14Z" fill="#f5e642" />
               </svg>
-              <span className="text-xs font-bold tracking-widest uppercase" style={{ color: "#1a1a1a" }}>INKBY</span>
+              <span className="text-xs font-bold tracking-widest uppercase text-inkby-fg">INKBY</span>
             </div>
-            <p className="text-[10px] text-right" style={{ color: "#9e9a94" }}>
+            <p className="text-[10px] text-right text-inkby-fg-muted">
               Painlessly manage your<br />requests, books, and deposits
             </p>
           </div>
@@ -425,7 +421,7 @@ export default function ArtistProfilePage() {
 
           <div className="flex-1 flex flex-col justify-center gap-6 max-w-sm mx-auto w-full">
             <div className="text-center">
-              <h1 className="text-2xl font-bold leading-snug" style={{ color: "#1a1a1a" }}>
+              <h1 className="text-2xl font-bold leading-snug text-inkby-fg">
                 Tell us a bit<br />about yourself
               </h1>
             </div>
@@ -434,7 +430,7 @@ export default function ArtistProfilePage() {
               {/* Name row */}
               <div className="flex gap-2">
                 <div className="flex-1 flex flex-col gap-1.5">
-                  <Label htmlFor="firstName" className="text-[10px] tracking-widest uppercase" style={{ color: "#9e9a94" }}>
+                  <Label htmlFor="firstName" className="text-[10px] tracking-widest uppercase text-inkby-fg-muted">
                     First Name
                   </Label>
                   <Input
@@ -443,11 +439,11 @@ export default function ArtistProfilePage() {
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
                     className="rounded-xl h-12 text-sm"
-                    style={{ background: "#fff", borderColor: "#e2ddd6" }}
+                    style={{ background: "var(--inkby-surface)", borderColor: "var(--inkby-border)" }}
                   />
                 </div>
                 <div className="flex-1 flex flex-col gap-1.5">
-                  <Label htmlFor="lastName" className="text-[10px] tracking-widest uppercase" style={{ color: "#9e9a94" }}>
+                  <Label htmlFor="lastName" className="text-[10px] tracking-widest uppercase text-inkby-fg-muted">
                     Last Name
                   </Label>
                   <Input
@@ -456,23 +452,23 @@ export default function ArtistProfilePage() {
                     value={lastName}
                     onChange={(e) => setLastName(e.target.value)}
                     className="rounded-xl h-12 text-sm"
-                    style={{ background: "#fff", borderColor: "#e2ddd6" }}
+                    style={{ background: "var(--inkby-surface)", borderColor: "var(--inkby-border)" }}
                   />
                 </div>
               </div>
 
               {/* Phone */}
               <div className="flex flex-col gap-1.5">
-                <Label htmlFor="phone" className="text-[10px] tracking-widest uppercase" style={{ color: "#9e9a94" }}>
+                <Label htmlFor="phone" className="text-[10px] tracking-widest uppercase text-inkby-fg-muted">
                   Phone Number
                 </Label>
                 <div
                   className="flex items-center rounded-xl overflow-hidden"
-                  style={{ background: "#fff", border: "1px solid #e2ddd6" }}
+                  style={{ background: "var(--inkby-surface)", border: "1px solid var(--inkby-border)" }}
                 >
                   <div className="flex items-center gap-1.5 pl-3 pr-2 shrink-0 select-none">
                     <span className="text-base">🇲🇳</span>
-                    <span className="text-sm" style={{ color: "#6b6b6b" }}>+976</span>
+                    <span className="text-sm text-inkby-fg-secondary">+976</span>
                     <svg width="10" height="10" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                       <path d="M6 9l6 6 6-6" stroke="#b0aca6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
@@ -483,15 +479,14 @@ export default function ArtistProfilePage() {
                     placeholder="8812 3456"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    className="flex-1 border-0 rounded-none bg-transparent h-12 px-2 focus-visible:ring-0 focus-visible:border-0 text-sm"
-                    style={{ color: "#1a1a1a" }}
+                    className="flex-1 border-0 rounded-none bg-transparent h-12 px-2 focus-visible:ring-0 focus-visible:border-0 text-sm text-inkby-fg"
                   />
                 </div>
               </div>
 
               {/* Email */}
               <div className="flex flex-col gap-1.5">
-                <Label htmlFor="email" className="text-[10px] tracking-widest uppercase" style={{ color: "#9e9a94" }}>
+                <Label htmlFor="email" className="text-[10px] tracking-widest uppercase text-inkby-fg-muted">
                   Email Address
                 </Label>
                 <Input
@@ -500,15 +495,15 @@ export default function ArtistProfilePage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="rounded-xl h-12 text-sm"
-                  style={{ background: "#fff", borderColor: "#e2ddd6" }}
+                  style={{ background: "var(--inkby-surface)", borderColor: "var(--inkby-border)" }}
                 />
               </div>
             </div>
 
-            {error && <p className="text-xs text-center" style={{ color: "#d94f4f" }}>{error}</p>}
+            {error && <p className="text-xs text-center text-inkby-error">{error}</p>}
 
             <div className="flex flex-col gap-3">
-              <p className="text-[10px] text-center leading-relaxed" style={{ color: "#9e9a94" }}>
+              <p className="text-[10px] text-center leading-relaxed text-inkby-fg-muted">
                 By providing your phone number, you agree to receive notifications from @{artist.slug}.{" "}
                 You can opt out at any time.
               </p>
@@ -520,7 +515,7 @@ export default function ArtistProfilePage() {
                   }
                 }}
                 className="w-full rounded-full h-12 text-xs font-semibold tracking-widest uppercase cursor-pointer"
-                style={{ background: "#1a1a1a", color: "#fff" }}
+                style={{ background: "var(--inkby-fg)", color: "var(--inkby-surface)" }}
               >
                 CONTINUE
               </Button>
@@ -545,7 +540,7 @@ export default function ArtistProfilePage() {
             ) : (
               <SmileyIcon size={48} />
             )}
-            <p className="text-sm font-semibold" style={{ color: "#1a1a1a" }}>Book with @{artist.slug}</p>
+            <p className="text-sm font-semibold text-inkby-fg">Book with @{artist.slug}</p>
           </div>
 
           <div className="flex flex-col gap-3 max-w-sm mx-auto w-full pb-8">
@@ -562,7 +557,7 @@ export default function ArtistProfilePage() {
                 onChange={(e) => setIdea(e.target.value)}
                 rows={4}
                 className="resize-none rounded-xl text-sm"
-                style={{ background: "#f5f2ec", borderColor: "#e2ddd6", color: "#1a1a1a" }}
+                style={{ background: "var(--inkby-surface-warm)", borderColor: "var(--inkby-border)", color: "var(--inkby-fg)" }}
               />
             </QuestionCard>
 
@@ -610,7 +605,7 @@ export default function ArtistProfilePage() {
                 variant="outline"
                 onClick={() => fileInputRef.current?.click()}
                 className="w-full rounded-xl h-10 text-xs border-dashed cursor-pointer"
-                style={{ borderColor: "#d1cdc6", color: "#9e9a94" }}
+                style={{ borderColor: "var(--inkby-border-medium)", color: "var(--inkby-fg-muted)" }}
               >
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                   <path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
@@ -638,13 +633,13 @@ export default function ArtistProfilePage() {
               <PillSelect options={PLACEMENTS} value={placement} onChange={setPlacement} />
             </QuestionCard>
 
-            {error && <p className="text-xs text-center" style={{ color: "#d94f4f" }}>{error}</p>}
+            {error && <p className="text-xs text-center text-inkby-error">{error}</p>}
 
             <Button
               onClick={handleSubmit}
               disabled={submitting}
               className="w-full rounded-full h-12 text-xs font-semibold tracking-widest uppercase flex items-center justify-center gap-2 cursor-pointer"
-              style={{ background: "#1a1a1a", color: "#fff" }}
+              style={{ background: "var(--inkby-fg)", color: "var(--inkby-surface)" }}
             >
               {submitting && <Spinner />}
               SEND REQUEST
@@ -659,15 +654,14 @@ export default function ArtistProfilePage() {
           <SmileyIcon size={64} />
 
           <div className="text-center">
-            <h1 className="text-2xl font-bold leading-snug" style={{ color: "#1a1a1a" }}>
+            <h1 className="text-2xl font-bold leading-snug text-inkby-fg">
               Your request<br />has been sent
             </h1>
           </div>
 
           {/* Summary card */}
           <div
-            className="w-full max-w-xs rounded-2xl overflow-hidden flex items-center justify-center gap-0 px-2"
-            style={{ background: "#fff" }}
+            className="w-full max-w-xs rounded-2xl overflow-hidden flex items-center justify-center gap-0 px-2 bg-inkby-surface"
           >
             {photoUrls.length > 0 && (
               <div className="w-20 h-20 flex justify-center items-center relative shrink-0 overflow-hidden rounded-xl">
@@ -676,21 +670,27 @@ export default function ArtistProfilePage() {
             )}
             <div className="flex flex-col gap-1.5 p-4 justify-center">
               <div className="flex items-center gap-1.5 flex-wrap">
-                <span className="text-[10px] font-bold rounded-full px-2 py-0.5" style={{ background: "#f4a574", color: "#fff" }}>
+                <span
+                  className="text-[10px] font-bold rounded-full px-2 py-0.5"
+                  style={{ background: "var(--inkby-coral)", color: "var(--inkby-surface)" }}
+                >
                   {size}
                 </span>
-                <span className="text-[10px] font-medium rounded-full px-2 py-0.5" style={{ background: "#e8e4dc", color: "#6b6b6b" }}>
+                <span
+                  className="text-[10px] font-medium rounded-full px-2 py-0.5"
+                  style={{ background: "var(--inkby-surface-neutral)", color: "var(--inkby-fg-secondary)" }}
+                >
                   {placement}
                 </span>
               </div>
-              <p className="text-sm font-semibold" style={{ color: "#1a1a1a" }}>{displayName}</p>
+              <p className="text-sm font-semibold text-inkby-fg">{displayName}</p>
               {idea && (
-                <p className="text-xs line-clamp-2" style={{ color: "#9e9a94" }}>{idea}</p>
+                <p className="text-xs line-clamp-2 text-inkby-fg-muted">{idea}</p>
               )}
             </div>
           </div>
 
-          <p className="text-xs text-center max-w-xs leading-relaxed" style={{ color: "#9e9a94" }}>
+          <p className="text-xs text-center max-w-xs leading-relaxed text-inkby-fg-muted">
             @{artist.slug} will review your submission,<br />
             and request a deposit if accepted.
           </p>
@@ -703,7 +703,7 @@ export default function ArtistProfilePage() {
               setSize(""); setPlacement(""); setError("");
             }}
             className="w-full max-w-xs rounded-full h-12 text-xs font-semibold tracking-widest uppercase cursor-pointer"
-            style={{ background: "#1a1a1a", color: "#fff" }}
+            style={{ background: "var(--inkby-fg)", color: "var(--inkby-surface)" }}
           >
             DONE
           </Button>
@@ -711,8 +711,7 @@ export default function ArtistProfilePage() {
           {bookingRequestId && (
             <a
               href={`/booking/${bookingRequestId}`}
-              className="text-xs font-medium underline underline-offset-2"
-              style={{ color: "#9e9a94" }}
+              className="text-xs font-medium underline underline-offset-2 text-inkby-fg-muted"
             >
               View your booking
             </a>

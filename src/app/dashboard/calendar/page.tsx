@@ -54,6 +54,8 @@ const MONTHS = [
   "July", "August", "September", "October", "November", "December",
 ];
 
+void clonePageVaryPathWithNewSearchParams;
+
 function formatTime(date: Date): string {
   let hours = date.getHours();
   const mins = date.getMinutes();
@@ -78,7 +80,7 @@ function CalendarSkeleton() {
     <div className="px-4 flex flex-col gap-3 pt-2">
       <Skeleton className="h-4 w-24 mb-1" />
       {[1, 2, 3].map((i) => (
-        <div key={i} className="flex gap-3 rounded-2xl p-4" style={{ background: "#fff" }}>
+        <div key={i} className="flex gap-3 rounded-2xl p-4 bg-inkby-surface">
           <div className="flex flex-col items-center gap-1 w-8 shrink-0">
             <Skeleton className="h-3 w-7" />
             <Skeleton className="h-5 w-6" />
@@ -104,25 +106,27 @@ function EventCard({ ev }: { ev: CalendarEvent }) {
       href={`/dashboard/requests/${ev.bookingRequestId}`}
       className="flex items-center gap-3 rounded-2xl px-4 py-3 transition-opacity hover:opacity-80 cursor-pointer"
       style={{
-        background: "#fff",
-        borderLeft: isConfirmed ? "3px solid #86efac" : "3px solid #e2ddd6",
+        background: "var(--inkby-surface)",
+        borderLeft: isConfirmed
+          ? "3px solid var(--inkby-success-border-light)"
+          : "3px solid var(--inkby-border)",
       }}
     >
       <div className="flex flex-col items-center w-8 shrink-0">
-        <span className="text-[9px] font-bold tracking-widest" style={{ color: "#9e9a94" }}>
+        <span className="text-[9px] font-bold tracking-widest text-inkby-fg-muted">
           {weekday}
         </span>
-        <span className="text-base font-bold leading-tight" style={{ color: "#1a1a1a" }}>
+        <span className="text-base font-bold leading-tight text-inkby-fg">
           {day}
         </span>
       </div>
 
       <div className="flex-1 min-w-0">
-        <p className="text-xs font-semibold truncate" style={{ color: "#1a1a1a" }}>
+        <p className="text-xs font-semibold truncate text-inkby-fg">
           {ev.clientName}
-          <span className="font-normal ml-1" style={{ color: "#9e9a94" }}>({time})</span>
+          <span className="font-normal ml-1 text-inkby-fg-muted">({time})</span>
         </p>
-        <p className="text-[11px] mt-0.5 truncate" style={{ color: "#9e9a94" }}>
+        <p className="text-[11px] mt-0.5 truncate text-inkby-fg-muted">
           {ev.tattooSize}{ev.placement ? ` / ${ev.placement}` : ""}
         </p>
       </div>
@@ -131,8 +135,8 @@ function EventCard({ ev }: { ev: CalendarEvent }) {
         className="shrink-0 text-[10px] font-semibold px-2 py-0.5 rounded-full"
         style={
           isConfirmed
-            ? { border: "1px solid #86efac", color: "#16a34a", background: "#f0fdf4" }
-            : { border: "1px solid #e2ddd6", color: "#9e9a94", background: "#f5f2ed" }
+            ? { border: "1px solid var(--inkby-success-border-light)", color: "var(--inkby-success-fg-mid)", background: "var(--inkby-success-bg)" }
+            : { border: "1px solid var(--inkby-border)", color: "var(--inkby-fg-muted)", background: "var(--inkby-surface-warm)" }
         }
       >
         {isConfirmed ? "Confirmed" : "Pending"}
@@ -197,10 +201,10 @@ export default function CalendarPage() {
   const groups = groupByMonth(events);
 
   return (
-    <div className="w-full max-w-xl mx-auto flex flex-col min-h-full pb-6" style={{ background: "#EBE7DF" }}>
+    <div className="w-full max-w-xl mx-auto flex flex-col min-h-full pb-6 bg-inkby-canvas">
       <header className="flex items-center justify-between px-4 pt-4 pb-3">
         <div className="flex items-center gap-1.5">
-          <h1 className="text-xl font-bold" style={{ color: "#1a1a1a" }}>Schedule</h1>
+          <h1 className="text-xl font-bold text-inkby-fg">Schedule</h1>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <path d="M6 9l6 6 6-6" stroke="#9e9a94" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
@@ -208,7 +212,7 @@ export default function CalendarPage() {
         {!loading && events.length > 0 && (
           <span
             className="text-xs font-semibold rounded-full px-2 py-0.5"
-            style={{ background: "#e8e4dc", color: "#6b6b6b" }}
+            style={{ background: "var(--inkby-surface-neutral)", color: "var(--inkby-fg-secondary)" }}
           >
             {events.length}
           </span>
@@ -221,17 +225,17 @@ export default function CalendarPage() {
         <div className="flex flex-col items-center justify-center px-8 py-20 gap-4 text-center">
           <div
             className="w-20 h-20 rounded-2xl flex items-center justify-center"
-            style={{ background: "#e8e4dc", color: "#9e9a94" }}
+            style={{ background: "var(--inkby-surface-neutral)", color: "var(--inkby-fg-muted)" }}
           >
             <svg width="40" height="40" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="1.5" />
               <path d="M16 2v4M8 2v4M3 10h18" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
             </svg>
           </div>
-          <p className="text-sm font-semibold" style={{ color: "#1a1a1a" }}>
+          <p className="text-sm font-semibold text-inkby-fg">
             No upcoming appointments
           </p>
-          <p className="text-xs max-w-xs leading-relaxed" style={{ color: "#9e9a94" }}>
+          <p className="text-xs max-w-xs leading-relaxed text-inkby-fg-muted">
             Confirmed and pending appointments will appear here.
           </p>
         </div>
@@ -240,8 +244,8 @@ export default function CalendarPage() {
           {[...groups.entries()].map(([monthLabel, monthEvents]) => (
             <section key={monthLabel}>
               <div className="mb-2">
-                <p className="text-sm font-bold" style={{ color: "#1a1a1a" }}>{monthLabel}</p>
-                <p className="text-[11px]" style={{ color: "#9e9a94" }}>
+                <p className="text-sm font-bold text-inkby-fg">{monthLabel}</p>
+                <p className="text-[11px] text-inkby-fg-muted">
                   {monthEvents.length} appointment{monthEvents.length !== 1 ? "s" : ""}
                 </p>
               </div>

@@ -181,7 +181,7 @@ export default function RegisterPage() {
     }
 
     return (
-        <main className="min-h-screen flex" style={{ background: "#EBE7DF" }}>
+        <main className="min-h-screen flex bg-inkby-canvas">
             {/* Left: photo collage */}
             <div className="hidden lg:grid lg:w-1/2 grid-cols-2 grid-rows-2 gap-1 p-1">
                 <div className="row-span-2 relative overflow-hidden rounded-lg">
@@ -216,18 +216,15 @@ export default function RegisterPage() {
             {/* Right: registration form */}
             <div className="flex flex-1 items-center justify-center px-6 py-12">
                 <div className="w-full max-w-sm flex flex-col items-center gap-6">
-                    {/* Logo */}
                     <LogoIcon />
 
-                    {/* Heading */}
                     <div className="text-center">
                         <h1
-                            className="text-3xl font-bold tracking-tight leading-tight"
-                            style={{ color: "#1a1a1a" }}
+                            className="text-3xl font-bold tracking-tight leading-tight text-inkby-fg"
                         >
                             Create an account
                         </h1>
-                        <p className="mt-2 text-sm" style={{ color: "#6b6b6b" }}>
+                        <p className="mt-2 text-sm text-inkby-fg-secondary">
                             Welcome! Glad you&apos;re here.
                         </p>
                     </div>
@@ -237,32 +234,29 @@ export default function RegisterPage() {
                         onClick={handleGoogleSignIn}
                         disabled={googleLoading}
                         className="h-auto p-0 flex items-center justify-center gap-2 font-normal text-white cursor-pointer w-full py-4 px-6 rounded-full"
-                        style={{ background: "#202124" }}
+                        style={{ background: "var(--inkby-google-btn)" }}
                     >
                         <GoogleIcon />
                         {googleLoading ? "Redirecting..." : "Continue with Google"}
                     </Button>
 
-                    <hr className="w-full border-t border-[#D1CDC6]" />
+                    <hr className="w-full border-t border-inkby-border-medium" />
 
-                    {/* Form */}
                     <form onSubmit={handleSubmit} className="w-full flex flex-col gap-3">
-                        {/* Email */}
                         <Input
                             type="email"
                             placeholder="Email address"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
-                            className="rounded-xl py-8 px-4 text-sm placeholder:text-[#b0aca6] focus-visible:ring-1 focus-visible:ring-[#b0aca6]"
+                            className="rounded-xl py-8 px-4 text-sm placeholder:text-inkby-fg-placeholder focus-visible:ring-1 focus-visible:ring-inkby-fg-placeholder"
                             style={{
-                                background: "#fff",
-                                border: "1px solid #D1CDC6",
-                                color: "#1a1a1a",
+                                background: "var(--inkby-surface)",
+                                border: "1px solid var(--inkby-border-medium)",
+                                color: "var(--inkby-fg)",
                             }}
                         />
 
-                        {/* Password with eye toggle */}
                         <div className="relative">
                             <Input
                                 type={showPassword ? "text" : "password"}
@@ -271,11 +265,11 @@ export default function RegisterPage() {
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
                                 minLength={6}
-                                className="rounded-xl py-8 pl-4 pr-11 text-sm placeholder:text-[#b0aca6] focus-visible:ring-1 focus-visible:ring-[#b0aca6]"
+                                className="rounded-xl py-8 pl-4 pr-11 text-sm placeholder:text-inkby-fg-placeholder focus-visible:ring-1 focus-visible:ring-inkby-fg-placeholder"
                                 style={{
-                                    background: "#fff",
-                                    border: "1px solid #D1CDC6",
-                                    color: "#1a1a1a",
+                                    background: "var(--inkby-surface)",
+                                    border: "1px solid var(--inkby-border-medium)",
+                                    color: "var(--inkby-fg)",
                                 }}
                             />
                             <button
@@ -289,7 +283,6 @@ export default function RegisterPage() {
                             </button>
                         </div>
 
-                        {/* Confirm password with eye toggle */}
                         <div className="relative">
                             <Input
                                 type={showConfirmPassword ? "text" : "password"}
@@ -298,11 +291,11 @@ export default function RegisterPage() {
                                 onChange={(e) => setConfirmPassword(e.target.value)}
                                 required
                                 minLength={6}
-                                className="rounded-xl py-8 pl-4 pr-11 text-sm placeholder:text-[#b0aca6] focus-visible:ring-1 focus-visible:ring-[#b0aca6]"
+                                className="rounded-xl py-8 pl-4 pr-11 text-sm placeholder:text-inkby-fg-placeholder focus-visible:ring-1 focus-visible:ring-inkby-fg-placeholder"
                                 style={{
-                                    background: "#fff",
-                                    border: "1px solid #D1CDC6",
-                                    color: "#1a1a1a",
+                                    background: "var(--inkby-surface)",
+                                    border: "1px solid var(--inkby-border-medium)",
+                                    color: "var(--inkby-fg)",
                                 }}
                             />
                             <button
@@ -316,19 +309,17 @@ export default function RegisterPage() {
                             </button>
                         </div>
 
-                        {/* Error */}
                         {error && (
-                            <p className="text-xs text-center" style={{ color: "#d94f4f" }}>
+                            <p className="text-xs text-center text-inkby-error">
                                 {error}
                             </p>
                         )}
 
-                        {/* Submit */}
                         <Button
                             type="submit"
                             disabled={loading}
                             className="w-full flex items-center justify-center gap-2 rounded-full py-6 px-4 text-xs font-semibold tracking-widest uppercase mt-1 cursor-pointer"
-                            style={{ background: "#1a1a1a", color: "#fff" }}
+                            style={{ background: "var(--inkby-fg)", color: "var(--inkby-surface)" }}
                         >
                             {loading && <Spinner />}
                             Continue
@@ -336,12 +327,11 @@ export default function RegisterPage() {
                     </form>
 
                     <div className="flex flex-col items-center gap-1">
-                        <p className="text-xs" style={{ color: "#8a8680" }}>
+                        <p className="text-xs text-inkby-fg-subtle">
                             Already have an account?{" "}
                             <Link
                                 href="/login"
-                                className="underline underline-offset-2"
-                                style={{ color: "#8a8680" }}
+                                className="underline underline-offset-2 text-inkby-fg-subtle"
                             >
                                 Log in
                             </Link>

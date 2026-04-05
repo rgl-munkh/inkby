@@ -16,6 +16,9 @@ export async function GET(
       with: {
         photos: true,
         schedules: true,
+        appointment: {
+          columns: { id: true, status: true },
+        },
         artist: {
           columns: {
             slug: true,

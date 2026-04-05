@@ -84,7 +84,7 @@ const STEPS = ["Profile", "Booking", "Customize"] as const;
 
 function StepIndicator({ current }: { current: number }) {
   return (
-    <div className="flex items-center rounded-full p-1 gap-1" style={{ background: "#e8e4dc" }}>
+    <div className="flex items-center rounded-full p-1 gap-1 bg-inkby-surface-neutral">
       {STEPS.map((label, i) => {
         const stepNum = i + 1;
         const isActive = stepNum === current;
@@ -94,8 +94,8 @@ function StepIndicator({ current }: { current: number }) {
             key={label}
             className="flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium transition-all"
             style={{
-              background: isActive ? "#1a1a1a" : "transparent",
-              color: isActive ? "#fff" : isDone ? "#1a1a1a" : "#9e9a94",
+              background: isActive ? "var(--inkby-fg)" : "transparent",
+              color: isActive ? "var(--inkby-surface)" : isDone ? "var(--inkby-fg)" : "var(--inkby-fg-muted)",
             }}
           >
             {isDone && (
@@ -212,7 +212,7 @@ export default function OnboardingPage() {
   }
 
   return (
-    <main className="min-h-screen flex" style={{ background: "#EBE7DF" }}>
+    <main className="min-h-screen flex bg-inkby-canvas">
       {/* Left: photo collage */}
       <div className="hidden lg:grid lg:w-1/2 grid-cols-2 grid-rows-2 gap-1 p-1">
         <div className="row-span-2 relative overflow-hidden rounded-lg">
@@ -231,7 +231,7 @@ export default function OnboardingPage() {
         {/* Top bar */}
         <div className="flex items-center justify-between px-8 py-4">
           {userEmail ? (
-            <span className="text-xs flex items-center gap-1.5" style={{ color: "#8a8680" }}>
+            <span className="text-xs flex items-center gap-1.5 text-inkby-fg-subtle">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <rect x="2" y="4" width="20" height="16" rx="2" stroke="#8a8680" strokeWidth="1.5" />
                 <path d="M2 8l10 6 10-6" stroke="#8a8680" strokeWidth="1.5" strokeLinecap="round" />
@@ -246,7 +246,7 @@ export default function OnboardingPage() {
             size="sm"
             onClick={handleLogout}
             className="rounded-full text-xs tracking-widest uppercase px-4 cursor-pointer"
-            style={{ borderColor: "#c8c4bc", color: "#1a1a1a", background: "transparent" }}
+            style={{ borderColor: "var(--inkby-border-strong)", color: "var(--inkby-fg)", background: "transparent" }}
           >
             LOGOUT
           </Button>
@@ -261,10 +261,10 @@ export default function OnboardingPage() {
             {step === 1 && (
               <>
                 <div className="text-center">
-                  <h1 className="text-4xl font-extrabold leading-tight tracking-tight" style={{ color: "#1a1a1a" }}>
+                  <h1 className="text-4xl font-extrabold leading-tight tracking-tight text-inkby-fg">
                     Choose your<br />Inkby username
                   </h1>
-                  <p className="mt-3 text-sm" style={{ color: "#8a8680" }}>
+                  <p className="mt-3 text-sm text-inkby-fg-subtle">
                     Match your Inkby and Instagram handles<br />for the most seamless client experience.
                   </p>
                 </div>
@@ -272,14 +272,14 @@ export default function OnboardingPage() {
                 <div className="w-full flex flex-col gap-4">
                   {/* Instagram */}
                   <div className="flex flex-col gap-1.5">
-                    <Label htmlFor="instagram" style={{ color: "#8a8680", fontSize: "11px" }}>
+                    <Label htmlFor="instagram" className="text-inkby-fg-subtle" style={{ fontSize: "11px" }}>
                       Instagram
                     </Label>
                     <div
                       className="flex items-center rounded-xl overflow-hidden"
-                      style={{ background: "#fff", border: "1px solid #D1CDC6" }}
+                      style={{ background: "var(--inkby-surface)", border: "1px solid var(--inkby-border-medium)" }}
                     >
-                      <span className="pl-4 pr-1 shrink-0 text-sm select-none" style={{ color: "#b0aca6" }}>
+                      <span className="pl-4 pr-1 shrink-0 text-sm select-none text-inkby-fg-placeholder">
                         instagram.com/
                       </span>
                       <Input
@@ -289,8 +289,7 @@ export default function OnboardingPage() {
                         value={instagram}
                         onChange={(e) => handleInstagramChange(e.target.value)}
                         autoFocus
-                        className="flex-1 border-0 rounded-none bg-transparent h-12 px-0 focus-visible:ring-0 focus-visible:border-0 text-sm placeholder:text-[#b0aca6]"
-                        style={{ color: "#1a1a1a" }}
+                        className="flex-1 border-0 rounded-none bg-transparent h-12 px-0 focus-visible:ring-0 focus-visible:border-0 text-sm placeholder:text-inkby-fg-placeholder text-inkby-fg"
                       />
                       <div className="pr-4">
                         <InstagramIcon />
@@ -300,14 +299,14 @@ export default function OnboardingPage() {
 
                   {/* Slug */}
                   <div className="flex flex-col gap-1.5">
-                    <Label htmlFor="slug" style={{ color: "#8a8680", fontSize: "11px" }}>
+                    <Label htmlFor="slug" className="text-inkby-fg-subtle" style={{ fontSize: "11px" }}>
                       Username
                     </Label>
                     <div
                       className="flex items-center rounded-xl overflow-hidden"
-                      style={{ background: "#fff", border: "1px solid #D1CDC6" }}
+                      style={{ background: "var(--inkby-surface)", border: "1px solid var(--inkby-border-medium)" }}
                     >
-                      <span className="pl-4 pr-1 shrink-0 text-sm select-none" style={{ color: "#b0aca6" }}>
+                      <span className="pl-4 pr-1 shrink-0 text-sm select-none text-inkby-fg-placeholder">
                         {typeof window !== "undefined" ? window.location.host : "inkby.mn"}/@
                       </span>
                       <Input
@@ -318,19 +317,18 @@ export default function OnboardingPage() {
                         onChange={(e) => handleSlugChange(e.target.value)}
                         minLength={2}
                         maxLength={30}
-                        className="flex-1 border-0 rounded-none bg-transparent h-12 px-0 pr-4 focus-visible:ring-0 focus-visible:border-0 text-sm placeholder:text-[#b0aca6]"
-                        style={{ color: "#1a1a1a" }}
+                        className="flex-1 border-0 rounded-none bg-transparent h-12 px-0 pr-4 focus-visible:ring-0 focus-visible:border-0 text-sm placeholder:text-inkby-fg-placeholder text-inkby-fg"
                       />
                     </div>
                   </div>
                 </div>
 
-                {error && <p className="text-xs text-center" style={{ color: "#d94f4f" }}>{error}</p>}
+                {error && <p className="text-xs text-center text-inkby-error">{error}</p>}
 
                 <Button
                   onClick={goToStep2}
                   className="w-full rounded-full h-12 text-xs font-semibold tracking-widest uppercase flex items-center justify-between px-6 cursor-pointer"
-                  style={{ background: "#1a1a1a", color: "#fff" }}
+                  style={{ background: "var(--inkby-fg)", color: "var(--inkby-surface)" }}
                 >
                   NEXT
                   <ArrowRightIcon />
@@ -342,10 +340,10 @@ export default function OnboardingPage() {
             {step === 2 && (
               <>
                 <div className="text-center">
-                  <h1 className="text-4xl font-extrabold leading-tight tracking-tight" style={{ color: "#1a1a1a" }}>
+                  <h1 className="text-4xl font-extrabold leading-tight tracking-tight text-inkby-fg">
                     How much are<br />your deposits?
                   </h1>
-                  <p className="mt-3 text-sm" style={{ color: "#8a8680" }}>
+                  <p className="mt-3 text-sm text-inkby-fg-subtle">
                     Appointments aren&apos;t booked until the deposit is paid.
                   </p>
                 </div>
@@ -358,20 +356,19 @@ export default function OnboardingPage() {
                       size="icon"
                       onClick={() => adjustDeposit(-10000)}
                       className="rounded-full w-10 h-10 text-lg font-bold cursor-pointer shrink-0"
-                      style={{ background: "#e8e4dc", color: "#1a1a1a" }}
+                      style={{ background: "var(--inkby-surface-neutral)", color: "var(--inkby-fg)" }}
                       aria-label="Decrease"
                     >
                       −
                     </Button>
                     <div className="flex items-baseline gap-1">
-                      <span className="text-5xl font-black tracking-tight" style={{ color: "#c8c4bc" }}>₮</span>
+                      <span className="text-5xl font-black tracking-tight text-inkby-border-strong">₮</span>
                       <Input
                         type="text"
                         inputMode="numeric"
                         value={depositInput}
                         onChange={(e) => handleDepositChange(e.target.value)}
-                        className="text-4xl font-black tracking-tight border-0 bg-transparent focus-visible:ring-0 focus-visible:border-0 w-44 text-center h-auto p-0"
-                        style={{ color: "#1a1a1a" }}
+                        className="text-4xl font-black tracking-tight border-0 bg-transparent focus-visible:ring-0 focus-visible:border-0 w-44 text-center h-auto p-0 text-inkby-fg"
                       />
                     </div>
                     <Button
@@ -379,7 +376,7 @@ export default function OnboardingPage() {
                       size="icon"
                       onClick={() => adjustDeposit(10000)}
                       className="rounded-full w-10 h-10 text-lg font-bold cursor-pointer shrink-0"
-                      style={{ background: "#e8e4dc", color: "#1a1a1a" }}
+                      style={{ background: "var(--inkby-surface-neutral)", color: "var(--inkby-fg)" }}
                       aria-label="Increase"
                     >
                       +
@@ -390,7 +387,7 @@ export default function OnboardingPage() {
                   <Badge
                     variant="secondary"
                     className="rounded-full px-4 py-1.5 text-sm font-medium h-auto"
-                    style={{ background: "#e8e4dc", color: "#1a1a1a" }}
+                    style={{ background: "var(--inkby-surface-neutral)", color: "var(--inkby-fg)" }}
                   >
                     MNT ₮
                   </Badge>
@@ -398,18 +395,18 @@ export default function OnboardingPage() {
                   {/* Helper */}
                   <p
                     className="text-xs text-center rounded-xl px-4 py-3 w-full"
-                    style={{ background: "#e8e4dc", color: "#8a8680" }}
+                    style={{ background: "var(--inkby-surface-neutral)", color: "var(--inkby-fg-subtle)" }}
                   >
                     Most tattoo artists charge ₮100,000 deposits
                   </p>
                 </div>
 
-                {error && <p className="text-xs text-center" style={{ color: "#d94f4f" }}>{error}</p>}
+                {error && <p className="text-xs text-center text-inkby-error">{error}</p>}
 
                 <Button
                   onClick={goToStep3}
                   className="w-full rounded-full h-12 text-xs font-semibold tracking-widest uppercase flex items-center justify-between px-6 cursor-pointer"
-                  style={{ background: "#1a1a1a", color: "#fff" }}
+                  style={{ background: "var(--inkby-fg)", color: "var(--inkby-surface)" }}
                 >
                   NEXT
                   <ArrowRightIcon />
@@ -423,30 +420,30 @@ export default function OnboardingPage() {
                 {/* Left: profile card */}
                 <div
                   className="flex flex-col items-center justify-center gap-3 p-8 flex-1"
-                  style={{ background: "#f5f2ec" }}
+                  style={{ background: "var(--inkby-surface-warm)" }}
                 >
                   <div
                     className="w-20 h-20 rounded-full flex items-center justify-center"
-                    style={{ background: "#e2ded8" }}
+                    style={{ background: "var(--inkby-surface-device)" }}
                   >
                     <CameraIcon />
                   </div>
                   <div className="text-center">
-                    <p className="font-semibold text-base" style={{ color: "#1a1a1a" }}>@{slug}</p>
-                    <p className="text-xs mt-0.5" style={{ color: "#8a8680" }}>{typeof window !== "undefined" ? window.location.host : "inkby.mn"}/{slug}</p>
+                    <p className="font-semibold text-base text-inkby-fg">@{slug}</p>
+                    <p className="text-xs mt-0.5 text-inkby-fg-subtle">{typeof window !== "undefined" ? window.location.host : "inkby.mn"}/{slug}</p>
                   </div>
                 </div>
 
                 {/* Right: dark panel */}
                 <div
                   className="flex flex-col items-center justify-center gap-5 p-8 flex-1"
-                  style={{ background: "#1a1a1a" }}
+                  style={{ background: "var(--inkby-fg)" }}
                 >
                   <div className="text-center">
-                    <h2 className="text-2xl font-extrabold leading-tight" style={{ color: "#fff" }}>
+                    <h2 className="text-2xl font-extrabold leading-tight text-inkby-surface">
                       Your new<br />link in bio
                     </h2>
-                    <p className="mt-2 text-xs" style={{ color: "#8a8680" }}>
+                    <p className="mt-2 text-xs text-inkby-fg-subtle">
                       Drop your new booking link in your IG,<br />
                       TikTok, newsletter, whatever, and<br />
                       watch your requests roll in.
@@ -456,9 +453,9 @@ export default function OnboardingPage() {
                   {/* Copy link pill */}
                   <div
                     className="flex items-center gap-2 rounded-full pl-4 pr-1 py-1 w-full"
-                    style={{ background: "#2a2a2a" }}
+                    style={{ background: "var(--inkby-dark-surface)" }}
                   >
-                    <span className="text-xs font-medium flex-1 truncate" style={{ color: "#d4d0ca" }}>
+                    <span className="text-xs font-medium flex-1 truncate text-inkby-dark-text">
                       {profileLink}
                     </span>
                     <Button
@@ -466,8 +463,8 @@ export default function OnboardingPage() {
                       size="sm"
                       className="rounded-full flex items-center gap-1.5 px-3 text-xs font-medium cursor-pointer shrink-0 h-7"
                       style={{
-                        background: copied ? "#2d6a4f" : "#3a3a3a",
-                        color: copied ? "#95d5b2" : "#d4d0ca",
+                        background: copied ? "var(--inkby-success-dark-bg)" : "var(--inkby-dark-control)",
+                        color: copied ? "var(--inkby-success-fg-mint)" : "var(--inkby-dark-text)",
                       }}
                     >
                       {copied ? <CheckIcon /> : <CopyIcon />}
@@ -475,14 +472,14 @@ export default function OnboardingPage() {
                     </Button>
                   </div>
 
-                  {error && <p className="text-xs text-center" style={{ color: "#d94f4f" }}>{error}</p>}
+                  {error && <p className="text-xs text-center text-inkby-error">{error}</p>}
 
                   <Button
                     onClick={handleFinish}
                     disabled={loading}
                     variant="outline"
                     className="w-full rounded-full h-11 text-xs font-semibold tracking-widest uppercase flex items-center justify-center gap-2 cursor-pointer"
-                    style={{ background: "#fff", color: "#1a1a1a", borderColor: "#fff" }}
+                    style={{ background: "var(--inkby-surface)", color: "var(--inkby-fg)", borderColor: "var(--inkby-surface)" }}
                   >
                     {loading && <Spinner />}
                     LET&apos;S GET STARTED

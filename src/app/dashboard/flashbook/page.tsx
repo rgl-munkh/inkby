@@ -224,22 +224,25 @@ function NewFlashSheet({
         side="right"
         showCloseButton={false}
         className="h-screen overflow-y-auto rounded-t-2xl border-0 p-0 gap-0"
-        style={{ background: "#f5f2ed" }}
+        style={{ background: "var(--inkby-surface-warm)" }}
       >
-        <SheetHeader className="px-5 pt-6 pb-2 border-b" style={{ borderColor: "#e2ddd6" }}>
+        <SheetHeader
+          className="px-5 pt-6 pb-2 border-b"
+          style={{ borderColor: "var(--inkby-border)" }}
+        >
           <div className="flex items-center gap-3">
             <button
               type="button"
               onClick={() => onOpenChange(false)}
               className="w-9 h-9 rounded-full flex items-center justify-center shrink-0 transition-opacity hover:opacity-70"
-              style={{ background: "#e8e4dc", color: "#1a1a1a" }}
+              style={{ background: "var(--inkby-surface-neutral)", color: "var(--inkby-fg)" }}
               aria-label="Back"
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path d="M15 18l-6-6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </button>
-            <SheetTitle className="text-base font-semibold text-left flex-1" style={{ color: "#1a1a1a" }}>
+            <SheetTitle className="text-base font-semibold text-left flex-1 text-inkby-fg">
               New flash
             </SheetTitle>
           </div>
@@ -276,7 +279,7 @@ function NewFlashSheet({
               disabled={uploading}
               onClick={() => fileRef.current?.click()}
               className="flex-1 rounded-xl py-3 px-3 flex flex-col items-center gap-1.5 text-xs font-medium transition-opacity hover:opacity-80 disabled:opacity-50"
-              style={{ background: "#fff", border: "1px solid #e2ddd6", color: "#1a1a1a" }}
+              style={{ background: "var(--inkby-surface)", border: "1px solid var(--inkby-border)", color: "var(--inkby-fg)" }}
             >
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" strokeWidth="1.5" />
@@ -290,7 +293,7 @@ function NewFlashSheet({
               disabled={uploading}
               onClick={() => cameraRef.current?.click()}
               className="flex-1 rounded-xl py-3 px-3 flex flex-col items-center gap-1.5 text-xs font-medium transition-opacity hover:opacity-80 disabled:opacity-50"
-              style={{ background: "#fff", border: "1px solid #e2ddd6", color: "#1a1a1a" }}
+              style={{ background: "var(--inkby-surface)", border: "1px solid var(--inkby-border)", color: "var(--inkby-fg)" }}
             >
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path d="M4 8h3l1.5-2h7L17 8h3v11H4V8z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
@@ -299,29 +302,29 @@ function NewFlashSheet({
               Camera
             </button>
           </div>
-          <p className="text-[11px] leading-relaxed" style={{ color: "#9e9a94" }}>
+          <p className="text-[11px] leading-relaxed text-inkby-fg-muted">
             Upload one image per flash. Supports transparency and different dimensions.
           </p>
 
           {photoUrl && (
-            <div className="relative w-full aspect-video rounded-xl overflow-hidden" style={{ background: "#e8e4dc" }}>
+            <div className="relative w-full aspect-video rounded-xl overflow-hidden bg-inkby-surface-neutral">
               <Image src={photoUrl} alt="Preview" fill className="object-contain" unoptimized />
             </div>
           )}
 
           <div>
-            <Label className="text-[10px] font-semibold mb-1 block" style={{ color: "#9e9a94" }}>
+            <Label className="text-[10px] font-semibold mb-1 block text-inkby-fg-muted">
               Add a title (optional)
             </Label>
             <input
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               className="w-full rounded-xl px-3 h-11 text-sm outline-none"
-              style={{ background: "#fff", color: "#1a1a1a", border: "1px solid #e2ddd6" }}
+              style={{ background: "var(--inkby-surface)", color: "var(--inkby-fg)", border: "1px solid var(--inkby-border)" }}
             />
           </div>
           <div>
-            <Label className="text-[10px] font-semibold mb-1 block" style={{ color: "#9e9a94" }}>
+            <Label className="text-[10px] font-semibold mb-1 block text-inkby-fg-muted">
               Add a description (optional)
             </Label>
             <textarea
@@ -329,17 +332,17 @@ function NewFlashSheet({
               onChange={(e) => setDescription(e.target.value)}
               rows={3}
               className="w-full rounded-xl px-3 py-2.5 text-sm outline-none resize-none"
-              style={{ background: "#fff", color: "#1a1a1a", border: "1px solid #e2ddd6" }}
+              style={{ background: "var(--inkby-surface)", color: "var(--inkby-fg)", border: "1px solid var(--inkby-border)" }}
             />
           </div>
 
           <div
             className="rounded-xl p-4 flex items-center justify-between gap-3"
-            style={{ background: "#fff", border: "1px solid #e2ddd6" }}
+            style={{ background: "var(--inkby-surface)", border: "1px solid var(--inkby-border)" }}
           >
             <div>
-              <p className="text-sm font-semibold" style={{ color: "#1a1a1a" }}>Repeatable</p>
-              <p className="text-xs mt-0.5" style={{ color: "#9e9a94" }}>
+              <p className="text-sm font-semibold text-inkby-fg">Repeatable</p>
+              <p className="text-xs mt-0.5 text-inkby-fg-muted">
                 Available until you archive this piece
               </p>
             </div>
@@ -349,7 +352,7 @@ function NewFlashSheet({
               aria-checked={isRepeatable}
               onClick={() => setIsRepeatable((v) => !v)}
               className="w-12 h-7 rounded-full shrink-0 transition-colors relative"
-              style={{ background: isRepeatable ? "#1a1a1a" : "#d1cdc6" }}
+              style={{ background: isRepeatable ? "var(--inkby-fg)" : "var(--inkby-border-medium)" }}
             >
               <span
                 className="absolute top-1 w-5 h-5 rounded-full bg-white transition-transform"
@@ -359,7 +362,7 @@ function NewFlashSheet({
           </div>
 
           <div>
-            <p className="text-[10px] font-semibold tracking-wide mb-2" style={{ color: "#9e9a94" }}>
+            <p className="text-[10px] font-semibold tracking-wide mb-2 text-inkby-fg-muted">
               SIZE, DURATION, ESTIMATE
             </p>
             <div className="flex flex-col gap-2">
@@ -367,7 +370,7 @@ function NewFlashSheet({
                 <div
                   key={sz.label}
                   className="rounded-xl p-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3"
-                  style={{ background: "#fff", border: "1px solid #e2ddd6" }}
+                  style={{ background: "var(--inkby-surface)", border: "1px solid var(--inkby-border)" }}
                 >
                   <button
                     type="button"
@@ -377,17 +380,17 @@ function NewFlashSheet({
                     <span
                       className="w-5 h-5 rounded shrink-0 mt-0.5 flex items-center justify-center text-[10px] font-bold"
                       style={{
-                        background: rows[i].enabled ? "#f4a574" : "#e8e4dc",
-                        color: rows[i].enabled ? "#fff" : "#9e9a94",
+                        background: rows[i].enabled ? "var(--inkby-coral)" : "var(--inkby-surface-neutral)",
+                        color: rows[i].enabled ? "var(--inkby-surface)" : "var(--inkby-fg-muted)",
                       }}
                     >
                       {rows[i].enabled ? "✓" : ""}
                     </span>
                     <span>
-                      <span className="text-xs font-semibold block" style={{ color: "#1a1a1a" }}>
+                      <span className="text-xs font-semibold block text-inkby-fg">
                         {sz.label}
                       </span>
-                      <span className="text-[10px]" style={{ color: "#9e9a94" }}>
+                      <span className="text-[10px] text-inkby-fg-muted">
                         {sz.sublabel}
                       </span>
                     </span>
@@ -400,7 +403,7 @@ function NewFlashSheet({
                       onChange={(e) => setRow(i, { duration: e.target.value })}
                       placeholder="1h30m"
                       className="flex-1 min-w-0 rounded-lg px-2 h-9 text-xs outline-none disabled:opacity-40"
-                      style={{ background: "#f5f2ed", border: "1px solid #e2ddd6", color: "#1a1a1a" }}
+                      style={{ background: "var(--inkby-surface-warm)", border: "1px solid var(--inkby-border)", color: "var(--inkby-fg)" }}
                     />
                     <input
                       type="text"
@@ -410,7 +413,7 @@ function NewFlashSheet({
                       onChange={(e) => setRow(i, { amount: formatAmount(e.target.value) })}
                       placeholder="Estimate"
                       className="flex-1 min-w-0 rounded-lg px-2 h-9 text-xs outline-none disabled:opacity-40"
-                      style={{ background: "#f5f2ed", border: "1px solid #e2ddd6", color: "#1a1a1a" }}
+                      style={{ background: "var(--inkby-surface-warm)", border: "1px solid var(--inkby-border)", color: "var(--inkby-fg)" }}
                     />
                   </div>
                 </div>
@@ -419,7 +422,7 @@ function NewFlashSheet({
           </div>
 
           {error && (
-            <p className="text-xs text-center" style={{ color: "#d94f4f" }}>
+            <p className="text-xs text-center text-inkby-error">
               {error}
             </p>
           )}
@@ -427,14 +430,14 @@ function NewFlashSheet({
 
         <div
           className="w-full p-4 flex gap-3 z-[60] border-t"
-          style={{ background: "#f5f2ed", borderColor: "#e2ddd6" }}
+          style={{ background: "var(--inkby-surface-warm)", borderColor: "var(--inkby-border)" }}
         >
           <Button
             type="button"
             variant="outline"
             onClick={() => onOpenChange(false)}
             className="flex-1 rounded-full h-11 text-xs font-semibold"
-            style={{ borderColor: "#d1cdc6", color: "#1a1a1a" }}
+            style={{ borderColor: "var(--inkby-border-medium)", color: "var(--inkby-fg)" }}
           >
             CANCEL
           </Button>
@@ -443,7 +446,7 @@ function NewFlashSheet({
             onClick={() => void handleSubmit()}
             disabled={submitting || uploading}
             className="flex-[2] rounded-full h-11 text-xs font-bold tracking-widest"
-            style={{ background: "#1a1a1a", color: "#fff" }}
+            style={{ background: "var(--inkby-fg)", color: "var(--inkby-surface)" }}
           >
             {submitting ? "ADDING…" : "ADD FLASH"}
           </Button>
@@ -480,9 +483,9 @@ export default function FlashbookPage() {
   }, []);
 
   return (
-    <div className="max-w-xl mx-auto flex flex-col min-h-full pb-6" style={{ background: "#EBE7DF" }}>
+    <div className="max-w-xl mx-auto flex flex-col min-h-full pb-6 bg-inkby-canvas">
       <header className="flex items-center justify-between px-4 pt-4 pb-3">
-        <h1 className="text-xl font-bold" style={{ color: "#1a1a1a" }}>
+        <h1 className="text-xl font-bold text-inkby-fg">
           Flashbook
         </h1>
         <Button
@@ -490,7 +493,7 @@ export default function FlashbookPage() {
           size="icon"
           onClick={() => setSheetOpen(true)}
           className="rounded-full h-10 w-10 shrink-0"
-          style={{ background: "#1a1a1a", color: "#fff" }}
+          style={{ background: "var(--inkby-fg)", color: "var(--inkby-surface)" }}
           aria-label="New flash"
         >
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -505,23 +508,23 @@ export default function FlashbookPage() {
         <div className="flex flex-col items-center justify-center px-8 py-16 gap-4 text-center">
           <div
             className="w-20 h-20 rounded-2xl flex items-center justify-center"
-            style={{ background: "#e8e4dc", color: "#9e9a94" }}
+            style={{ background: "var(--inkby-surface-neutral)", color: "var(--inkby-fg-muted)" }}
           >
             <svg width="40" height="40" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" strokeWidth="1.5" />
               <circle cx="8.5" cy="10.5" r="1.5" fill="currentColor" />
             </svg>
           </div>
-          <p className="text-sm font-semibold" style={{ color: "#1a1a1a" }}>
+          <p className="text-sm font-semibold text-inkby-fg">
             No flash yet
           </p>
-          <p className="text-xs max-w-xs leading-relaxed" style={{ color: "#9e9a94" }}>
+          <p className="text-xs max-w-xs leading-relaxed text-inkby-fg-muted">
             Add designs clients can book from your profile. Tap + to create your first flash.
           </p>
           <Button
             onClick={() => setSheetOpen(true)}
             className="rounded-full h-11 px-8 text-xs font-bold tracking-widest mt-2"
-            style={{ background: "#1a1a1a", color: "#fff" }}
+            style={{ background: "var(--inkby-fg)", color: "var(--inkby-surface)" }}
           >
             ADD FLASH
           </Button>
@@ -531,23 +534,22 @@ export default function FlashbookPage() {
           {deals.map((deal) => (
             <article
               key={deal.id}
-              className="flex flex-col rounded-2xl overflow-hidden"
-              style={{ background: "#fff" }}
+              className="flex flex-col rounded-2xl overflow-hidden bg-inkby-surface"
             >
-              <div className="relative aspect-square w-full" style={{ background: "#f0ede8" }}>
+              <div className="relative aspect-square w-full bg-inkby-surface-soft">
                 <Image src={deal.photoUrl} alt={deal.title ?? "Flash"} fill className="object-cover" unoptimized />
               </div>
               <div className="p-3 flex flex-col gap-1">
-                <p className="text-[11px] font-medium" style={{ color: "#6b6b6b" }}>
+                <p className="text-[11px] font-medium text-inkby-fg-secondary">
                   {deal.isRepeatable ? "Repeatable" : "Non-repeatable"}
                 </p>
-                <p className="text-[11px]" style={{ color: "#9e9a94" }}>
+                <p className="text-[11px] text-inkby-fg-muted">
                   {deal.sizes.length} size{deal.sizes.length !== 1 ? "s" : ""}
                 </p>
-                <p className="text-sm font-semibold" style={{ color: "#1a1a1a" }}>
+                <p className="text-sm font-semibold text-inkby-fg">
                   ₮{minEstimate(deal.sizes).toLocaleString("en-US")}
                   {deal.sizes.length > 1 && (
-                    <span className="text-[10px] font-normal" style={{ color: "#9e9a94" }}>
+                    <span className="text-[10px] font-normal text-inkby-fg-muted">
                       {" "}
                       from
                     </span>

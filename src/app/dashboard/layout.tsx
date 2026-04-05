@@ -33,7 +33,7 @@ export default async function DashboardLayout({
   if (!artist.onboardingCompleted) redirect("/onboarding");
 
   return (
-    <div className="flex min-h-screen" style={{ background: "#EBE7DF" }}>
+    <div className="flex min-h-screen bg-inkby-canvas">
       <Sidebar artist={artist} />
       <main className="flex-1 min-w-0 pb-24 lg:pb-0">
         {children}

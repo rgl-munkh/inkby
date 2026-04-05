@@ -4,7 +4,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { createClient } from "@/lib/supabase/client";
 
@@ -127,37 +126,30 @@ export function Sidebar({ artist }: { artist: Artist }) {
   return (
     <aside
       className="hidden lg:flex flex-col w-44 min-h-screen shrink-0 py-3 px-2 gap-1"
-      style={{ background: "#e2ddd6" }}
+      style={{ background: "var(--inkby-border)" }}
     >
       {/* Artist card */}
-      <div
-        className="flex flex-col items-center gap-1.5 rounded-xl p-3 mb-1"
-        style={{ background: "#d6d0c8" }}
+      <Link
+        href="/dashboard/profile"
+        className="flex flex-col items-center gap-1.5 rounded-xl p-3 mb-1 transition-opacity hover:opacity-80 cursor-pointer"
+        style={{ background: "var(--inkby-chip)" }}
       >
         <Avatar className="size-12">
           {artist.avatarUrl && <AvatarImage src={artist.avatarUrl} alt={displayName} />}
-          <AvatarFallback className="text-sm font-semibold" style={{ background: "#c8c4bc", color: "#6b6b6b" }}>
+          <AvatarFallback
+            className="text-sm font-semibold"
+            style={{ background: "var(--inkby-border-strong)", color: "var(--inkby-fg-secondary)" }}
+          >
             {initials}
           </AvatarFallback>
         </Avatar>
         <div className="text-center">
-          <p className="text-xs font-semibold leading-tight" style={{ color: "#1a1a1a" }}>
+          <p className="text-xs font-semibold leading-tight text-inkby-fg">
             {displayName}
           </p>
-          <p className="text-xs mt-0.5" style={{ color: "#8a8680" }}>₮0.00</p>
+          <p className="text-xs mt-0.5 text-inkby-fg-subtle">₮0.00</p>
         </div>
-      </div>
-
-      {/* NEW button */}
-      <Button
-        className="w-full rounded-full h-8 text-xs font-bold tracking-widest uppercase gap-1.5 cursor-pointer mb-1"
-        style={{ background: "#1a1a1a", color: "#fff" }}
-      >
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-        </svg>
-        NEW
-      </Button>
+      </Link>
 
       {/* Top nav */}
       {NAV_TOP.map(({ label, href, icon: Icon }) => {
@@ -168,9 +160,10 @@ export function Sidebar({ artist }: { artist: Artist }) {
             href={href}
             className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-medium transition-colors"
             style={{
-              background: isActive ? "#1a1a1a" : "transparent",
-              color: isActive ? "#fff" : "#6b6b6b",
+              background: isActive ? "var(--inkby-nav-active)" : "transparent",
+              color: isActive ? "var(--inkby-fg)" : "var(--inkby-fg-secondary)",
             }}
+            suppressHydrationWarning
           >
             <Icon />
             {label}
@@ -179,7 +172,7 @@ export function Sidebar({ artist }: { artist: Artist }) {
       })}
 
       <div className="my-1 px-3">
-        <Separator style={{ background: "#c8c4bc" }} />
+        <Separator style={{ background: "var(--inkby-border-strong)" }} />
       </div>
 
       {/* Bottom nav */}
@@ -191,9 +184,10 @@ export function Sidebar({ artist }: { artist: Artist }) {
             href={href}
             className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-medium transition-colors"
             style={{
-              background: isActive ? "#1a1a1a" : "transparent",
-              color: isActive ? "#fff" : "#6b6b6b",
+              background: isActive ? "var(--inkby-fg)" : "transparent",
+              color: isActive ? "var(--inkby-surface)" : "var(--inkby-fg-secondary)",
             }}
+            suppressHydrationWarning
           >
             <Icon />
             {label}
@@ -205,8 +199,7 @@ export function Sidebar({ artist }: { artist: Artist }) {
       <div className="mt-auto pt-2">
         <button
           onClick={handleLogout}
-          className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-medium w-full transition-colors hover:opacity-70 cursor-pointer"
-          style={{ color: "#9e9a94" }}
+          className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-medium w-full transition-colors hover:opacity-70 cursor-pointer text-inkby-fg-muted"
         >
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />

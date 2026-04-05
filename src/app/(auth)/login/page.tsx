@@ -173,7 +173,7 @@ export default function LoginPage() {
     }
 
     return (
-        <main className="min-h-screen flex" style={{ background: "#EBE7DF" }}>
+        <main className="min-h-screen flex bg-inkby-canvas">
             {/* Left: photo collage */}
             <div className="hidden lg:grid lg:w-1/2 grid-cols-2 grid-rows-2 gap-1 p-1">
                 <div className="row-span-2 relative overflow-hidden rounded-lg">
@@ -212,12 +212,11 @@ export default function LoginPage() {
 
                     <div className="text-center">
                         <h1
-                            className="text-3xl font-bold tracking-tight leading-tight"
-                            style={{ color: "#1a1a1a" }}
+                            className="text-3xl font-bold tracking-tight leading-tight text-inkby-fg"
                         >
                             Welcome back
                         </h1>
-                        <p className="mt-2 text-sm" style={{ color: "#6b6b6b" }}>
+                        <p className="mt-2 text-sm text-inkby-fg-secondary">
                             Good to see you again.
                         </p>
                     </div>
@@ -227,13 +226,13 @@ export default function LoginPage() {
                         onClick={handleGoogleSignIn}
                         disabled={googleLoading}
                         className="h-auto p-0 flex items-center justify-center gap-2 font-normal text-white cursor-pointer w-full py-4 px-6 rounded-full"
-                        style={{ background: "#202124" }}
+                        style={{ background: "var(--inkby-google-btn)" }}
                     >
                         <GoogleIcon />
                         {googleLoading ? "Redirecting..." : "Continue with Google"}
                     </Button>
 
-                    <hr className="w-full border-t border-[#D1CDC6]" />
+                    <hr className="w-full border-t border-inkby-border-medium" />
 
                     <form onSubmit={handleSubmit} className="w-full flex flex-col gap-3">
                         <Input
@@ -242,11 +241,11 @@ export default function LoginPage() {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
-                            className="rounded-xl py-8 px-4 text-sm placeholder:text-[#b0aca6] focus-visible:ring-1 focus-visible:ring-[#b0aca6]"
+                            className="rounded-xl py-8 px-4 text-sm placeholder:text-inkby-fg-placeholder focus-visible:ring-1 focus-visible:ring-inkby-fg-placeholder"
                             style={{
-                                background: "#fff",
-                                border: "1px solid #D1CDC6",
-                                color: "#1a1a1a",
+                                background: "var(--inkby-surface)",
+                                border: "1px solid var(--inkby-border-medium)",
+                                color: "var(--inkby-fg)",
                             }}
                         />
 
@@ -257,11 +256,11 @@ export default function LoginPage() {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
-                                className="rounded-xl py-8 pl-4 pr-11 text-sm placeholder:text-[#b0aca6] focus-visible:ring-1 focus-visible:ring-[#b0aca6]"
+                                className="rounded-xl py-8 pl-4 pr-11 text-sm placeholder:text-inkby-fg-placeholder focus-visible:ring-1 focus-visible:ring-inkby-fg-placeholder"
                                 style={{
-                                    background: "#fff",
-                                    border: "1px solid #D1CDC6",
-                                    color: "#1a1a1a",
+                                    background: "var(--inkby-surface)",
+                                    border: "1px solid var(--inkby-border-medium)",
+                                    color: "var(--inkby-fg)",
                                 }}
                             />
                             <button
@@ -276,7 +275,7 @@ export default function LoginPage() {
                         </div>
 
                         {error && (
-                            <p className="text-xs text-center" style={{ color: "#d94f4f" }}>
+                            <p className="text-xs text-center text-inkby-error">
                                 {error}
                             </p>
                         )}
@@ -285,19 +284,18 @@ export default function LoginPage() {
                             type="submit"
                             disabled={loading}
                             className="w-full flex items-center justify-center gap-2 rounded-full py-6 px-4 text-xs font-semibold tracking-widest uppercase mt-1 cursor-pointer"
-                            style={{ background: "#1a1a1a", color: "#fff" }}
+                            style={{ background: "var(--inkby-fg)", color: "var(--inkby-surface)" }}
                         >
                             {loading && <Spinner />}
                             Log in
                         </Button>
                     </form>
 
-                    <p className="text-xs" style={{ color: "#8a8680" }}>
+                    <p className="text-xs text-inkby-fg-subtle">
                         Don&apos;t have an account?{" "}
                         <Link
                             href="/register"
-                            className="underline underline-offset-2"
-                            style={{ color: "#8a8680" }}
+                            className="underline underline-offset-2 text-inkby-fg-subtle"
                         >
                             Sign up
                         </Link>

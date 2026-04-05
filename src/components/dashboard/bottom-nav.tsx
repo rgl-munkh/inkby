@@ -67,7 +67,7 @@ export function BottomNav({ artist }: { artist: Artist }) {
       {/* Nav pill */}
       <div
         className="flex items-center gap-1 rounded-full px-4 py-3 flex-1 justify-between max-w-xs shadow-lg"
-        style={{ background: "#fff" }}
+        style={{ background: "var(--inkby-surface)" }}
       >
         {NAV_ITEMS.map(({ href, icon: Icon, label }) => {
           const isActive = pathname === href || (href !== "/dashboard" && pathname.startsWith(href));
@@ -77,7 +77,7 @@ export function BottomNav({ artist }: { artist: Artist }) {
               href={href}
               aria-label={label}
               className="flex items-center justify-center w-9 h-9 rounded-full transition-colors"
-              style={{ color: isActive ? "#1a1a1a" : "#b0aca6" }}
+              style={{ color: isActive ? "var(--inkby-fg)" : "var(--inkby-fg-placeholder)" }}
             >
               <Icon active={isActive} />
             </Link>
@@ -90,7 +90,7 @@ export function BottomNav({ artist }: { artist: Artist }) {
         href="/dashboard/new"
         aria-label="New booking"
         className="flex items-center justify-center w-12 h-12 rounded-full shadow-lg shrink-0 transition-opacity hover:opacity-90"
-        style={{ background: "#1a1a1a", color: "#fff" }}
+        style={{ background: "var(--inkby-fg)", color: "var(--inkby-surface)" }}
       >
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />

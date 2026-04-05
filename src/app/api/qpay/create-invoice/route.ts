@@ -35,16 +35,17 @@ export async function POST(request: NextRequest) {
       return badRequest("Appointment is not awaiting payment");
     }
 
-    const depositAmount = appointment.artist?.depositAmount;
+    // const depositAmount = appointment.artist?.depositAmount;
+    const depositAmount = 100; // TESTING
 
     if (!depositAmount) {
       return serverError("Artist has not set a deposit amount");
     }
 
     const invoiceData = {
-      invoice_code: "INKBY_DEPOSIT",
+      invoice_code: process.env.QPAY_INVOICE_CODE ?? "INKBY_DEPOSIT",
       sender_invoice_no: appointment.id,
-      invoice_receiver_code: "",
+      invoice_receiver_code: "terminal",
       invoice_description: `Inkby Tattoo Deposit - ${appointment.artist?.displayName || "Artist"}`,
       amount: Number(depositAmount),
       callback_url: `${process.env.QPAY_CALLBACK_URL}?appointment_id=${appointment.id}`,

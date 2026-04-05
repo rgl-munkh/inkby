@@ -41,7 +41,6 @@ type BookingRequest = {
   schedules: Schedule[];
 };
 
-// --- Helper: parse "1h30m" / "2h" / "45m" → minutes ---
 function parseDuration(str: string): number | null {
   const clean = str.trim().toLowerCase();
   const full = clean.match(/^(\d+)h(\d+)m?$/);
@@ -53,7 +52,6 @@ function parseDuration(str: string): number | null {
   return null;
 }
 
-// --- Helper: format minutes → "30 minutes" / "1 hour" / "1h 30m" ---
 function formatDuration(mins: number): string {
   if (mins < 60) return `${mins} minute${mins !== 1 ? "s" : ""}`;
   const h = Math.floor(mins / 60);
@@ -105,18 +103,18 @@ function AppointmentDetailsCard({
     : "Client will choose date";
 
   return (
-    <div className="rounded-2xl overflow-hidden" style={{ background: "#fff" }}>
+    <div className="rounded-2xl overflow-hidden bg-inkby-surface">
       {/* Header row */}
       <div
         className="flex items-center justify-between px-4 py-3 border-b"
-        style={{ borderColor: "#f0ede8" }}
+        style={{ borderColor: "var(--inkby-surface-soft)" }}
       >
-        <p className="text-sm font-semibold" style={{ color: "#1a1a1a" }}>
+        <p className="text-sm font-semibold text-inkby-fg">
           Appointment details
         </p>
         <span
           className="text-xs font-semibold rounded-full px-3 py-1"
-          style={{ background: "#f5a623", color: "#fff" }}
+          style={{ background: "var(--inkby-orange)", color: "var(--inkby-surface)" }}
         >
           {badgeLabel}
         </span>
@@ -125,21 +123,21 @@ function AppointmentDetailsCard({
       {/* Date row */}
       <div
         className="flex items-start gap-3 px-4 py-3 border-b"
-        style={{ borderColor: "#f0ede8" }}
+        style={{ borderColor: "var(--inkby-surface-soft)" }}
       >
-        <span className="mt-0.5 shrink-0" style={{ color: "#9e9a94" }}><CalendarIcon /></span>
+        <span className="mt-0.5 shrink-0 text-inkby-fg-muted"><CalendarIcon /></span>
         <div>
-          <p className="text-sm font-semibold" style={{ color: "#1a1a1a" }}>Date</p>
-          <p className="text-xs mt-0.5" style={{ color: "#6b6b6b" }}>{dateText}</p>
+          <p className="text-sm font-semibold text-inkby-fg">Date</p>
+          <p className="text-xs mt-0.5 text-inkby-fg-secondary">{dateText}</p>
         </div>
       </div>
 
       {/* Duration row */}
       <div className="flex items-start gap-3 px-4 py-3">
-        <span className="mt-0.5 shrink-0" style={{ color: "#9e9a94" }}><ClockIcon /></span>
+        <span className="mt-0.5 shrink-0 text-inkby-fg-muted"><ClockIcon /></span>
         <div>
-          <p className="text-sm font-semibold" style={{ color: "#1a1a1a" }}>Duration</p>
-          <p className="text-xs mt-0.5" style={{ color: "#6b6b6b" }}>
+          <p className="text-sm font-semibold text-inkby-fg">Duration</p>
+          <p className="text-xs mt-0.5 text-inkby-fg-secondary">
             {schedule ? formatDuration(schedule.durationMinutes) : "—"}
           </p>
         </div>
@@ -148,7 +146,6 @@ function AppointmentDetailsCard({
   );
 }
 
-// --- Icons ---
 function BackIcon() {
   return (
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -216,11 +213,10 @@ function TrashIcon() {
   );
 }
 
-// --- Field wrapper used inside the sheet ---
 function FieldBox({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="flex flex-col gap-1">
-      <p className="text-[10px] font-semibold tracking-widest uppercase" style={{ color: "#9e9a94" }}>
+      <p className="text-[10px] font-semibold tracking-widest uppercase text-inkby-fg-muted">
         {label}
       </p>
       {children}
@@ -228,7 +224,6 @@ function FieldBox({ label, children }: { label: string; children: React.ReactNod
   );
 }
 
-// --- Schedule Sheet ---
 function ScheduleSheet({
   open,
   onOpenChange,
@@ -333,24 +328,23 @@ function ScheduleSheet({
       <SheetContent
         side="right"
         className="w-full sm:max-w-md flex flex-col p-0 gap-0 overflow-y-auto"
-        style={{ background: "#f5f2ed" }}
+        style={{ background: "var(--inkby-surface-warm)" }}
       >
         {/* Sheet header */}
-        <SheetHeader className="px-5 pt-5 pb-4 shrink-0" style={{ background: "#f5f2ed" }}>
+        <SheetHeader className="px-5 pt-5 pb-4 shrink-0" style={{ background: "var(--inkby-surface-warm)" }}>
           <div className="flex items-start gap-3">
             <button
               onClick={() => onOpenChange(false)}
-              className="mt-0.5 w-8 h-8 flex items-center justify-center rounded-full transition-opacity hover:opacity-60 cursor-pointer shrink-0"
-              style={{ color: "#1a1a1a" }}
+              className="mt-0.5 w-8 h-8 flex items-center justify-center rounded-full transition-opacity hover:opacity-60 cursor-pointer shrink-0 text-inkby-fg"
               aria-label="Close"
             >
               <BackIcon />
             </button>
             <div>
-              <SheetTitle className="text-base font-semibold text-left" style={{ color: "#1a1a1a" }}>
+              <SheetTitle className="text-base font-semibold text-left text-inkby-fg">
                 Schedule {request.firstName} {request.lastName}
               </SheetTitle>
-              <SheetDescription className="text-[10px] font-semibold tracking-widest uppercase text-left mt-0.5" style={{ color: "#9e9a94" }}>
+              <SheetDescription className="text-[10px] font-semibold tracking-widest uppercase text-left mt-0.5 text-inkby-fg-muted">
                 Custom
               </SheetDescription>
             </div>
@@ -360,8 +354,7 @@ function ScheduleSheet({
         {/* Booking summary */}
         <div className="px-5 pb-4">
           <div
-            className="flex items-center gap-3 rounded-2xl p-3"
-            style={{ background: "#fff" }}
+            className="flex items-center gap-3 rounded-2xl p-3 bg-inkby-surface"
           >
             {photo ? (
               <div className="relative w-14 h-14 rounded-xl overflow-hidden shrink-0">
@@ -369,8 +362,7 @@ function ScheduleSheet({
               </div>
             ) : (
               <div
-                className="w-14 h-14 rounded-xl shrink-0 flex items-center justify-center"
-                style={{ background: "#e8e4dc" }}
+                className="w-14 h-14 rounded-xl shrink-0 flex items-center justify-center bg-inkby-surface-neutral"
               >
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                   <rect x="3" y="3" width="18" height="18" rx="2" stroke="#b0aca6" strokeWidth="1.5" />
@@ -380,12 +372,12 @@ function ScheduleSheet({
               </div>
             )}
             <div>
-              <p className="text-sm font-semibold" style={{ color: "#1a1a1a" }}>
+              <p className="text-sm font-semibold text-inkby-fg">
                 {request.firstName} {request.lastName}
               </p>
               <div className="flex gap-1.5 mt-0.5 flex-wrap">
-                <span className="text-xs font-medium" style={{ color: "#9e9a94" }}>#{request.tattooSize}</span>
-                <span className="text-xs font-medium" style={{ color: "#9e9a94" }}>#{request.placement}</span>
+                <span className="text-xs font-medium text-inkby-fg-muted">#{request.tattooSize}</span>
+                <span className="text-xs font-medium text-inkby-fg-muted">#{request.placement}</span>
               </div>
             </div>
           </div>
@@ -402,22 +394,22 @@ function ScheduleSheet({
                 onChange={(e) => setDuration(e.target.value)}
                 placeholder="1h30m"
                 className="rounded-xl px-3 h-11 text-sm outline-none w-full"
-                style={{ background: "#fff", color: "#1a1a1a", border: "1px solid #e2ddd6" }}
+                style={{ background: "var(--inkby-surface)", color: "var(--inkby-fg)", border: "1px solid var(--inkby-border)" }}
               />
             </FieldBox>
             <FieldBox label="Deposit">
               <div
                 className="rounded-xl px-3 h-11 flex items-center text-sm"
-                style={{ background: "#fff", color: "#9e9a94", border: "1px solid #e2ddd6" }}
+                style={{ background: "var(--inkby-surface)", color: "var(--inkby-fg-muted)", border: "1px solid var(--inkby-border)" }}
               >
                 ₮0
               </div>
             </FieldBox>
           </div>
 
-          {/* Date pickers (visible when toggle is on) */}
+          {/* Date pickers */}
           <div>
-            <Label className="mb-1 text-[#9e9a94] text-[10px] font-semibold">PICK SPECIFIC DATE</Label>
+            <Label className="mb-1 text-inkby-fg-muted text-[10px] font-semibold">PICK SPECIFIC DATE</Label>
             <div className="flex flex-col gap-2">
               {dates.map((d, i) => (
                 <div key={i} className="flex items-center gap-2">
@@ -426,13 +418,12 @@ function ScheduleSheet({
                     value={d}
                     onChange={(e) => updateDate(i, e.target.value)}
                     className="flex-1 rounded-xl px-3 h-11 text-sm outline-none"
-                    style={{ background: "#fff", color: "#1a1a1a", border: "1px solid #e2ddd6" }}
+                    style={{ background: "var(--inkby-surface)", color: "var(--inkby-fg)", border: "1px solid var(--inkby-border)" }}
                   />
                   {dates.length > 1 && (
                     <button
                       onClick={() => removeDate(i)}
-                      className="w-8 h-8 flex items-center justify-center rounded-full transition-opacity hover:opacity-60 cursor-pointer"
-                      style={{ color: "#9e9a94" }}
+                      className="w-8 h-8 flex items-center justify-center rounded-full transition-opacity hover:opacity-60 cursor-pointer text-inkby-fg-muted"
                     >
                       <TrashIcon />
                     </button>
@@ -441,8 +432,7 @@ function ScheduleSheet({
               ))}
               <button
                 onClick={addDate}
-                className="flex items-center gap-1.5 text-xs font-medium transition-opacity hover:opacity-60 cursor-pointer"
-                style={{ color: "#6b6b6b" }}
+                className="flex items-center gap-1.5 text-xs font-medium transition-opacity hover:opacity-60 cursor-pointer text-inkby-fg-secondary"
               >
                 <PlusIcon />
                 Add another date
@@ -454,30 +444,28 @@ function ScheduleSheet({
           <FieldBox label="Estimate">
             <div className="grid grid-cols-2 gap-3">
               <FieldBox label="Low">
-                <div className="flex items-center rounded-xl overflow-hidden" style={{ background: "#fff", border: "1px solid #e2ddd6" }}>
-                  <span className="pl-3 pr-1 text-sm shrink-0" style={{ color: "#9e9a94" }}>₮</span>
+                <div className="flex items-center rounded-xl overflow-hidden" style={{ background: "var(--inkby-surface)", border: "1px solid var(--inkby-border)" }}>
+                  <span className="pl-3 pr-1 text-sm shrink-0 text-inkby-fg-muted">₮</span>
                   <input
                     type="text"
                     inputMode="numeric"
                     value={lowAmount}
                     onChange={(e) => setLowAmount(formatAmount(e.target.value))}
                     placeholder="0"
-                    className="flex-1 h-11 pr-3 text-sm outline-none bg-transparent"
-                    style={{ color: "#1a1a1a" }}
+                    className="flex-1 h-11 pr-3 text-sm outline-none bg-transparent text-inkby-fg"
                   />
                 </div>
               </FieldBox>
               <FieldBox label="High">
-                <div className="flex items-center rounded-xl overflow-hidden" style={{ background: "#fff", border: "1px solid #e2ddd6" }}>
-                  <span className="pl-3 pr-1 text-sm shrink-0" style={{ color: "#9e9a94" }}>₮</span>
+                <div className="flex items-center rounded-xl overflow-hidden" style={{ background: "var(--inkby-surface)", border: "1px solid var(--inkby-border)" }}>
+                  <span className="pl-3 pr-1 text-sm shrink-0 text-inkby-fg-muted">₮</span>
                   <input
                     type="text"
                     inputMode="numeric"
                     value={highAmount}
                     onChange={(e) => setHighAmount(formatAmount(e.target.value))}
                     placeholder="0"
-                    className="flex-1 h-11 pr-3 text-sm outline-none bg-transparent"
-                    style={{ color: "#1a1a1a" }}
+                    className="flex-1 h-11 pr-3 text-sm outline-none bg-transparent text-inkby-fg"
                   />
                 </div>
               </FieldBox>
@@ -491,24 +479,24 @@ function ScheduleSheet({
               onChange={(e) => setMessage(e.target.value)}
               rows={5}
               className="rounded-2xl px-4 py-3 text-sm resize-none outline-none w-full"
-              style={{ background: "#fff", color: "#1a1a1a", border: "1px solid #e2ddd6" }}
+              style={{ background: "var(--inkby-surface)", color: "var(--inkby-fg)", border: "1px solid var(--inkby-border)" }}
             />
           </FieldBox>
 
           {/* Error */}
           {error && (
-            <p className="text-xs text-center" style={{ color: "#d94f4f" }}>{error}</p>
+            <p className="text-xs text-center text-inkby-error">{error}</p>
           )}
         </div>
 
         {/* Footer */}
         <div
-          className=" w-full sm:max-w-md px-5 pb-6 pt-3 flex flex-col gap-3"
-          style={{ background: "linear-gradient(to top, #f5f2ed 75%, transparent)" }}
+          className="w-full sm:max-w-md px-5 pb-6 pt-3 flex flex-col gap-3"
+          style={{ background: "linear-gradient(to top, var(--inkby-surface-warm) 75%, transparent)" }}
         >
           <div className="flex items-center justify-center gap-1.5">
             <ShieldIcon />
-            <p className="text-[10px]" style={{ color: "#9e9a94" }}>
+            <p className="text-[10px] text-inkby-fg-muted">
               Covered by Artist Chargeback Protection
             </p>
           </div>
@@ -516,7 +504,7 @@ function ScheduleSheet({
             onClick={handleSubmit}
             disabled={submitting}
             className="w-full rounded-full h-12 text-xs font-bold tracking-widest uppercase cursor-pointer"
-            style={{ background: "#1a1a1a", color: "#fff" }}
+            style={{ background: "var(--inkby-fg)", color: "var(--inkby-surface)" }}
           >
             {submitting ? "SENDING..." : `SEND TO ${request.firstName.toUpperCase()} ${request.lastName.toUpperCase()}`}
           </Button>
@@ -526,7 +514,6 @@ function ScheduleSheet({
   );
 }
 
-// --- Skeletons / empty states ---
 function DetailSkeleton() {
   return (
     <div className="flex flex-col gap-4 p-4">
@@ -549,7 +536,6 @@ const QA_FIELDS = [
   { label: "WHERE ON YOUR BODY?", key: "placement" },
 ] as const;
 
-// --- Main page ---
 export default function RequestDetailPage() {
   const router = useRouter();
   const params = useParams();
@@ -587,21 +573,19 @@ export default function RequestDetailPage() {
   }
 
   return (
-    <div className="max-w-xl mx-auto flex flex-col min-h-screen" style={{ background: "#EBE7DF" }}>
+    <div className="max-w-xl mx-auto flex flex-col min-h-screen bg-inkby-canvas">
       {/* Sticky header */}
       <div
-        className="sticky top-0 z-20 flex items-center px-2 py-3 gap-2"
-        style={{ background: "#EBE7DF" }}
+        className="sticky top-0 z-20 flex items-center px-2 py-3 gap-2 bg-inkby-canvas"
       >
         <button
           onClick={() => router.back()}
-          className="w-9 h-9 flex items-center justify-center rounded-full transition-opacity hover:opacity-60 cursor-pointer shrink-0"
-          style={{ color: "#1a1a1a" }}
+          className="w-9 h-9 flex items-center justify-center rounded-full transition-opacity hover:opacity-60 cursor-pointer shrink-0 text-inkby-fg"
           aria-label="Go back"
         >
           <BackIcon />
         </button>
-        <h1 className="flex-1 text-center text-sm font-semibold pr-9 truncate" style={{ color: "#1a1a1a" }}>
+        <h1 className="flex-1 text-center text-sm font-semibold pr-9 truncate text-inkby-fg">
           {loading ? (
             <Skeleton className="h-4 w-32 mx-auto" />
           ) : (
@@ -615,14 +599,14 @@ export default function RequestDetailPage() {
         <TabsList
           variant="line"
           className="w-full h-auto justify-start gap-0 p-0 border-b rounded-none shrink-0 px-4"
-          style={{ borderColor: "#d1cdc6", background: "#EBE7DF" }}
+          style={{ borderColor: "var(--inkby-border-medium)", background: "var(--inkby-canvas)" }}
         >
           {(["appointment", "payment", "chat"] as const).map((tab) => (
             <TabsTrigger
               key={tab}
               value={tab}
               className="capitalize text-xs font-semibold tracking-wide px-4 py-2.5 rounded-none h-auto"
-              style={{ color: activeTab === tab ? "#1a1a1a" : "#9e9a94" }}
+              style={{ color: activeTab === tab ? "var(--inkby-fg)" : "var(--inkby-fg-muted)" }}
             >
               {tab.charAt(0).toUpperCase() + tab.slice(1)}
             </TabsTrigger>
@@ -635,12 +619,12 @@ export default function RequestDetailPage() {
             <DetailSkeleton />
           ) : !request ? (
             <div className="flex items-center justify-center py-20">
-              <p className="text-sm" style={{ color: "#9e9a94" }}>Request not found.</p>
+              <p className="text-sm text-inkby-fg-muted">Request not found.</p>
             </div>
           ) : (
             <div className="flex flex-col">
               {/* Photo */}
-              <div className="relative w-full h-72 bg-[#e8e4dc]">
+              <div className="relative w-full h-72 bg-inkby-surface-neutral">
                 {photo ? (
                   <Image src={photo} alt="Reference" fill className="object-cover" unoptimized />
                 ) : (
@@ -657,7 +641,7 @@ export default function RequestDetailPage() {
                     <button
                       onClick={handleDownload}
                       className="w-8 h-8 rounded-full flex items-center justify-center transition-opacity hover:opacity-70 cursor-pointer"
-                      style={{ background: "rgba(255,255,255,0.85)", color: "#1a1a1a" }}
+                      style={{ background: "rgba(255,255,255,0.85)", color: "var(--inkby-fg)" }}
                       aria-label="Download photo"
                     >
                       <DownloadIcon />
@@ -665,7 +649,7 @@ export default function RequestDetailPage() {
                     <button
                       onClick={() => navigator.share?.({ url: photo })}
                       className="w-8 h-8 rounded-full flex items-center justify-center transition-opacity hover:opacity-70 cursor-pointer"
-                      style={{ background: "rgba(255,255,255,0.85)", color: "#1a1a1a" }}
+                      style={{ background: "rgba(255,255,255,0.85)", color: "var(--inkby-fg)" }}
                       aria-label="Share photo"
                     >
                       <ShareIcon />
@@ -678,15 +662,15 @@ export default function RequestDetailPage() {
               <div className="px-4 pt-4 flex flex-col gap-4">
                 {/* Idea + tags */}
                 <div className="flex flex-col gap-1.5">
-                  <p className="text-sm" style={{ color: "#1a1a1a" }}>
+                  <p className="text-sm text-inkby-fg">
                     {request.ideaDescription}
                   </p>
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="text-xs font-medium" style={{ color: "#9e9a94" }}>#{request.placement}</span>
-                    <span className="text-xs font-medium" style={{ color: "#9e9a94" }}>#{request.tattooSize}</span>
+                    <span className="text-xs font-medium text-inkby-fg-muted">#{request.placement}</span>
+                    <span className="text-xs font-medium text-inkby-fg-muted">#{request.tattooSize}</span>
                     <span
                       className="text-xs rounded-full px-2.5 py-0.5 font-medium"
-                      style={{ background: "#e2ddd6", color: "#6b6b6b" }}
+                      style={{ background: "var(--inkby-border)", color: "var(--inkby-fg-secondary)" }}
                     >
                       Custom
                     </span>
@@ -697,52 +681,51 @@ export default function RequestDetailPage() {
                 {isPending ? (
                   <>
                     {/* Private notes */}
-                    <div className="rounded-2xl p-4 flex flex-col gap-1" style={{ background: "#fff" }}>
+                    <div className="rounded-2xl p-4 flex flex-col gap-1 bg-inkby-surface">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
-                          <span style={{ color: "#9e9a94" }}><NoteIcon /></span>
-                          <span className="text-sm font-semibold" style={{ color: "#1a1a1a" }}>Private notes</span>
+                          <span className="text-inkby-fg-muted"><NoteIcon /></span>
+                          <span className="text-sm font-semibold text-inkby-fg">Private notes</span>
                         </div>
                         <button
-                          className="text-xs font-semibold tracking-widest uppercase transition-opacity hover:opacity-60 cursor-pointer"
-                          style={{ color: "#9e9a94" }}
+                          className="text-xs font-semibold tracking-widest uppercase transition-opacity hover:opacity-60 cursor-pointer text-inkby-fg-muted"
                         >
                           ADD
                         </button>
                       </div>
                       {latestSchedule?.privateNote ? (
-                        <p className="text-xs mt-1" style={{ color: "#6b6b6b" }}>
+                        <p className="text-xs mt-1 text-inkby-fg-secondary">
                           {latestSchedule.privateNote}
                         </p>
                       ) : (
-                        <p className="text-xs" style={{ color: "#b0aca6" }}>Not visible to clients</p>
+                        <p className="text-xs text-inkby-fg-placeholder">Not visible to clients</p>
                       )}
                     </div>
 
                     {/* Additional questions */}
-                    <div className="rounded-2xl overflow-hidden" style={{ background: "#fff" }}>
+                    <div className="rounded-2xl overflow-hidden bg-inkby-surface">
                       <div className="px-4 pt-4 pb-2">
-                        <p className="text-[10px] font-semibold tracking-widest uppercase" style={{ color: "#9e9a94" }}>
+                        <p className="text-[10px] font-semibold tracking-widest uppercase text-inkby-fg-muted">
                           Additional Questions
                         </p>
                       </div>
-                      <div className="flex flex-col divide-y" style={{ borderColor: "#f0ede8" }}>
+                      <div className="flex flex-col divide-y" style={{ borderColor: "var(--inkby-surface-soft)" }}>
                         {QA_FIELDS.map(({ label, key }) => (
                           <div key={key} className="px-4 py-3 flex flex-col gap-0.5">
-                            <p className="text-[10px] font-semibold tracking-widest uppercase" style={{ color: "#b0aca6" }}>
+                            <p className="text-[10px] font-semibold tracking-widest uppercase text-inkby-fg-placeholder">
                               {label}
                             </p>
-                            <p className="text-sm" style={{ color: "#1a1a1a" }}>
+                            <p className="text-sm text-inkby-fg">
                               {request[key]}
                             </p>
                           </div>
                         ))}
                         <div className="px-4 py-3 flex flex-col gap-0.5">
-                          <p className="text-[10px] font-semibold tracking-widest uppercase" style={{ color: "#b0aca6" }}>
+                          <p className="text-[10px] font-semibold tracking-widest uppercase text-inkby-fg-placeholder">
                             CONTACT
                           </p>
-                          <p className="text-sm" style={{ color: "#1a1a1a" }}>{request.email}</p>
-                          <p className="text-sm" style={{ color: "#6b6b6b" }}>{request.phone}</p>
+                          <p className="text-sm text-inkby-fg">{request.email}</p>
+                          <p className="text-sm text-inkby-fg-secondary">{request.phone}</p>
                         </div>
                       </div>
                     </div>
@@ -757,12 +740,12 @@ export default function RequestDetailPage() {
 
         {/* Payment tab */}
         <TabsContent value="payment" className="flex-1 flex items-center justify-center">
-          <p className="text-sm" style={{ color: "#9e9a94" }}>Coming soon</p>
+          <p className="text-sm text-inkby-fg-muted">Coming soon</p>
         </TabsContent>
 
         {/* Chat tab */}
         <TabsContent value="chat" className="flex-1 flex items-center justify-center">
-          <p className="text-sm" style={{ color: "#9e9a94" }}>Coming soon</p>
+          <p className="text-sm text-inkby-fg-muted">Coming soon</p>
         </TabsContent>
       </Tabs>
 
@@ -770,12 +753,12 @@ export default function RequestDetailPage() {
       {!loading && request && (
         <div
           className="mx-auto max-w-xl fixed bottom-0 left-0 right-0 lg:left-44 px-4 pb-6 pt-3 z-20"
-          style={{ background: "linear-gradient(to top, #EBE7DF 70%, transparent)" }}
+          style={{ background: "linear-gradient(to top, var(--inkby-canvas) 70%, transparent)" }}
         >
           <Button
             onClick={() => setSheetOpen(true)}
             className="w-full rounded-full h-12 text-xs font-bold tracking-widest uppercase cursor-pointer"
-            style={{ background: "#1a1a1a", color: "#fff" }}
+            style={{ background: "var(--inkby-fg)", color: "var(--inkby-surface)" }}
           >
             {isPending ? "SCHEDULE" : "EDIT APPOINTMENT"}
           </Button>
