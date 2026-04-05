@@ -1,6 +1,6 @@
 import { db } from "@/lib/db";
 import { flashDeals, flashDealSizes } from "@/lib/db/schema";
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 import {
   getAuthenticatedArtist,
   unauthorized,
@@ -21,6 +21,7 @@ const updateFlashDealSchema = z.object({
       z.object({
         size_label: z.string().min(1).max(50),
         estimated_amount: z.number().positive(),
+        duration_minutes: z.number().int().positive().optional(),
       })
     )
     .optional(),
@@ -91,6 +92,7 @@ export async function PATCH(
         sizes.map((s) => ({
           flashDealId: id,
           sizeLabel: s.size_label,
+          durationMinutes: s.duration_minutes ?? null,
           estimatedAmount: String(s.estimated_amount),
         }))
       );
@@ -119,7 +121,7 @@ export async function DELETE(
 
     await db
       .delete(flashDeals)
-      .where((t) => eq(t.id, id) && eq(t.artistId, user.id));
+      .where(and(eq(flashDeals.id, id), eq(flashDeals.artistId, user.id)));
 
     return NextResponse.json({ message: "Flash deal deleted" });
   } catch {

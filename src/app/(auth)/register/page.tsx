@@ -5,6 +5,9 @@ import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { GoogleIcon } from "@/components/icons/GoogleIcon";
 
 const collageImages = [
     {
@@ -229,16 +232,29 @@ export default function RegisterPage() {
                         </p>
                     </div>
 
+                    <Button
+                        type="button"
+                        onClick={handleGoogleSignIn}
+                        disabled={googleLoading}
+                        className="h-auto p-0 flex items-center justify-center gap-2 font-normal text-white cursor-pointer w-full py-4 px-6 rounded-full"
+                        style={{ background: "#202124" }}
+                    >
+                        <GoogleIcon />
+                        {googleLoading ? "Redirecting..." : "Continue with Google"}
+                    </Button>
+
+                    <hr className="w-full border-t border-[#D1CDC6]" />
+
                     {/* Form */}
                     <form onSubmit={handleSubmit} className="w-full flex flex-col gap-3">
                         {/* Email */}
-                        <input
+                        <Input
                             type="email"
                             placeholder="Email address"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
-                            className="w-full rounded-xl py-3 px-4 text-sm placeholder:text-[#b0aca6] focus:outline-none"
+                            className="rounded-xl py-8 px-4 text-sm placeholder:text-[#b0aca6] focus-visible:ring-1 focus-visible:ring-[#b0aca6]"
                             style={{
                                 background: "#fff",
                                 border: "1px solid #D1CDC6",
@@ -248,14 +264,14 @@ export default function RegisterPage() {
 
                         {/* Password with eye toggle */}
                         <div className="relative">
-                            <input
+                            <Input
                                 type={showPassword ? "text" : "password"}
                                 placeholder="Password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
                                 minLength={6}
-                                className="w-full rounded-xl py-3 pl-4 pr-11 text-sm placeholder:text-[#b0aca6] focus:outline-none"
+                                className="rounded-xl py-8 pl-4 pr-11 text-sm placeholder:text-[#b0aca6] focus-visible:ring-1 focus-visible:ring-[#b0aca6]"
                                 style={{
                                     background: "#fff",
                                     border: "1px solid #D1CDC6",
@@ -275,14 +291,14 @@ export default function RegisterPage() {
 
                         {/* Confirm password with eye toggle */}
                         <div className="relative">
-                            <input
+                            <Input
                                 type={showConfirmPassword ? "text" : "password"}
                                 placeholder="Confirm Password"
                                 value={confirmPassword}
                                 onChange={(e) => setConfirmPassword(e.target.value)}
                                 required
                                 minLength={6}
-                                className="w-full rounded-xl py-3 pl-4 pr-11 text-sm placeholder:text-[#b0aca6] focus:outline-none"
+                                className="rounded-xl py-8 pl-4 pr-11 text-sm placeholder:text-[#b0aca6] focus-visible:ring-1 focus-visible:ring-[#b0aca6]"
                                 style={{
                                     background: "#fff",
                                     border: "1px solid #D1CDC6",
@@ -308,28 +324,18 @@ export default function RegisterPage() {
                         )}
 
                         {/* Submit */}
-                        <button
+                        <Button
                             type="submit"
                             disabled={loading}
-                            className="w-full flex items-center justify-center gap-2 rounded-full py-3 px-4 text-xs font-semibold tracking-widest uppercase transition-opacity hover:opacity-90 disabled:opacity-60 cursor-pointer mt-1"
+                            className="w-full flex items-center justify-center gap-2 rounded-full py-6 px-4 text-xs font-semibold tracking-widest uppercase mt-1 cursor-pointer"
                             style={{ background: "#1a1a1a", color: "#fff" }}
                         >
                             {loading && <Spinner />}
                             Continue
-                        </button>
+                        </Button>
                     </form>
 
-                    {/* Footer links */}
                     <div className="flex flex-col items-center gap-1">
-                        <button
-                            type="button"
-                            onClick={handleGoogleSignIn}
-                            disabled={googleLoading}
-                            className="text-xs underline underline-offset-2 transition-opacity hover:opacity-70 disabled:opacity-50 cursor-pointer"
-                            style={{ color: "#8a8680" }}
-                        >
-                            {googleLoading ? "Redirecting..." : "Sign up with Google"}
-                        </button>
                         <p className="text-xs" style={{ color: "#8a8680" }}>
                             Already have an account?{" "}
                             <Link

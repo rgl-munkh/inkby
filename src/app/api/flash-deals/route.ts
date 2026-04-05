@@ -20,6 +20,7 @@ const createFlashDealSchema = z.object({
       z.object({
         size_label: z.string().min(1).max(50),
         estimated_amount: z.number().positive(),
+        duration_minutes: z.number().int().positive().optional(),
       })
     )
     .min(1, "At least one size is required"),
@@ -54,6 +55,7 @@ export async function POST(request: NextRequest) {
       sizes.map((s) => ({
         flashDealId: deal.id,
         sizeLabel: s.size_label,
+        durationMinutes: s.duration_minutes ?? null,
         estimatedAmount: String(s.estimated_amount),
       }))
     );

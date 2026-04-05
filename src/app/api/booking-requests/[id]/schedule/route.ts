@@ -15,7 +15,8 @@ const scheduleSchema = z.object({
   duration_minutes: z.number().int().positive(),
   suggested_dates: z
     .array(z.object({ datetime: z.string().datetime() }))
-    .min(1, "At least one suggested date is required"),
+    .min(0)
+    .optional(),
   low_amount: z.number().positive(),
   high_amount: z.number().positive(),
   message: z.string().max(2000).optional(),
@@ -52,32 +53,39 @@ export async function POST(
       return notFound("Booking request not found");
     }
 
-    if (bookingRequest.status !== "pending") {
-      return badRequest("Booking request is not in pending status");
+    if (bookingRequest.status !== "pending" && bookingRequest.status !== "scheduled") {
+      return badRequest("Booking request cannot be rescheduled");
     }
 
-    const scheduleValues = parsed.data.suggested_dates.map((date) => ({
+    // Delete existing schedule rows before inserting new ones (handles re-scheduling)
+    await db
+      .delete(bookingSchedules)
+      .where(eq(bookingSchedules.bookingRequestId, bookingRequestId));
+
+    const dates = parsed.data.suggested_dates ?? [];
+    const baseRow = {
       bookingRequestId,
       artistId: user.id,
       durationMinutes: parsed.data.duration_minutes,
-      suggestedDatetime: new Date(date.datetime),
       lowAmount: String(parsed.data.low_amount),
       highAmount: String(parsed.data.high_amount),
       message: parsed.data.message ?? null,
       privateNote: parsed.data.private_note ?? null,
-    }));
+    };
 
-    const createdSchedules = await db
-      .insert(bookingSchedules)
-      .values(scheduleValues)
-      .returning();
+    const scheduleValues =
+      dates.length > 0
+        ? dates.map((d) => ({ ...baseRow, suggestedDatetime: new Date(d.datetime) }))
+        : [{ ...baseRow, suggestedDatetime: null }];
+
+    await db.insert(bookingSchedules).values(scheduleValues);
 
     await db
       .update(bookingRequests)
       .set({ status: "scheduled" })
       .where(eq(bookingRequests.id, bookingRequestId));
 
-    return NextResponse.json({ schedules: createdSchedules }, { status: 201 });
+    return NextResponse.json({ success: true }, { status: 201 });
   } catch {
     return serverError();
   }

@@ -16,6 +16,14 @@ export async function GET(
       with: {
         photos: true,
         schedules: true,
+        artist: {
+          columns: {
+            slug: true,
+            displayName: true,
+            avatarUrl: true,
+            instagramUsername: true,
+          },
+        },
       },
     });
 

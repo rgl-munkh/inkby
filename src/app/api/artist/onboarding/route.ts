@@ -6,12 +6,13 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
 const onboardingSchema = z.object({
+  slug: z
+    .string()
+    .min(2)
+    .max(30)
+    .regex(/^[a-z0-9._]+$/, "Slug must be lowercase alphanumeric, dots, or underscores"),
   instagram_username: z.string().min(1).max(30),
-  display_name: z.string().min(1).max(100).optional(),
   deposit_amount: z.number().positive(),
-  studio_location: z.string().min(1),
-  studio_lat: z.number().optional(),
-  studio_lng: z.number().optional(),
 });
 
 export async function PUT(request: NextRequest) {
@@ -26,17 +27,23 @@ export async function PUT(request: NextRequest) {
       return badRequest(parsed.error.issues[0].message);
     }
 
-    const { instagram_username, display_name, deposit_amount, studio_location, studio_lat, studio_lng } = parsed.data;
+    const { slug, instagram_username, deposit_amount } = parsed.data;
+
+    const existingSlug = await db.query.artists.findFirst({
+      where: (t, { and, eq, ne }) => and(eq(t.slug, slug), ne(t.id, user.id)),
+      columns: { id: true },
+    });
+
+    if (existingSlug) {
+      return badRequest("This username is already taken");
+    }
 
     const [updated] = await db
       .update(artists)
       .set({
+        slug,
         instagramUsername: instagram_username,
-        displayName: display_name ?? null,
         depositAmount: String(deposit_amount),
-        studioLocation: studio_location,
-        studioLat: studio_lat ?? null,
-        studioLng: studio_lng ?? null,
         onboardingCompleted: true,
       })
       .where(eq(artists.id, user.id))

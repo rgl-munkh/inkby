@@ -1,6 +1,6 @@
 import { db } from "@/lib/db";
 import { bookingRequests, bookingRequestPhotos } from "@/lib/db/schema";
-import { eq, desc, count } from "drizzle-orm";
+import { eq, and, desc, count } from "drizzle-orm";
 import { getAuthenticatedArtist, unauthorized, badRequest, serverError } from "@/lib/auth";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
@@ -68,10 +68,6 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get("limit") || "20");
     const offset = (page - 1) * limit;
 
-    const where = status
-      ? eq(bookingRequests.artistId, user.id) && eq(bookingRequests.status, status)
-      : eq(bookingRequests.artistId, user.id);
-
     const [requests, [{ total }]] = await Promise.all([
       db.query.bookingRequests.findMany({
         where: status
@@ -85,7 +81,11 @@ export async function GET(request: NextRequest) {
       db
         .select({ total: count() })
         .from(bookingRequests)
-        .where(eq(bookingRequests.artistId, user.id)),
+        .where(
+          status
+            ? and(eq(bookingRequests.artistId, user.id), eq(bookingRequests.status, status))
+            : eq(bookingRequests.artistId, user.id)
+        ),
     ]);
 
     return NextResponse.json({

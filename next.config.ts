@@ -7,9 +7,14 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "*",
       },
-    ]
-  }
-  /* config options here */
+    ],
+  },
+  env: {
+    DATABASE_URL: process.env.DATABASE_URL,
+  },
+  async rewrites() {
+    return [{ source: "/@:slug", destination: "/profile/:slug" }];
+  },
 };
 
 export default nextConfig;

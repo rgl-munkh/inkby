@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createServiceClient } from "@/lib/supabase/server";
 import { badRequest, serverError } from "@/lib/auth";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
     const ext = file.name.split(".").pop() || "jpg";
     const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
 
-    const supabase = await createClient();
+    const supabase = createServiceClient();
 
     const { error } = await supabase.storage
       .from(bucket)

@@ -38,7 +38,7 @@ export const paymentStatusEnum = pgEnum("payment_status", [
 
 export const artists = pgTable("artists", {
   id: uuid("id").primaryKey(),
-  slug: text("slug").unique().notNull(),
+  slug: text("slug").unique(),
   displayName: text("display_name"),
   instagramUsername: text("instagram_username"),
   depositAmount: numeric("deposit_amount", { precision: 12, scale: 2 }),
@@ -87,7 +87,7 @@ export const bookingSchedules = pgTable("booking_schedules", {
     .references(() => artists.id, { onDelete: "cascade" })
     .notNull(),
   durationMinutes: integer("duration_minutes").notNull(),
-  suggestedDatetime: timestamp("suggested_datetime", { withTimezone: true }).notNull(),
+  suggestedDatetime: timestamp("suggested_datetime", { withTimezone: true }),
   lowAmount: numeric("low_amount", { precision: 12, scale: 2 }).notNull(),
   highAmount: numeric("high_amount", { precision: 12, scale: 2 }).notNull(),
   message: text("message"),
@@ -132,6 +132,7 @@ export const flashDealSizes = pgTable("flash_deal_sizes", {
     .references(() => flashDeals.id, { onDelete: "cascade" })
     .notNull(),
   sizeLabel: text("size_label").notNull(),
+  durationMinutes: integer("duration_minutes"),
   estimatedAmount: numeric("estimated_amount", { precision: 12, scale: 2 }).notNull(),
 });
 
