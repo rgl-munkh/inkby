@@ -15,7 +15,6 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [{ source: "/@:slug", destination: "/profile/:slug" }];
   },
-  //
 };
 
 export default nextConfig;
