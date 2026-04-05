@@ -137,7 +137,7 @@ function EmptyState({ slug }: { slug: string }) {
   const [copied, setCopied] = useState(false);
 
   function handleCopy() {
-    navigator.clipboard.writeText(`https://inkby.mn/@${slug}`);
+    navigator.clipboard.writeText(`${window.location.origin}/@${slug}`);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   }
@@ -197,7 +197,7 @@ export default function DashboardPage() {
 
   function handleInviteCopy() {
     if (!slug) return;
-    navigator.clipboard.writeText(`https://inkby.mn/@${slug}`);
+    navigator.clipboard.writeText(`${window.location.origin}/@${slug}`);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   }

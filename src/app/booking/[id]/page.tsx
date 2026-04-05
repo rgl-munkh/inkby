@@ -256,7 +256,7 @@ export default function ClientBookingPage() {
           <div>
             <p className="text-sm font-semibold" style={{ color: "#1a1a1a" }}>{artistHandle}</p>
             <p className="text-xs" style={{ color: "#9e9a94" }}>
-              inkby.mn/{artistHandle}
+              {typeof window !== "undefined" ? window.location.host : "inkby.mn"}/{artistHandle}
             </p>
           </div>
         </div>

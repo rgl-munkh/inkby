@@ -25,12 +25,14 @@ type Appointment = {
   chosenDatetime: string;
   status: string;
   bookingRequest: BookingRequestSnippet;
+  bookingRequestId: string;
   schedule: ScheduleSnippet | null;
 };
 
 type PendingSchedule = {
   id: string;
   suggestedDatetime: string | null;
+  bookingRequestId: string;
   durationMinutes: number;
   bookingRequest: BookingRequestSnippet;
 };
@@ -96,7 +98,7 @@ function EventCard({ ev }: { ev: CalendarEvent }) {
   const day = ev.datetime.getDate();
   const time = formatTime(ev.datetime);
   const isConfirmed = ev.type === "confirmed";
-  
+
   return (
     <Link
       href={`/dashboard/requests/${ev.bookingRequestId}`}

@@ -125,7 +125,7 @@ export default function OnboardingPage() {
   const [copied, setCopied] = useState(false);
   const [userEmail, setUserEmail] = useState("");
 
-  const profileLink = `inkby.mn/@${slug || "yourname"}`;
+  const profileLink = `${typeof window !== "undefined" ? window.location.host : ""}/@${slug || "yourname"}`;
 
   useEffect(() => {
     const supabase = createClient();
@@ -308,7 +308,7 @@ export default function OnboardingPage() {
                       style={{ background: "#fff", border: "1px solid #D1CDC6" }}
                     >
                       <span className="pl-4 pr-1 shrink-0 text-sm select-none" style={{ color: "#b0aca6" }}>
-                        inkby.mn/@
+                        {typeof window !== "undefined" ? window.location.host : "inkby.mn"}/@
                       </span>
                       <Input
                         id="slug"
@@ -433,7 +433,7 @@ export default function OnboardingPage() {
                   </div>
                   <div className="text-center">
                     <p className="font-semibold text-base" style={{ color: "#1a1a1a" }}>@{slug}</p>
-                    <p className="text-xs mt-0.5" style={{ color: "#8a8680" }}>inkby.mn/{slug}</p>
+                    <p className="text-xs mt-0.5" style={{ color: "#8a8680" }}>{typeof window !== "undefined" ? window.location.host : "inkby.mn"}/{slug}</p>
                   </div>
                 </div>
 
