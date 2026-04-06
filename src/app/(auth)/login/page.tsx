@@ -241,7 +241,7 @@ export default function LoginPage() {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
-                            className="rounded-xl py-8 px-4 text-sm placeholder:text-inkby-fg-placeholder focus-visible:ring-1 focus-visible:ring-inkby-fg-placeholder"
+                            className="rounded-xl py-8 px-4 placeholder:text-sm placeholder:text-inkby-fg-placeholder focus-visible:ring-1 focus-visible:ring-inkby-fg-placeholder"
                             style={{
                                 background: "var(--inkby-surface)",
                                 border: "1px solid var(--inkby-border-medium)",
@@ -256,7 +256,7 @@ export default function LoginPage() {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
-                                className="rounded-xl py-8 pl-4 pr-11 text-sm placeholder:text-inkby-fg-placeholder focus-visible:ring-1 focus-visible:ring-inkby-fg-placeholder"
+                                className="rounded-xl py-8 pl-4 pr-11 placeholder:text-sm placeholder:text-inkby-fg-placeholder focus-visible:ring-1 focus-visible:ring-inkby-fg-placeholder"
                                 style={{
                                     background: "var(--inkby-surface)",
                                     border: "1px solid var(--inkby-border-medium)",

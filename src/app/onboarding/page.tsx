@@ -289,7 +289,7 @@ export default function OnboardingPage() {
                         value={instagram}
                         onChange={(e) => handleInstagramChange(e.target.value)}
                         autoFocus
-                        className="flex-1 border-0 rounded-none bg-transparent h-12 px-0 focus-visible:ring-0 focus-visible:border-0 text-sm placeholder:text-inkby-fg-placeholder text-inkby-fg"
+                        className="flex-1 border-0 rounded-none bg-transparent h-12 px-0 focus-visible:ring-0 focus-visible:border-0 placeholder:text-sm placeholder:text-inkby-fg-placeholder text-inkby-fg"
                       />
                       <div className="pr-4">
                         <InstagramIcon />
@@ -317,7 +317,7 @@ export default function OnboardingPage() {
                         onChange={(e) => handleSlugChange(e.target.value)}
                         minLength={2}
                         maxLength={30}
-                        className="flex-1 border-0 rounded-none bg-transparent h-12 px-0 pr-4 focus-visible:ring-0 focus-visible:border-0 text-sm placeholder:text-inkby-fg-placeholder text-inkby-fg"
+                        className="flex-1 border-0 rounded-none bg-transparent h-12 px-0 pr-4 focus-visible:ring-0 focus-visible:border-0 placeholder:text-sm placeholder:text-inkby-fg-placeholder text-inkby-fg"
                       />
                     </div>
                   </div>
@@ -368,7 +368,7 @@ export default function OnboardingPage() {
                         inputMode="numeric"
                         value={depositInput}
                         onChange={(e) => handleDepositChange(e.target.value)}
-                        className="text-4xl font-black tracking-tight border-0 bg-transparent focus-visible:ring-0 focus-visible:border-0 w-44 text-center h-auto p-0 text-inkby-fg"
+                        className="text-4xl font-black tracking-tight border-0 bg-transparent focus-visible:ring-0 focus-visible:border-0 w-44 text-center h-auto p-0 placeholder:text-sm placeholder:text-inkby-fg-placeholder text-inkby-fg"
                       />
                     </div>
                     <Button

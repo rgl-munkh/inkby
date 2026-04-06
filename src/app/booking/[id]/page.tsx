@@ -186,7 +186,7 @@ function ChooseTimeSheet({
           type="datetime-local"
           value={chosen}
           onChange={(e) => setChosen(e.target.value)}
-          className="w-full rounded-xl px-4 h-12 text-sm outline-none"
+          className="w-full rounded-xl px-4 h-12 placeholder:text-sm outline-none"
           style={{ background: "var(--inkby-surface-warm)", color: "var(--inkby-fg)", border: "1px solid var(--inkby-border)" }}
         />
         {error && (

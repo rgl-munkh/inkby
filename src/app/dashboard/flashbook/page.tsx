@@ -319,7 +319,7 @@ function NewFlashSheet({
             <input
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full rounded-xl px-3 h-11 text-sm outline-none"
+              className="w-full rounded-xl px-3 h-11 placeholder:text-sm outline-none"
               style={{ background: "var(--inkby-surface)", color: "var(--inkby-fg)", border: "1px solid var(--inkby-border)" }}
             />
           </div>
@@ -402,7 +402,7 @@ function NewFlashSheet({
                       value={rows[i].duration}
                       onChange={(e) => setRow(i, { duration: e.target.value })}
                       placeholder="1h30m"
-                      className="flex-1 min-w-0 rounded-lg px-2 h-9 text-xs outline-none disabled:opacity-40"
+                      className="flex-1 min-w-0 rounded-lg px-2 h-9 placeholder:text-sm outline-none disabled:opacity-40"
                       style={{ background: "var(--inkby-surface-warm)", border: "1px solid var(--inkby-border)", color: "var(--inkby-fg)" }}
                     />
                     <input
@@ -412,7 +412,7 @@ function NewFlashSheet({
                       value={rows[i].amount}
                       onChange={(e) => setRow(i, { amount: formatAmount(e.target.value) })}
                       placeholder="Estimate"
-                      className="flex-1 min-w-0 rounded-lg px-2 h-9 text-xs outline-none disabled:opacity-40"
+                      className="flex-1 min-w-0 rounded-lg px-2 h-9 placeholder:text-sm outline-none disabled:opacity-40"
                       style={{ background: "var(--inkby-surface-warm)", border: "1px solid var(--inkby-border)", color: "var(--inkby-fg)" }}
                     />
                   </div>

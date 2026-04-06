@@ -393,7 +393,7 @@ function ScheduleSheet({
                 value={duration}
                 onChange={(e) => setDuration(e.target.value)}
                 placeholder="1h30m"
-                className="rounded-xl px-3 h-11 text-sm outline-none w-full"
+                className="rounded-xl px-3 h-11 placeholder:text-sm outline-none w-full"
                 style={{ background: "var(--inkby-surface)", color: "var(--inkby-fg)", border: "1px solid var(--inkby-border)" }}
               />
             </FieldBox>
@@ -417,7 +417,7 @@ function ScheduleSheet({
                     type="datetime-local"
                     value={d}
                     onChange={(e) => updateDate(i, e.target.value)}
-                    className="flex-1 rounded-xl px-3 h-11 text-sm outline-none"
+                    className="flex-1 rounded-xl px-3 h-11 placeholder:text-sm outline-none"
                     style={{ background: "var(--inkby-surface)", color: "var(--inkby-fg)", border: "1px solid var(--inkby-border)" }}
                   />
                   {dates.length > 1 && (
@@ -452,7 +452,7 @@ function ScheduleSheet({
                     value={lowAmount}
                     onChange={(e) => setLowAmount(formatAmount(e.target.value))}
                     placeholder="0"
-                    className="flex-1 h-11 pr-3 text-sm outline-none bg-transparent text-inkby-fg"
+                    className="flex-1 h-11 pr-3 placeholder:text-sm outline-none bg-transparent text-inkby-fg"
                   />
                 </div>
               </FieldBox>
@@ -465,7 +465,7 @@ function ScheduleSheet({
                     value={highAmount}
                     onChange={(e) => setHighAmount(formatAmount(e.target.value))}
                     placeholder="0"
-                    className="flex-1 h-11 pr-3 text-sm outline-none bg-transparent text-inkby-fg"
+                    className="flex-1 h-11 pr-3 placeholder:text-sm outline-none bg-transparent text-inkby-fg"
                   />
                 </div>
               </FieldBox>
