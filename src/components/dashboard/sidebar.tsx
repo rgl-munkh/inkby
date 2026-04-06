@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { createClient } from "@/lib/supabase/client";
+import { cn } from "@/lib/utils";
 
 type Artist = {
   slug: string | null;
@@ -96,18 +97,18 @@ function GiftIcon() {
 }
 
 const NAV_TOP = [
-  { label: "INBOX", href: "/dashboard", icon: InboxIcon },
-  { label: "FLASHBOOK", href: "/dashboard/flashbook", icon: FlashIcon },
-  { label: "CALENDAR", href: "/dashboard/calendar", icon: CalendarIcon },
-  { label: "CLIENTS", href: "/dashboard/clients", icon: UsersIcon },
+  { label: "INBOX", href: "/dashboard", icon: InboxIcon, isDisabled: false },
+  { label: "FLASHBOOK", href: "/dashboard/flashbook", icon: FlashIcon, isDisabled: false },
+  { label: "CALENDAR", href: "/dashboard/calendar", icon: CalendarIcon, isDisabled: false },
+  { label: "CLIENTS", href: "/dashboard/clients", icon: UsersIcon, isDisabled: true },
 ];
 
 const NAV_BOTTOM = [
-  { label: "BOOKING LINKS", href: "/dashboard/booking-links", icon: LinkIcon },
-  { label: "EVENTS", href: "/dashboard/events", icon: StarIcon },
-  { label: "TRANSACTIONS", href: "/dashboard/transactions", icon: CreditCardIcon },
-  { label: "PROFILE", href: "/dashboard/profile", icon: UserIcon },
-  { label: "REFERRALS", href: "/dashboard/referrals", icon: GiftIcon },
+  { label: "BOOKING LINKS", href: "/dashboard/booking-links", icon: LinkIcon, isDisabled: false },
+  { label: "EVENTS", href: "/dashboard/events", icon: StarIcon, isDisabled: true },
+  { label: "TRANSACTIONS", href: "/dashboard/transactions", icon: CreditCardIcon, isDisabled: true },
+  { label: "PROFILE", href: "/dashboard/profile", icon: UserIcon, isDisabled: false },
+  { label: "REFERRALS", href: "/dashboard/referrals", icon: GiftIcon, isDisabled: true },
 ];
 
 export function Sidebar({ artist }: { artist: Artist }) {
@@ -152,13 +153,13 @@ export function Sidebar({ artist }: { artist: Artist }) {
       </Link>
 
       {/* Top nav */}
-      {NAV_TOP.map(({ label, href, icon: Icon }) => {
+      {NAV_TOP.map(({ label, href, icon: Icon, isDisabled }) => {
         const isActive = pathname === href || (href !== "/dashboard" && pathname.startsWith(href));
         return (
           <Link
             key={href}
-            href={href}
-            className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-medium transition-colors"
+            href={isDisabled ? "#" : href}
+            className={cn("flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-medium transition-colors", isDisabled && "opacity-50 cursor-not-allowed text-inkby-fg-muted")}
             style={{
               background: isActive ? "var(--inkby-nav-active)" : "transparent",
               color: isActive ? "var(--inkby-fg)" : "var(--inkby-fg-secondary)",
@@ -176,13 +177,13 @@ export function Sidebar({ artist }: { artist: Artist }) {
       </div>
 
       {/* Bottom nav */}
-      {NAV_BOTTOM.map(({ label, href, icon: Icon }) => {
+      {NAV_BOTTOM.map(({ label, href, icon: Icon, isDisabled }) => {
         const isActive = pathname.startsWith(href);
         return (
           <Link
             key={href}
-            href={href}
-            className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-medium transition-colors"
+            href={isDisabled ? "#" : href}
+            className={cn("flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-medium transition-colors", isDisabled && "opacity-50 cursor-not-allowed text-inkby-fg-muted")}
             style={{
               background: isActive ? "var(--inkby-fg)" : "transparent",
               color: isActive ? "var(--inkby-surface)" : "var(--inkby-fg-secondary)",

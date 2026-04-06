@@ -5,7 +5,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Button } from "@/components/ui/button";
 
 type BookingRequest = {
   id: string;
@@ -225,9 +224,10 @@ export default function DashboardPage() {
       {/* Tabs + content */}
       <div className="flex-1 px-4 pt-4 max-w-xl mx-auto lg:px-6 lg:pt-6">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
+          <div className="overflow-x-auto scrollbar-none -mx-4 px-4 lg:-mx-6 lg:px-6">
           <TabsList
             variant="line"
-            className="w-full h-auto justify-start gap-0 p-0 mb-4 border-b rounded-none"
+            className="w-max min-w-full h-auto justify-start gap-0 p-0 mb-4 border-b rounded-none"
             style={{ borderColor: "var(--inkby-border-medium)" }}
           >
             {TABS.map(({ label, value }) => {
@@ -236,7 +236,7 @@ export default function DashboardPage() {
                 <TabsTrigger
                   key={value}
                   value={value}
-                  className="text-xs font-semibold tracking-wide px-4 py-2.5 rounded-none gap-1.5 h-auto"
+                  className="text-xs font-semibold tracking-wide px-3 sm:px-4 py-2.5 rounded-none gap-1.5 h-auto"
                   style={{ color: activeTab === value ? "var(--inkby-fg)" : "var(--inkby-fg-muted)" }}
                 >
                   {label}
@@ -252,6 +252,7 @@ export default function DashboardPage() {
               );
             })}
           </TabsList>
+          </div>
 
           {TABS.map(({ value }) => (
             <TabsContent key={value} value={value} className="w-full">

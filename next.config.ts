@@ -12,6 +12,7 @@ const nextConfig: NextConfig = {
   env: {
     DATABASE_URL: process.env.DATABASE_URL,
   },
+  allowedDevOrigins: ['192.168.50.227'],
   async rewrites() {
     return [{ source: "/@:slug", destination: "/profile/:slug" }];
   },
