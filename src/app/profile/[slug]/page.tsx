@@ -148,6 +148,7 @@ export default function ArtistProfilePage() {
   const [email, setEmail] = useState("");
 
   const [idea, setIdea] = useState("");
+  const [selectedFlashPhotoUrl, setSelectedFlashPhotoUrl] = useState<string | null>(null);
   const [photoFiles, setPhotoFiles] = useState<File[]>([]);
   const [photoUrls, setPhotoUrls] = useState<string[]>([]);
   const [size, setSize] = useState("");
@@ -212,6 +213,9 @@ export default function ArtistProfilePage() {
     try {
       const uploadedUrls = await uploadPhotos();
       setPhotoUrls(uploadedUrls);
+      const photo_urls = selectedFlashPhotoUrl
+        ? [selectedFlashPhotoUrl, ...uploadedUrls]
+        : uploadedUrls;
 
       const res = await fetch("/api/booking-requests", {
         method: "POST",
@@ -228,7 +232,7 @@ export default function ArtistProfilePage() {
               : size === "5-6 INCHES" ? "large"
                 : "extra-large",
           placement: placement.toLowerCase(),
-          photo_urls: uploadedUrls,
+          photo_urls,
         }),
       });
 
@@ -371,6 +375,7 @@ export default function ArtistProfilePage() {
                         type="button"
                         onClick={() => {
                           setIdea(`I'm interested in your flash: ${deal.title ?? "Untitled"}`);
+                          setSelectedFlashPhotoUrl(deal.photoUrl);
                           setStep(1);
                         }}
                         className="flex flex-col rounded-2xl overflow-hidden text-left transition-opacity hover:opacity-80 cursor-pointer bg-inkby-surface"

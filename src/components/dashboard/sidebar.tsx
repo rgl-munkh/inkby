@@ -106,7 +106,7 @@ const NAV_TOP = [
 const NAV_BOTTOM = [
   { label: "BOOKING LINKS", href: "/dashboard/booking-links", icon: LinkIcon, isDisabled: false },
   { label: "EVENTS", href: "/dashboard/events", icon: StarIcon, isDisabled: true },
-  { label: "TRANSACTIONS", href: "/dashboard/transactions", icon: CreditCardIcon, isDisabled: true },
+  { label: "TRANSACTIONS", href: "/dashboard/transactions", icon: CreditCardIcon, isDisabled: false },
   { label: "PROFILE", href: "/dashboard/profile", icon: UserIcon, isDisabled: false },
   { label: "REFERRALS", href: "/dashboard/referrals", icon: GiftIcon, isDisabled: true },
 ];

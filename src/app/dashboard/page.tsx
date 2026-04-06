@@ -206,12 +206,13 @@ export default function DashboardPage() {
       <div
         className="flex lg:hidden items-center justify-between px-4 py-3 sticky top-0 z-10 bg-inkby-canvas"
       >
-        <div
+        <Link
+          href="/dashboard/profile"
           className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold"
           style={{ background: "var(--inkby-chip)", color: "var(--inkby-fg-secondary)" }}
         >
           {artist?.displayName?.charAt(0) ?? artist?.instagramUsername?.charAt(0) ?? "A"}
-        </div>
+        </Link>
         <button
           onClick={handleInviteCopy}
           className="border rounded-full px-4 py-1.5 text-xs font-semibold tracking-widest uppercase transition-opacity hover:opacity-70 cursor-pointer"
