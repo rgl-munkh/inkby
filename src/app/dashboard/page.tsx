@@ -107,13 +107,13 @@ function RequestCard({ request }: { request: BookingRequest }) {
           <span className="text-xs font-medium text-inkby-fg-muted">#{request.tattooSize}</span>
         </div>
       </div>
-    </Link>
+    </Link> 
   );
 }
 
 function RequestsSkeleton() {
   return (
-    <div className="grid grid-cols-1 gap-3">
+    <div className="grid grid-cols-1 gap-3 w-full">
       {[1, 2, 3, 4].map((i) => (
         <div key={i} className="rounded-2xl overflow-hidden bg-inkby-surface">
           <Skeleton className="w-full h-48" />
@@ -201,7 +201,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col">
       {/* Mobile top bar */}
       <div
         className="flex lg:hidden items-center justify-between px-4 py-3 sticky top-0 z-10 bg-inkby-canvas"
@@ -222,9 +222,9 @@ export default function DashboardPage() {
       </div>
 
       {/* Tabs + content */}
-      <div className="flex-1 px-4 pt-4 max-w-xl mx-auto lg:px-6 lg:pt-6">
+        <div className="px-2 lg:px-4 pt-4 lg:max-w-xl mx-auto lg:px-6 lg:pt-6">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <div className="overflow-x-auto scrollbar-none -mx-4 px-4 lg:-mx-6 lg:px-6">
+          <div className="overflow-x-auto scrollbar-none -mx-4 lg:px-4 lg:-mx-6 lg:px-6">
           <TabsList
             variant="line"
             className="w-max min-w-full h-auto justify-start gap-0 p-0 mb-4 border-b rounded-none"
@@ -261,7 +261,7 @@ export default function DashboardPage() {
               ) : requests.length === 0 ? (
                 <EmptyState slug={slug} />
               ) : (
-                <div className="grid grid-cols-1 gap-3">
+                <div className="grid grid-cols-1 gap-y-3">
                   {requests.map((req) => (
                     <RequestCard key={req.id} request={req} />
                   ))}

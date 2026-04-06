@@ -452,7 +452,7 @@ function ScheduleSheet({
                     value={lowAmount}
                     onChange={(e) => setLowAmount(formatAmount(e.target.value))}
                     placeholder="0"
-                    className="flex-1 h-11 pr-3 placeholder:text-sm outline-none bg-transparent text-inkby-fg"
+                    className="flex-1 h-11 pr-3 text-base placeholder:text-sm outline-none bg-transparent text-inkby-fg"
                   />
                 </div>
               </FieldBox>
@@ -465,7 +465,7 @@ function ScheduleSheet({
                     value={highAmount}
                     onChange={(e) => setHighAmount(formatAmount(e.target.value))}
                     placeholder="0"
-                    className="flex-1 h-11 pr-3 placeholder:text-sm outline-none bg-transparent text-inkby-fg"
+                    className="flex-1 h-11 pr-3 text-base placeholder:text-sm outline-none bg-transparent text-inkby-fg"
                   />
                 </div>
               </FieldBox>
@@ -614,7 +614,7 @@ export default function RequestDetailPage() {
         </TabsList>
 
         {/* Appointment tab */}
-        <TabsContent value="appointment" className="flex-1 pb-28">
+        <TabsContent value="appointment" className="flex-1 pb:4 lg:pb-28">
           {loading ? (
             <DetailSkeleton />
           ) : !request ? (
@@ -752,7 +752,7 @@ export default function RequestDetailPage() {
       {/* Sticky SCHEDULE button */}
       {!loading && request && (
         <div
-          className="mx-auto max-w-xl fixed bottom-0 left-0 right-0 lg:left-44 px-4 pb-6 pt-3 z-20"
+          className="lg:mx-auto lg:max-w-xl lg:fixed bottom-0 left-0 right-0 lg:left-44 px-4 pb-6 pt-3 z-20"
           style={{ background: "linear-gradient(to top, var(--inkby-canvas) 70%, transparent)" }}
         >
           <Button
