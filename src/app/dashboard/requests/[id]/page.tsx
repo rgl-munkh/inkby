@@ -224,6 +224,43 @@ function FieldBox({ label, children }: { label: string; children: React.ReactNod
   );
 }
 
+type AvailableDateEntry = {
+  date: string;       // "YYYY-MM-DD"
+  startTime: string;  // "HH:mm"
+  endTime: string;    // "HH:mm"
+};
+
+function generate30MinSlots(startTime: string, endTime: string): string[] {
+  const slots: string[] = [];
+  const [sh, sm] = startTime.split(":").map(Number);
+  const [eh, em] = endTime.split(":").map(Number);
+  let mins = sh * 60 + sm;
+  const endMins = eh * 60 + em;
+  while (mins < endMins) {
+    slots.push(`${String(Math.floor(mins / 60)).padStart(2, "0")}:${String(mins % 60).padStart(2, "0")}`);
+    mins += 30;
+  }
+  return slots;
+}
+
+function formatDateLabel(dateStr: string): string {
+  return new Date(`${dateStr}T12:00:00`).toLocaleDateString("en-US", {
+    weekday: "short", month: "short", day: "numeric",
+  });
+}
+
+function formatSlotTime(hhmm: string): string {
+  const [h, m] = hhmm.split(":").map(Number);
+  const ampm = h >= 12 ? "PM" : "AM";
+  return `${h % 12 || 12}:${String(m).padStart(2, "0")} ${ampm}`;
+}
+
+function splitDatetime(val: string): { date: string; time: string } {
+  if (!val) return { date: "", time: "" };
+  const [date, time = ""] = val.split("T");
+  return { date, time: time.slice(0, 5) };
+}
+
 function ScheduleSheet({
   open,
   onOpenChange,
@@ -245,6 +282,15 @@ function ScheduleSheet({
   );
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
+  const [availableDates, setAvailableDates] = useState<AvailableDateEntry[]>([]);
+
+  useEffect(() => {
+    if (!open) return;
+    fetch("/api/artist/availability")
+      .then((r) => r.json())
+      .then((data) => { if (data.availableDates) setAvailableDates(data.availableDates); })
+      .catch(() => {});
+  }, [open]);
 
   function formatAmount(raw: string): string {
     const digits = raw.replace(/[^0-9]/g, "");
@@ -411,25 +457,87 @@ function ScheduleSheet({
           <div>
             <Label className="mb-1 text-inkby-fg-muted text-[10px] font-semibold">PICK SPECIFIC DATE</Label>
             <div className="flex flex-col gap-2">
-              {dates.map((d, i) => (
-                <div key={i} className="flex items-center gap-2">
-                  <input
-                    type="datetime-local"
-                    value={d}
-                    onChange={(e) => updateDate(i, e.target.value)}
-                    className="flex-1 rounded-xl px-3 h-11 placeholder:text-sm outline-none"
-                    style={{ background: "var(--inkby-surface)", color: "var(--inkby-fg)", border: "1px solid var(--inkby-border)" }}
-                  />
-                  {dates.length > 1 && (
-                    <button
-                      onClick={() => removeDate(i)}
-                      className="w-8 h-8 flex items-center justify-center rounded-full transition-opacity hover:opacity-60 cursor-pointer text-inkby-fg-muted"
+              {dates.map((d, i) => {
+                const { date: selDate, time: selTime } = splitDatetime(d);
+
+                if (availableDates.length === 0) {
+                  // Fallback: free-form datetime-local when no availability configured
+                  return (
+                    <div key={i} className="flex items-center gap-2">
+                      <input
+                        type="datetime-local"
+                        value={d}
+                        onChange={(e) => updateDate(i, e.target.value)}
+                        className="flex-1 rounded-xl px-3 h-11 placeholder:text-sm outline-none"
+                        style={{ background: "var(--inkby-surface)", color: "var(--inkby-fg)", border: "1px solid var(--inkby-border)" }}
+                      />
+                      {dates.length > 1 && (
+                        <button
+                          onClick={() => removeDate(i)}
+                          className="w-8 h-8 flex items-center justify-center rounded-full transition-opacity hover:opacity-60 cursor-pointer text-inkby-fg-muted"
+                        >
+                          <TrashIcon />
+                        </button>
+                      )}
+                    </div>
+                  );
+                }
+
+                const slots = selDate
+                  ? generate30MinSlots(
+                      availableDates.find((a) => a.date === selDate)?.startTime ?? "00:00",
+                      availableDates.find((a) => a.date === selDate)?.endTime ?? "00:00"
+                    )
+                  : [];
+
+                return (
+                  <div key={i} className="flex items-center gap-2">
+                    {/* Date select */}
+                    <select
+                      value={selDate}
+                      onChange={(e) => {
+                        const newDate = e.target.value;
+                        // Reset time when date changes
+                        updateDate(i, newDate ? `${newDate}T` : "");
+                      }}
+                      className="flex-1 rounded-xl px-3 h-11 text-sm outline-none cursor-pointer min-w-0"
+                      style={{ background: "var(--inkby-surface)", color: selDate ? "var(--inkby-fg)" : "var(--inkby-fg-placeholder)", border: "1px solid var(--inkby-border)" }}
                     >
-                      <TrashIcon />
-                    </button>
-                  )}
-                </div>
-              ))}
+                      <option value="">Pick a date…</option>
+                      {availableDates.map((a) => (
+                        <option key={a.date} value={a.date}>
+                          {formatDateLabel(a.date)}
+                        </option>
+                      ))}
+                    </select>
+
+                    {/* Time select */}
+                    <select
+                      value={selTime}
+                      disabled={!selDate || slots.length === 0}
+                      onChange={(e) => updateDate(i, selDate ? `${selDate}T${e.target.value}` : "")}
+                      className="w-32 shrink-0 rounded-xl px-3 h-11 text-sm outline-none cursor-pointer disabled:cursor-not-allowed"
+                      style={{ background: "var(--inkby-surface)", color: selTime ? "var(--inkby-fg)" : "var(--inkby-fg-placeholder)", border: "1px solid var(--inkby-border)" }}
+                    >
+                      <option value="">Time…</option>
+                      {slots.map((s) => (
+                        <option key={s} value={s}>
+                          {formatSlotTime(s)}
+                        </option>
+                      ))}
+                    </select>
+
+                    {dates.length > 1 && (
+                      <button
+                        onClick={() => removeDate(i)}
+                        className="w-8 h-8 flex items-center justify-center rounded-full transition-opacity hover:opacity-60 cursor-pointer text-inkby-fg-muted shrink-0"
+                      >
+                        <TrashIcon />
+                      </button>
+                    )}
+                  </div>
+                );
+              })}
               <button
                 onClick={addDate}
                 className="flex items-center gap-1.5 text-xs font-medium transition-opacity hover:opacity-60 cursor-pointer text-inkby-fg-secondary"

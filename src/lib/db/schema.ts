@@ -136,6 +136,17 @@ export const flashDealSizes = pgTable("flash_deal_sizes", {
   estimatedAmount: numeric("estimated_amount", { precision: 12, scale: 2 }).notNull(),
 });
 
+export const artistAvailableDates = pgTable("artist_available_dates", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  artistId: uuid("artist_id")
+    .references(() => artists.id, { onDelete: "cascade" })
+    .notNull(),
+  date: text("date").notNull(),            // "YYYY-MM-DD"
+  startTime: text("start_time").notNull(), // "HH:mm"
+  endTime: text("end_time").notNull(),     // "HH:mm"
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
 export const payments = pgTable("payments", {
   id: uuid("id").defaultRandom().primaryKey(),
   appointmentId: uuid("appointment_id")
@@ -155,6 +166,14 @@ export const artistsRelations = relations(artists, ({ many }) => ({
   bookingSchedules: many(bookingSchedules),
   appointments: many(appointments),
   flashDeals: many(flashDeals),
+  availableDates: many(artistAvailableDates),
+}));
+
+export const artistAvailableDatesRelations = relations(artistAvailableDates, ({ one }) => ({
+  artist: one(artists, {
+    fields: [artistAvailableDates.artistId],
+    references: [artists.id],
+  }),
 }));
 
 export const bookingRequestsRelations = relations(
@@ -263,3 +282,6 @@ export type FlashDealSizeInsert = typeof flashDealSizes.$inferInsert;
 
 export type Payment = typeof payments.$inferSelect;
 export type PaymentInsert = typeof payments.$inferInsert;
+
+export type ArtistAvailableDate = typeof artistAvailableDates.$inferSelect;
+export type ArtistAvailableDateInsert = typeof artistAvailableDates.$inferInsert;
