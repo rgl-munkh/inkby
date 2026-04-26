@@ -61,7 +61,13 @@ function CheckIcon() {
   );
 }
 
-function RequestCard({ request }: { request: BookingRequest }) {
+function RequestCard({
+  request,
+  priorityFirstPhoto = false,
+}: {
+  request: BookingRequest;
+  priorityFirstPhoto?: boolean;
+}) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const photoUrls =
@@ -97,7 +103,9 @@ function RequestCard({ request }: { request: BookingRequest }) {
                   src={url}
                   alt={n > 1 ? `Reference image ${i + 1} of ${n}` : "Reference"}
                   fill
+                  sizes="(max-width: 1023px) 100vw, 36rem"
                   className="object-cover"
+                  priority={priorityFirstPhoto && i === 0}
                 />
               </div>
             ))}
@@ -312,8 +320,12 @@ export function RequestTabs({
                 <EmptyState slug={slug} />
               ) : (
                 <div className="grid grid-cols-1 gap-y-3">
-                  {requests.map((req) => (
-                    <RequestCard key={req.id} request={req} />
+                  {requests.map((req, index) => (
+                    <RequestCard
+                      key={req.id}
+                      request={req}
+                      priorityFirstPhoto={index === 0}
+                    />
                   ))}
                 </div>
               )}
