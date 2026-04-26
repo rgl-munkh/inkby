@@ -77,8 +77,6 @@ export async function createInvoice(
 ): Promise<QPayInvoiceResponse> {
   const token = await getAccessToken();
 
-  console.log({ token })
-
   const res = await fetch(`${QPAY_URL}/invoice`, {
     method: "POST",
     headers: {
@@ -87,8 +85,6 @@ export async function createInvoice(
     },
     body: JSON.stringify(params),
   });
-
-  console.log({ res })
 
   if (!res.ok) {
     const text = await res.text();
@@ -102,10 +98,7 @@ export async function checkPayment(
   invoiceId: string
 ): Promise<QPayPaymentCheckResponse> {
   const token = await getAccessToken();
-  console.log({
-    object_type: "INVOICE",
-    object_id: invoiceId
-  })
+
   const res = await fetch(`${QPAY_URL}/payment/check`, {
     method: "POST",
     headers: {

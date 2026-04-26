@@ -1,10 +1,12 @@
 import { createServiceClient } from "@/lib/supabase/server";
-import { badRequest, serverError } from "@/lib/auth";
+import { getAuthenticatedArtist, unauthorized, badRequest, serverError } from "@/lib/auth";
 import { NextRequest, NextResponse } from "next/server";
 
-// Upload a file to Supabase Storage
 export async function POST(request: NextRequest) {
   try {
+    const { user, error: authError } = await getAuthenticatedArtist();
+    if (authError || !user) return unauthorized();
+
     const formData = await request.formData();
     const file = formData.get("file") as File | null;
     const bucket = formData.get("bucket") as string | null;

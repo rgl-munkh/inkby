@@ -3,7 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { db } from "@/lib/db";
 import { artists } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
-import { Sidebar } from "@/components/dashboard/sidebar";
+import { Sidebar } from "@/features/dashboard-nav/sidebar";
 import { BottomNav } from "@/components/dashboard/bottom-nav";
 
 export default async function DashboardLayout({

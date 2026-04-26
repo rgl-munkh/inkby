@@ -12,6 +12,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
 const updateFlashDealSchema = z.object({
+  photo_url: z.string().url().optional(),
   title: z.string().max(200).optional(),
   description: z.string().max(2000).optional(),
   is_repeatable: z.boolean().optional(),
@@ -74,9 +75,11 @@ export async function PATCH(
       return notFound("Flash deal not found");
     }
 
-    const { sizes, title, description, is_repeatable, is_active } = parsed.data;
+    const { sizes, title, description, is_repeatable, is_active, photo_url } =
+      parsed.data;
 
     const updateValues: Partial<typeof flashDeals.$inferInsert> = {};
+    if (photo_url !== undefined) updateValues.photoUrl = photo_url;
     if (title !== undefined) updateValues.title = title;
     if (description !== undefined) updateValues.description = description;
     if (is_repeatable !== undefined) updateValues.isRepeatable = is_repeatable;

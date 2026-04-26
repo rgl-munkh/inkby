@@ -33,8 +33,6 @@ export async function POST(request: NextRequest) {
 
     const qpayResult = await checkPayment(payment.qpayInvoiceId);
 
-    console.log({ qpayResult })
-
     if (qpayResult.count > 0 && qpayResult.paid_amount > 0) {
       await db
         .update(payments)

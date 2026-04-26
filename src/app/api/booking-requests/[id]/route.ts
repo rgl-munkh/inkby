@@ -15,7 +15,17 @@ export async function GET(
       where: eq(bookingRequests.id, id),
       with: {
         photos: true,
-        schedules: true,
+        schedules: {
+          columns: {
+            id: true,
+            durationMinutes: true,
+            lowAmount: true,
+            highAmount: true,
+            message: true,
+            suggestedDatetime: true,
+            createdAt: true,
+          },
+        },
         appointment: {
           columns: { id: true, status: true },
         },

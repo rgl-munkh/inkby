@@ -18,6 +18,9 @@ const confirmAppointmentSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
+    const { user, error: authError } = await getAuthenticatedArtist();
+    if (authError || !user) return unauthorized();
+
     const body = await request.json();
     const parsed = confirmAppointmentSchema.safeParse(body);
 
