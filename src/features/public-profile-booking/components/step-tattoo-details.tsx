@@ -54,7 +54,7 @@ export function StepTattooDetails({
         ) : (
           <SmileyIcon size={48} />
         )}
-        <p className="text-sm font-semibold text-inkby-fg">Book with @{artist.slug}</p>
+        <p className="text-sm font-semibold text-foreground">Book with @{artist.slug}</p>
       </div>
 
       <div className="flex flex-col gap-3 max-w-sm mx-auto w-full pb-8">
@@ -70,7 +70,7 @@ export function StepTattooDetails({
             onChange={(e) => setIdea(e.target.value)}
             rows={4}
             className="resize-none rounded-xl placeholder:text-sm"
-            style={{ background: "var(--inkby-surface-warm)", borderColor: "var(--inkby-border)", color: "var(--inkby-fg)" }}
+            style={{ background: "var(--muted)", borderColor: "var(--border)", color: "var(--foreground)" }}
           />
         </QuestionCard>
 
@@ -118,7 +118,7 @@ export function StepTattooDetails({
             variant="outline"
             onClick={() => fileInputRef.current?.click()}
             className="w-full rounded-xl h-10 text-xs border-dashed cursor-pointer"
-            style={{ borderColor: "var(--inkby-border-medium)", color: "var(--inkby-fg-muted)" }}
+            style={{ borderColor: "var(--border)", color: "var(--muted-foreground)" }}
           >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
@@ -144,12 +144,12 @@ export function StepTattooDetails({
           <PillSelect options={PLACEMENTS} value={placement} onChange={setPlacement} />
         </QuestionCard>
 
-        {error && <p className="text-xs text-center text-inkby-error">{error}</p>}
+        {error && <p className="text-xs text-center text-destructive">{error}</p>}
 
         <Button
           onClick={onContinue}
           className="w-full rounded-full h-12 text-xs font-semibold tracking-widest uppercase cursor-pointer"
-          style={{ background: "var(--inkby-fg)", color: "var(--inkby-surface)" }}
+          style={{ background: "var(--foreground)", color: "var(--card)" }}
         >
           CONTINUE
         </Button>

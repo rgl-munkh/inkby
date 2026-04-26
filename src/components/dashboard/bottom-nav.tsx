@@ -1,6 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import { ThemeToggle } from "@/components/theme-toggle";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -64,11 +65,11 @@ export function BottomNav({ artist }: { artist: Artist }) {
   const pathname = usePathname();
 
   return (
-    <div className="flex lg:hidden fixed bottom-4 left-0 right-0 z-50 items-end justify-center px-4 gap-3">
+    <div className="flex lg:hidden fixed bottom-4 left-0 right-0 z-50 items-end justify-center px-4 gap-2">
       {/* Nav pill */}
       <div
         className="flex items-center gap-1 rounded-full px-4 py-3 flex-1 justify-between max-w-xs shadow-lg"
-        style={{ background: "var(--inkby-surface)" }}
+        style={{ background: "var(--card)" }}
       >
         {NAV_ITEMS.map(({ href, icon: Icon, label, isDisabled }) => {
           const isActive = pathname === href || (href !== "/dashboard" && pathname.startsWith(href));
@@ -77,8 +78,8 @@ export function BottomNav({ artist }: { artist: Artist }) {
               key={href}
               href={isDisabled ? "#" : href}
               aria-label={label}
-              className={cn("flex items-center justify-center w-9 h-9 rounded-full transition-colors", isDisabled && "opacity-50 cursor-not-allowed text-inkby-fg-muted")}
-              style={{ color: isActive ? "var(--inkby-fg)" : "var(--inkby-fg-placeholder)" }}
+              className={cn("flex items-center justify-center w-9 h-9 rounded-full transition-colors", isDisabled && "opacity-50 cursor-not-allowed text-muted-foreground")}
+              style={{ color: isActive ? "var(--foreground)" : "var(--muted-foreground)" }}
             >
               <Icon active={isActive} />
             </Link>
@@ -86,12 +87,19 @@ export function BottomNav({ artist }: { artist: Artist }) {
         })}
       </div>
 
+      <div
+        className="flex shrink-0 items-center justify-center rounded-full shadow-lg p-0.5"
+        style={{ background: "var(--card)" }}
+      >
+        <ThemeToggle />
+      </div>
+
       {/* FAB */}
       {/* <Link
         href="/dashboard/new"
         aria-label="New booking"
         className="flex items-center justify-center w-12 h-12 rounded-full shadow-lg shrink-0 transition-opacity hover:opacity-90"
-        style={{ background: "var(--inkby-fg)", color: "var(--inkby-surface)" }}
+        style={{ background: "var(--foreground)", color: "var(--card)" }}
       >
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />

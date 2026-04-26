@@ -41,23 +41,23 @@ export function TransactionsView({
   }, [activePeriod, initialEarnings]);
 
   return (
-    <div className="max-w-xl mx-auto flex flex-col pb-28 bg-inkby-canvas min-h-screen">
+    <div className="max-w-xl mx-auto flex flex-col pb-28 bg-background min-h-screen">
       <header className="px-4 pt-5 pb-4">
-        <h1 className="text-xl font-bold text-inkby-fg">Transactions</h1>
+        <h1 className="text-xl font-bold text-foreground">Transactions</h1>
       </header>
 
       <div className="px-4 mb-4">
         <div
           className="rounded-2xl p-5 flex flex-col gap-4"
-          style={{ background: "var(--inkby-surface)" }}
+          style={{ background: "var(--card)" }}
         >
           <div className="flex items-center justify-between">
-            <p className="text-xs font-semibold tracking-widest uppercase text-inkby-fg-muted">
+            <p className="text-xs font-semibold tracking-widest uppercase text-muted-foreground">
               Earnings
             </p>
             <div
               className="flex items-center gap-0.5 rounded-full p-0.5"
-              style={{ background: "var(--inkby-surface-neutral)" }}
+              style={{ background: "var(--muted)" }}
             >
               {PERIOD_TABS.map((p) => (
                 <button
@@ -66,8 +66,8 @@ export function TransactionsView({
                   onClick={() => setActivePeriod(p)}
                   className="rounded-full px-3 py-1 text-[10px] font-semibold transition-colors cursor-pointer"
                   style={{
-                    background: activePeriod === p ? "var(--inkby-fg)" : "transparent",
-                    color: activePeriod === p ? "var(--inkby-surface)" : "var(--inkby-fg-muted)",
+                    background: activePeriod === p ? "var(--foreground)" : "transparent",
+                    color: activePeriod === p ? "var(--card)" : "var(--muted-foreground)",
                   }}
                 >
                   {p}
@@ -79,7 +79,7 @@ export function TransactionsView({
           {earningsLoading ? (
             <Skeleton className="h-9 w-36" />
           ) : (
-            <p className="text-3xl font-bold text-inkby-fg">
+            <p className="text-3xl font-bold text-foreground">
               ₮{formatAmount(earnings)}
             </p>
           )}
@@ -87,7 +87,7 @@ export function TransactionsView({
       </div>
 
       <div className="px-4 mb-3">
-        <p className="text-xs font-semibold tracking-widest uppercase text-inkby-fg-muted">
+        <p className="text-xs font-semibold tracking-widest uppercase text-muted-foreground">
           All transactions
         </p>
       </div>
@@ -95,14 +95,14 @@ export function TransactionsView({
       {!initialTransactions.length ? (
         <div className="flex flex-col items-center justify-center py-20 gap-4 px-8 text-center">
           <div
-            className="w-16 h-16 rounded-2xl flex items-center justify-center text-inkby-fg-muted"
-            style={{ background: "var(--inkby-surface-neutral)" }}
+            className="w-16 h-16 rounded-2xl flex items-center justify-center text-muted-foreground"
+            style={{ background: "var(--muted)" }}
           >
             <CreditCardIcon />
           </div>
           <div>
-            <p className="font-semibold text-sm text-inkby-fg">No transactions yet</p>
-            <p className="text-xs mt-1 text-inkby-fg-muted">
+            <p className="font-semibold text-sm text-foreground">No transactions yet</p>
+            <p className="text-xs mt-1 text-muted-foreground">
               Payments from clients will appear here once received.
             </p>
           </div>
@@ -115,18 +115,18 @@ export function TransactionsView({
               <div
                 key={tx.id}
                 className="flex items-center justify-between rounded-2xl px-4 py-3.5"
-                style={{ background: "var(--inkby-surface)" }}
+                style={{ background: "var(--card)" }}
               >
                 <div className="flex flex-col gap-0.5">
-                  <p className="text-sm font-semibold text-inkby-fg">
+                  <p className="text-sm font-semibold text-foreground">
                     {tx.firstName} {tx.lastName}
                   </p>
-                  <p className="text-xs text-inkby-fg-muted">
+                  <p className="text-xs text-muted-foreground">
                     {formatDate(tx.paidAt ?? tx.createdAt)}
                   </p>
                 </div>
                 <div className="flex flex-col items-end gap-1">
-                  <p className="text-sm font-bold text-inkby-fg">
+                  <p className="text-sm font-bold text-foreground">
                     ₮{formatAmount(tx.amount)}
                   </p>
                   <span

@@ -48,10 +48,10 @@ export function ChooseTimeSheet({
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent side="bottom" className="rounded-t-2xl p-6 flex flex-col gap-5">
         <SheetHeader>
-          <SheetTitle className="text-base font-semibold text-left text-inkby-fg">
+          <SheetTitle className="text-base font-semibold text-left text-foreground">
             Choose a time
           </SheetTitle>
-          <SheetDescription className="text-xs text-left text-inkby-fg-muted">
+          <SheetDescription className="text-xs text-left text-muted-foreground">
             Pick your preferred date and time for the appointment.
           </SheetDescription>
         </SheetHeader>
@@ -60,16 +60,16 @@ export function ChooseTimeSheet({
           value={chosen}
           onChange={(e) => setChosen(e.target.value)}
           className="w-full rounded-xl px-4 h-12 placeholder:text-sm outline-none"
-          style={{ background: "var(--inkby-surface-warm)", color: "var(--inkby-fg)", border: "1px solid var(--inkby-border)" }}
+          style={{ background: "var(--muted)", color: "var(--foreground)", border: "1px solid var(--border)" }}
         />
         {error && (
-          <p className="text-xs text-center text-inkby-error">{error}</p>
+          <p className="text-xs text-center text-destructive">{error}</p>
         )}
         <Button
           onClick={handleSubmit}
           disabled={!chosen || submitting}
           className="w-full rounded-full h-12 text-xs font-bold tracking-widest uppercase cursor-pointer"
-          style={{ background: "var(--inkby-fg)", color: "var(--inkby-surface)" }}
+          style={{ background: "var(--foreground)", color: "var(--card)" }}
         >
           {submitting ? "CONFIRMING..." : "CONFIRM APPOINTMENT"}
         </Button>

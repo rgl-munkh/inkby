@@ -85,7 +85,7 @@ function RequestCard({
   return (
     <Link
       href={`/dashboard/requests/${request.id}`}
-      className="rounded-2xl overflow-hidden block transition-opacity hover:opacity-90 bg-inkby-surface"
+      className="rounded-2xl overflow-hidden block transition-opacity hover:opacity-90 bg-card"
     >
       {n > 0 ? (
         <div className="relative w-full">
@@ -126,7 +126,7 @@ function RequestCard({
           </div>
         </div>
       ) : (
-        <div className="w-full h-48 flex items-center justify-center bg-inkby-surface-neutral">
+        <div className="w-full h-48 flex items-center justify-center bg-muted">
           <svg width="32" height="32" viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <rect x="3" y="3" width="18" height="18" rx="2" stroke="#b0aca6" strokeWidth="1.5" />
             <circle cx="8.5" cy="8.5" r="1.5" stroke="#b0aca6" strokeWidth="1.5" />
@@ -136,17 +136,17 @@ function RequestCard({
       )}
       <div className="p-4 flex flex-col gap-1.5">
         <div className="flex items-center justify-between gap-2">
-          <p className="text-sm font-semibold text-inkby-fg">
+          <p className="text-sm font-semibold text-foreground">
             {request.firstName} {request.lastName}
           </p>
-          <span className="text-xs shrink-0 text-inkby-fg-muted">{timeAgo(request.createdAt)}</span>
+          <span className="text-xs shrink-0 text-muted-foreground">{timeAgo(request.createdAt)}</span>
         </div>
-        <p className="text-xs line-clamp-2 text-inkby-fg-secondary">
+        <p className="text-xs line-clamp-2 text-muted-foreground">
           {request.ideaDescription}
         </p>
         <div className="flex items-center gap-2 mt-0.5">
-          <span className="text-xs font-medium text-inkby-fg-muted">#{request.placement}</span>
-          <span className="text-xs font-medium text-inkby-fg-muted">#{request.tattooSize}</span>
+          <span className="text-xs font-medium text-muted-foreground">#{request.placement}</span>
+          <span className="text-xs font-medium text-muted-foreground">#{request.tattooSize}</span>
         </div>
       </div>
     </Link>
@@ -157,7 +157,7 @@ function RequestsSkeleton() {
   return (
     <div className="grid grid-cols-1 gap-3 w-full">
       {[1, 2, 3, 4].map((i) => (
-        <div key={i} className="rounded-2xl overflow-hidden bg-inkby-surface">
+        <div key={i} className="rounded-2xl overflow-hidden bg-card">
           <Skeleton className="w-full h-48" />
           <div className="p-4 space-y-2">
             <div className="flex justify-between">
@@ -184,15 +184,15 @@ function EmptyState({ slug }: { slug: string }) {
     <div className="flex flex-col items-center justify-center py-20 gap-4">
       <ShareIcon />
       <div className="text-center">
-        <p className="font-semibold text-base text-inkby-fg">All done!</p>
-        <p className="text-sm mt-1 text-inkby-fg-muted">
+        <p className="font-semibold text-base text-foreground">All done!</p>
+        <p className="text-sm mt-1 text-muted-foreground">
           Keep sharing your booking link to get more requests
         </p>
       </div>
       <button
         onClick={handleCopy}
         className="flex items-center gap-2 border rounded-full px-5 py-2.5 text-xs font-medium transition-opacity hover:opacity-70 cursor-pointer"
-        style={{ borderColor: "var(--inkby-border-strong)", color: "var(--inkby-fg)", background: "transparent" }}
+        style={{ borderColor: "var(--border)", color: "var(--foreground)", background: "transparent" }}
       >
         {copied ? <CheckIcon /> : <LinkIcon />}
         {copied ? "COPIED!" : "COPY BOOKING LINK"}
@@ -251,19 +251,19 @@ export function RequestTabs({
   return (
     <div className="flex flex-col">
       <div
-        className="flex lg:hidden items-center justify-between px-4 py-3 sticky top-0 z-10 bg-inkby-canvas"
+        className="flex lg:hidden items-center justify-between px-4 py-3 sticky top-0 z-10 bg-background"
       >
         <Link
           href="/dashboard/profile"
           className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold"
-          style={{ background: "var(--inkby-chip)", color: "var(--inkby-fg-secondary)" }}
+          style={{ background: "var(--muted)", color: "var(--muted-foreground)" }}
         >
           {artist.displayName?.charAt(0) ?? artist.instagramUsername?.charAt(0) ?? "A"}
         </Link>
         <button
           onClick={handleInviteCopy}
           className="border rounded-full px-4 py-1.5 text-xs font-semibold tracking-widest uppercase transition-opacity hover:opacity-70 cursor-pointer"
-          style={{ borderColor: "var(--inkby-border-strong)", color: "var(--inkby-fg)", background: "transparent" }}
+          style={{ borderColor: "var(--border)", color: "var(--foreground)", background: "transparent" }}
         >
           {copied ? "COPIED!" : "INVITE FRIENDS"}
         </button>
@@ -275,7 +275,7 @@ export function RequestTabs({
             <TabsList
               variant="line"
               className="w-max min-w-full h-auto justify-start gap-0 p-0 mb-4 border-b rounded-none"
-              style={{ borderColor: "var(--inkby-border-medium)" }}
+              style={{ borderColor: "var(--border)" }}
             >
               {TABS.map(({ label, value }) => {
                 const count = counts[value];
@@ -284,13 +284,13 @@ export function RequestTabs({
                     key={value}
                     value={value}
                     className="text-xs font-semibold tracking-wide px-3 sm:px-4 py-2.5 rounded-none gap-1.5 h-auto"
-                    style={{ color: activeTab === value ? "var(--inkby-fg)" : "var(--inkby-fg-muted)" }}
+                    style={{ color: activeTab === value ? "var(--foreground)" : "var(--muted-foreground)" }}
                   >
                     {label}
                     {count != null && count > 0 && (
                       <span
                         className="w-4 h-4 rounded-full text-[10px] font-bold flex items-center justify-center"
-                        style={{ background: "var(--inkby-fg)", color: "var(--inkby-surface)" }}
+                        style={{ background: "var(--foreground)", color: "var(--card)" }}
                       >
                         {count > 9 ? "9+" : count}
                       </span>
@@ -307,11 +307,11 @@ export function RequestTabs({
                 <RequestsSkeleton />
               ) : error ? (
                 <div className="flex flex-col items-center justify-center py-20 gap-3 text-center">
-                  <p className="text-sm font-semibold text-inkby-fg">Something went wrong</p>
-                  <p className="text-xs text-inkby-fg-muted">{error}</p>
+                  <p className="text-sm font-semibold text-foreground">Something went wrong</p>
+                  <p className="text-xs text-muted-foreground">{error}</p>
                   <button
                     onClick={() => { setError(null); setActiveTab(value); }}
-                    className="text-xs font-semibold underline text-inkby-fg-muted cursor-pointer"
+                    className="text-xs font-semibold underline text-muted-foreground cursor-pointer"
                   >
                     Retry
                   </button>

@@ -57,9 +57,9 @@ export default function FlashbookPage() {
   }, []);
 
   return (
-    <div className="max-w-xl mx-auto flex flex-col min-h-full pb-6 bg-inkby-canvas">
+    <div className="max-w-xl mx-auto flex flex-col min-h-full pb-6 bg-background">
       <header className="flex items-center justify-between px-4 pt-4 pb-3">
-        <h1 className="text-xl font-bold text-inkby-fg">
+        <h1 className="text-xl font-bold text-foreground">
           Flashbook
         </h1>
         <Button
@@ -70,7 +70,7 @@ export default function FlashbookPage() {
             setSheetOpen(true);
           }}
           className="rounded-full h-10 w-10 shrink-0"
-          style={{ background: "var(--inkby-fg)", color: "var(--inkby-surface)" }}
+          style={{ background: "var(--foreground)", color: "var(--card)" }}
           aria-label="New flash"
         >
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -85,17 +85,17 @@ export default function FlashbookPage() {
         <div className="flex flex-col items-center justify-center px-8 py-16 gap-4 text-center">
           <div
             className="w-20 h-20 rounded-2xl flex items-center justify-center"
-            style={{ background: "var(--inkby-surface-neutral)", color: "var(--inkby-fg-muted)" }}
+            style={{ background: "var(--muted)", color: "var(--muted-foreground)" }}
           >
             <svg width="40" height="40" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" strokeWidth="1.5" />
               <circle cx="8.5" cy="10.5" r="1.5" fill="currentColor" />
             </svg>
           </div>
-          <p className="text-sm font-semibold text-inkby-fg">
+          <p className="text-sm font-semibold text-foreground">
             No flash yet
           </p>
-          <p className="text-xs max-w-xs leading-relaxed text-inkby-fg-muted">
+          <p className="text-xs max-w-xs leading-relaxed text-muted-foreground">
             Add designs clients can book from your profile. Tap + to create your first flash.
           </p>
           <Button
@@ -104,7 +104,7 @@ export default function FlashbookPage() {
               setSheetOpen(true);
             }}
             className="rounded-full h-11 px-8 text-xs font-bold tracking-widest mt-2"
-            style={{ background: "var(--inkby-fg)", color: "var(--inkby-surface)" }}
+            style={{ background: "var(--foreground)", color: "var(--card)" }}
           >
             ADD FLASH
           </Button>
@@ -114,9 +114,9 @@ export default function FlashbookPage() {
           {deals.map((deal) => (
             <article
               key={deal.id}
-              className="flex flex-col rounded-2xl overflow-hidden bg-inkby-surface"
+              className="flex flex-col rounded-2xl overflow-hidden bg-card"
             >
-              <div className="relative aspect-square w-full bg-inkby-surface-soft">
+              <div className="relative aspect-square w-full bg-muted">
                 <Image src={deal.photoUrl} alt={deal.title ?? "Flash"} fill className="object-cover" />
                 <div className="absolute top-2 right-2 flex gap-1">
                   <button
@@ -128,7 +128,7 @@ export default function FlashbookPage() {
                       setSheetOpen(true);
                     }}
                     className="w-8 h-8 rounded-full flex items-center justify-center transition-opacity hover:opacity-90 shadow-sm"
-                    style={{ background: "var(--inkby-surface)", color: "var(--inkby-fg)" }}
+                    style={{ background: "var(--card)", color: "var(--foreground)" }}
                     aria-label="Edit flash"
                   >
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -149,7 +149,7 @@ export default function FlashbookPage() {
                       setDealPendingDelete(deal);
                     }}
                     className="w-8 h-8 rounded-full flex items-center justify-center transition-opacity hover:opacity-90 shadow-sm"
-                    style={{ background: "var(--inkby-surface)", color: "var(--inkby-fg)" }}
+                    style={{ background: "var(--card)", color: "var(--foreground)" }}
                     aria-label="Delete flash"
                   >
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -165,16 +165,16 @@ export default function FlashbookPage() {
                 </div>
               </div>
               <div className="p-3 flex flex-col gap-1">
-                <p className="text-[11px] font-medium text-inkby-fg-secondary">
+                <p className="text-[11px] font-medium text-muted-foreground">
                   {deal.isRepeatable ? "Repeatable" : "Non-repeatable"}
                 </p>
-                <p className="text-[11px] text-inkby-fg-muted">
+                <p className="text-[11px] text-muted-foreground">
                   {deal.sizes.length} size{deal.sizes.length !== 1 ? "s" : ""}
                 </p>
-                <p className="text-sm font-semibold text-inkby-fg">
+                <p className="text-sm font-semibold text-foreground">
                   ₮{minEstimate(deal.sizes).toLocaleString("en-US")}
                   {deal.sizes.length > 1 && (
-                    <span className="text-[10px] font-normal text-inkby-fg-muted">
+                    <span className="text-[10px] font-normal text-muted-foreground">
                       {" "}
                       from
                     </span>
@@ -199,13 +199,13 @@ export default function FlashbookPage() {
             aria-labelledby="flash-delete-title"
             aria-describedby="flash-delete-desc"
             className="w-full max-w-sm rounded-2xl p-5 shadow-lg"
-            style={{ background: "var(--inkby-surface)", border: "1px solid var(--inkby-border)" }}
+            style={{ background: "var(--card)", border: "1px solid var(--border)" }}
             onClick={(e) => e.stopPropagation()}
           >
-            <p id="flash-delete-title" className="text-base font-semibold text-inkby-fg">
+            <p id="flash-delete-title" className="text-base font-semibold text-foreground">
               Delete this flash?
             </p>
-            <p id="flash-delete-desc" className="text-sm mt-2 text-inkby-fg-muted">
+            <p id="flash-delete-desc" className="text-sm mt-2 text-muted-foreground">
               This removes the design from your flashbook. It cannot be undone.
             </p>
             <div className="flex gap-3 mt-5">
@@ -215,7 +215,7 @@ export default function FlashbookPage() {
                 disabled={deleteSubmitting}
                 onClick={() => setDealPendingDelete(null)}
                 className="flex-1 rounded-full h-11 text-xs font-semibold"
-                style={{ borderColor: "var(--inkby-border-medium)", color: "var(--inkby-fg)" }}
+                style={{ borderColor: "var(--border)", color: "var(--foreground)" }}
               >
                 CANCEL
               </Button>
@@ -236,7 +236,7 @@ export default function FlashbookPage() {
                   })();
                 }}
                 className="flex-1 rounded-full h-11 text-xs font-bold tracking-widest"
-                style={{ background: "var(--inkby-error)", color: "var(--inkby-surface)" }}
+                style={{ background: "var(--destructive)", color: "var(--card)" }}
               >
                 {deleteSubmitting ? "…" : "DELETE"}
               </Button>

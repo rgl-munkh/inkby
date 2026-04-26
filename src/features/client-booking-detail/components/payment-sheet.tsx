@@ -104,10 +104,10 @@ export function PaymentSheet({
         className="rounded-t-2xl p-6 flex flex-col gap-5 max-h-[90dvh] overflow-y-auto"
       >
         <SheetHeader>
-          <SheetTitle className="text-base font-semibold text-left text-inkby-fg">
+          <SheetTitle className="text-base font-semibold text-left text-foreground">
             Pay deposit
           </SheetTitle>
-          <SheetDescription className="text-xs text-left text-inkby-fg-muted">
+          <SheetDescription className="text-xs text-left text-muted-foreground">
             Scan the QR code or open your bank app to pay the deposit and lock in your appointment.
           </SheetDescription>
         </SheetHeader>
@@ -126,7 +126,7 @@ export function PaymentSheet({
 
         {invoiceError && !loadingInvoice && (
           <div className="flex flex-col items-center gap-3 py-6 text-center">
-            <p className="text-sm text-inkby-error">{invoiceError}</p>
+            <p className="text-sm text-destructive">{invoiceError}</p>
             <Button
               onClick={() => onOpenChange(false)}
               variant="outline"
@@ -139,30 +139,30 @@ export function PaymentSheet({
 
         {paymentStatus === "paid" && (
           <div className="flex flex-col items-center gap-3 py-8 text-center">
-            <span className="text-inkby-success"><CheckCircleIcon size={48} /></span>
-            <p className="text-base font-semibold text-inkby-fg">Deposit paid!</p>
-            <p className="text-xs text-inkby-fg-muted">Your appointment is confirmed.</p>
+            <span className="text-emerald-600"><CheckCircleIcon size={48} /></span>
+            <p className="text-base font-semibold text-foreground">Deposit paid!</p>
+            <p className="text-xs text-muted-foreground">Your appointment is confirmed.</p>
           </div>
         )}
 
         {invoice && paymentStatus !== "paid" && !loadingInvoice && (
           <>
-            <div className="flex items-center justify-between px-4 py-3 rounded-2xl bg-inkby-surface-soft">
+            <div className="flex items-center justify-between px-4 py-3 rounded-2xl bg-muted">
               <div>
-                <p className="text-[10px] font-semibold tracking-widest uppercase text-inkby-fg-placeholder">
+                <p className="text-[10px] font-semibold tracking-widest uppercase text-muted-foreground">
                   Deposit amount
                 </p>
-                <p className="text-xl font-bold mt-0.5 text-inkby-fg">
+                <p className="text-xl font-bold mt-0.5 text-foreground">
                   ₮{formatAmount(invoice.amount)}
                 </p>
               </div>
-              <span className="text-inkby-fg-placeholder"><QRIcon /></span>
+              <span className="text-muted-foreground"><QRIcon /></span>
             </div>
 
             <div className="flex flex-col items-center gap-2">
               <div
                 className="rounded-2xl overflow-hidden p-3"
-                style={{ background: "var(--inkby-surface)", border: "1px solid var(--inkby-border)" }}
+                style={{ background: "var(--card)", border: "1px solid var(--border)" }}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
@@ -173,14 +173,14 @@ export function PaymentSheet({
                   className="w-48 h-48 object-contain"
                 />
               </div>
-              <p className="text-[10px] text-inkby-fg-placeholder">
+              <p className="text-[10px] text-muted-foreground">
                 {paymentStatus === "checking" ? "Checking payment..." : "Waiting for payment..."}
               </p>
             </div>
 
             {invoice.urls && invoice.urls.length > 0 && (
               <div className="flex flex-col gap-2">
-                <p className="text-[10px] font-semibold tracking-widest uppercase text-inkby-fg-placeholder">
+                <p className="text-[10px] font-semibold tracking-widest uppercase text-muted-foreground">
                   Or open your bank app
                 </p>
                 <div className="grid grid-cols-2 gap-2">
@@ -189,7 +189,7 @@ export function PaymentSheet({
                       key={bank.name}
                       href={bank.link}
                       className="flex items-center gap-2 px-3 h-11 rounded-xl text-xs font-medium transition-opacity hover:opacity-75 active:opacity-60"
-                      style={{ background: "var(--inkby-surface-soft)", color: "var(--inkby-fg)" }}
+                      style={{ background: "var(--muted)", color: "var(--foreground)" }}
                     >
                       {bank.logo && (
                         // eslint-disable-next-line @next/next/no-img-element

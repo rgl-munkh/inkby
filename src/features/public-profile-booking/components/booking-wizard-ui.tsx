@@ -16,7 +16,7 @@ export function BackButton({ onClick }: { onClick: () => void }) {
     <button
       onClick={onClick}
       className="flex items-center justify-center w-8 h-8 rounded-full transition-colors hover:opacity-70 cursor-pointer"
-      style={{ background: "var(--inkby-surface-neutral)", color: "var(--inkby-fg-secondary)" }}
+      style={{ background: "var(--muted)", color: "var(--muted-foreground)" }}
       aria-label="Back"
     >
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -44,9 +44,9 @@ export function PillSelect({
           onClick={() => onChange(opt)}
           className="rounded-full px-3 py-1.5 text-xs font-medium border transition-all cursor-pointer"
           style={{
-            background: value === opt ? "var(--inkby-fg)" : "transparent",
-            color: value === opt ? "var(--inkby-surface)" : "var(--inkby-fg-secondary)",
-            borderColor: value === opt ? "var(--inkby-fg)" : "var(--inkby-border-medium)",
+            background: value === opt ? "var(--foreground)" : "transparent",
+            color: value === opt ? "var(--card)" : "var(--muted-foreground)",
+            borderColor: value === opt ? "var(--foreground)" : "var(--border)",
           }}
         >
           {opt}
@@ -70,13 +70,13 @@ export function QuestionCard({
   children: ReactNode;
 }) {
   return (
-    <div className="rounded-2xl p-5 bg-inkby-surface">
-      <p className="text-[10px] font-semibold tracking-widest uppercase mb-2 text-inkby-fg-placeholder">
+    <div className="rounded-2xl p-5 bg-card">
+      <p className="text-[10px] font-semibold tracking-widest uppercase mb-2 text-muted-foreground">
         Question {index}/{total}
       </p>
-      <h3 className="text-sm font-semibold mb-1 text-inkby-fg">{title}</h3>
+      <h3 className="text-sm font-semibold mb-1 text-foreground">{title}</h3>
       {description && (
-        <p className="text-xs mb-3 text-inkby-fg-muted">{description}</p>
+        <p className="text-xs mb-3 text-muted-foreground">{description}</p>
       )}
       {children}
     </div>

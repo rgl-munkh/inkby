@@ -18,7 +18,7 @@ export function ProfileBookingFlow({
   const v = useProfileBookingFlow({ artist, initialFlashDeals });
 
   return (
-    <main className="min-h-screen flex flex-col bg-inkby-profile-canvas">
+    <main className="min-h-screen flex flex-col bg-background">
       {v.step === 0 && (
         <StepLanding
           artist={v.artist}

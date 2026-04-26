@@ -237,25 +237,25 @@ export function NewFlashSheet({
         side="right"
         showCloseButton={false}
         className="h-screen overflow-y-auto rounded-t-2xl border-0 p-0 gap-0"
-        style={{ background: "var(--inkby-surface-warm)" }}
+        style={{ background: "var(--muted)" }}
       >
         <SheetHeader
           className="px-5 pt-6 pb-2 border-b"
-          style={{ borderColor: "var(--inkby-border)" }}
+          style={{ borderColor: "var(--border)" }}
         >
           <div className="flex items-center gap-3">
             <button
               type="button"
               onClick={() => onOpenChange(false)}
               className="w-9 h-9 rounded-full flex items-center justify-center shrink-0 transition-opacity hover:opacity-70"
-              style={{ background: "var(--inkby-surface-neutral)", color: "var(--inkby-fg)" }}
+              style={{ background: "var(--muted)", color: "var(--foreground)" }}
               aria-label="Back"
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path d="M15 18l-6-6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </button>
-            <SheetTitle className="text-base font-semibold text-left flex-1 text-inkby-fg">
+            <SheetTitle className="text-base font-semibold text-left flex-1 text-foreground">
               {isEdit ? "Edit flash" : "New flash"}
             </SheetTitle>
           </div>
@@ -294,7 +294,7 @@ export function NewFlashSheet({
               disabled={uploading}
               onClick={() => fileRef.current?.click()}
               className="flex-1 rounded-xl py-3 px-3 flex flex-col items-center gap-1.5 text-xs font-medium transition-opacity hover:opacity-80 disabled:opacity-50"
-              style={{ background: "var(--inkby-surface)", border: "1px solid var(--inkby-border)", color: "var(--inkby-fg)" }}
+              style={{ background: "var(--card)", border: "1px solid var(--border)", color: "var(--foreground)" }}
             >
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" strokeWidth="1.5" />
@@ -308,7 +308,7 @@ export function NewFlashSheet({
               disabled={uploading}
               onClick={() => cameraRef.current?.click()}
               className="flex-1 rounded-xl py-3 px-3 flex flex-col items-center gap-1.5 text-xs font-medium transition-opacity hover:opacity-80 disabled:opacity-50"
-              style={{ background: "var(--inkby-surface)", border: "1px solid var(--inkby-border)", color: "var(--inkby-fg)" }}
+              style={{ background: "var(--card)", border: "1px solid var(--border)", color: "var(--foreground)" }}
             >
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path d="M4 8h3l1.5-2h7L17 8h3v11H4V8z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
@@ -317,29 +317,29 @@ export function NewFlashSheet({
               Camera
             </button>
           </div>
-          <p className="text-[11px] leading-relaxed text-inkby-fg-muted">
+          <p className="text-[11px] leading-relaxed text-muted-foreground">
             Upload one image per flash. Supports transparency and different dimensions.
           </p>
 
           {photoUrl && (
-            <div className="relative w-full aspect-video rounded-xl overflow-hidden bg-inkby-surface-neutral">
+            <div className="relative w-full aspect-video rounded-xl overflow-hidden bg-muted">
               <Image src={photoUrl} alt="Preview" fill className="object-contain" />
             </div>
           )}
 
           <div>
-            <Label className="text-[10px] font-semibold mb-1 block text-inkby-fg-muted">
+            <Label className="text-[10px] font-semibold mb-1 block text-muted-foreground">
               Add a title (optional)
             </Label>
             <input
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               className="w-full rounded-xl px-3 h-11 placeholder:text-sm outline-none"
-              style={{ background: "var(--inkby-surface)", color: "var(--inkby-fg)", border: "1px solid var(--inkby-border)" }}
+              style={{ background: "var(--card)", color: "var(--foreground)", border: "1px solid var(--border)" }}
             />
           </div>
           <div>
-            <Label className="text-[10px] font-semibold mb-1 block text-inkby-fg-muted">
+            <Label className="text-[10px] font-semibold mb-1 block text-muted-foreground">
               Add a description (optional)
             </Label>
             <textarea
@@ -347,18 +347,18 @@ export function NewFlashSheet({
               onChange={(e) => setDescription(e.target.value)}
               rows={3}
               className="w-full rounded-xl px-3 py-2.5 text-sm outline-none resize-none"
-              style={{ background: "var(--inkby-surface)", color: "var(--inkby-fg)", border: "1px solid var(--inkby-border)" }}
+              style={{ background: "var(--card)", color: "var(--foreground)", border: "1px solid var(--border)" }}
             />
           </div>
 
           {isEdit && (
             <div
               className="rounded-xl p-4 flex items-center justify-between gap-3"
-              style={{ background: "var(--inkby-surface)", border: "1px solid var(--inkby-border)" }}
+              style={{ background: "var(--card)", border: "1px solid var(--border)" }}
             >
               <div>
-                <p className="text-sm font-semibold text-inkby-fg">Visible on profile</p>
-                <p className="text-xs mt-0.5 text-inkby-fg-muted">
+                <p className="text-sm font-semibold text-foreground">Visible on profile</p>
+                <p className="text-xs mt-0.5 text-muted-foreground">
                   Turn off to hide this flash from your public profile
                 </p>
               </div>
@@ -368,7 +368,7 @@ export function NewFlashSheet({
                 aria-checked={isActive}
                 onClick={() => setIsActive((v) => !v)}
                 className="w-12 h-7 rounded-full shrink-0 transition-colors relative"
-                style={{ background: isActive ? "var(--inkby-fg)" : "var(--inkby-border-medium)" }}
+                style={{ background: isActive ? "var(--foreground)" : "var(--border)" }}
               >
                 <span
                   className="absolute top-1 w-5 h-5 rounded-full bg-white transition-transform"
@@ -380,11 +380,11 @@ export function NewFlashSheet({
 
           <div
             className="rounded-xl p-4 flex items-center justify-between gap-3"
-            style={{ background: "var(--inkby-surface)", border: "1px solid var(--inkby-border)" }}
+            style={{ background: "var(--card)", border: "1px solid var(--border)" }}
           >
             <div>
-              <p className="text-sm font-semibold text-inkby-fg">Repeatable</p>
-              <p className="text-xs mt-0.5 text-inkby-fg-muted">
+              <p className="text-sm font-semibold text-foreground">Repeatable</p>
+              <p className="text-xs mt-0.5 text-muted-foreground">
                 Available until you archive this piece
               </p>
             </div>
@@ -394,7 +394,7 @@ export function NewFlashSheet({
               aria-checked={isRepeatable}
               onClick={() => setIsRepeatable((v) => !v)}
               className="w-12 h-7 rounded-full shrink-0 transition-colors relative"
-              style={{ background: isRepeatable ? "var(--inkby-fg)" : "var(--inkby-border-medium)" }}
+              style={{ background: isRepeatable ? "var(--foreground)" : "var(--border)" }}
             >
               <span
                 className="absolute top-1 w-5 h-5 rounded-full bg-white transition-transform"
@@ -404,7 +404,7 @@ export function NewFlashSheet({
           </div>
 
           <div>
-            <p className="text-[10px] font-semibold tracking-wide mb-2 text-inkby-fg-muted">
+            <p className="text-[10px] font-semibold tracking-wide mb-2 text-muted-foreground">
               SIZE, DURATION, ESTIMATE
             </p>
             <div className="flex flex-col gap-2">
@@ -412,7 +412,7 @@ export function NewFlashSheet({
                 <div
                   key={sz.label}
                   className="rounded-xl p-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3"
-                  style={{ background: "var(--inkby-surface)", border: "1px solid var(--inkby-border)" }}
+                  style={{ background: "var(--card)", border: "1px solid var(--border)" }}
                 >
                   <button
                     type="button"
@@ -422,17 +422,17 @@ export function NewFlashSheet({
                     <span
                       className="w-5 h-5 rounded shrink-0 mt-0.5 flex items-center justify-center text-[10px] font-bold"
                       style={{
-                        background: rows[i].enabled ? "var(--inkby-coral)" : "var(--inkby-surface-neutral)",
-                        color: rows[i].enabled ? "var(--inkby-surface)" : "var(--inkby-fg-muted)",
+                        background: rows[i].enabled ? "#fb923c" : "var(--muted)",
+                        color: rows[i].enabled ? "var(--card)" : "var(--muted-foreground)",
                       }}
                     >
                       {rows[i].enabled ? "✓" : ""}
                     </span>
                     <span>
-                      <span className="text-xs font-semibold block text-inkby-fg">
+                      <span className="text-xs font-semibold block text-foreground">
                         {sz.label}
                       </span>
-                      <span className="text-[10px] text-inkby-fg-muted">
+                      <span className="text-[10px] text-muted-foreground">
                         {sz.sublabel}
                       </span>
                     </span>
@@ -445,7 +445,7 @@ export function NewFlashSheet({
                       onChange={(e) => setRow(i, { duration: e.target.value })}
                       placeholder="1h30m"
                       className="flex-1 min-w-0 rounded-lg px-2 h-9 placeholder:text-sm outline-none disabled:opacity-40"
-                      style={{ background: "var(--inkby-surface-warm)", border: "1px solid var(--inkby-border)", color: "var(--inkby-fg)" }}
+                      style={{ background: "var(--muted)", border: "1px solid var(--border)", color: "var(--foreground)" }}
                     />
                     <input
                       type="text"
@@ -455,7 +455,7 @@ export function NewFlashSheet({
                       onChange={(e) => setRow(i, { amount: formatAmountInput(e.target.value) })}
                       placeholder="Estimate"
                       className="flex-1 min-w-0 rounded-lg px-2 h-9 placeholder:text-sm outline-none disabled:opacity-40"
-                      style={{ background: "var(--inkby-surface-warm)", border: "1px solid var(--inkby-border)", color: "var(--inkby-fg)" }}
+                      style={{ background: "var(--muted)", border: "1px solid var(--border)", color: "var(--foreground)" }}
                     />
                   </div>
                 </div>
@@ -464,7 +464,7 @@ export function NewFlashSheet({
           </div>
 
           {error && (
-            <p className="text-xs text-center text-inkby-error">
+            <p className="text-xs text-center text-destructive">
               {error}
             </p>
           )}
@@ -472,14 +472,14 @@ export function NewFlashSheet({
 
         <div
           className="w-full p-4 flex gap-3 z-[60] border-t"
-          style={{ background: "var(--inkby-surface-warm)", borderColor: "var(--inkby-border)" }}
+          style={{ background: "var(--muted)", borderColor: "var(--border)" }}
         >
           <Button
             type="button"
             variant="outline"
             onClick={() => onOpenChange(false)}
             className="flex-1 rounded-full h-11 text-xs font-semibold"
-            style={{ borderColor: "var(--inkby-border-medium)", color: "var(--inkby-fg)" }}
+            style={{ borderColor: "var(--border)", color: "var(--foreground)" }}
           >
             CANCEL
           </Button>
@@ -488,7 +488,7 @@ export function NewFlashSheet({
             onClick={() => void handleSubmit()}
             disabled={submitting || uploading}
             className="flex-[2] rounded-full h-11 text-xs font-bold tracking-widest"
-            style={{ background: "var(--inkby-fg)", color: "var(--inkby-surface)" }}
+            style={{ background: "var(--foreground)", color: "var(--card)" }}
           >
             {submitting
               ? isEdit

@@ -7,6 +7,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { createClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 type Artist = {
   slug: string | null;
@@ -127,28 +128,28 @@ export function Sidebar({ artist }: { artist: Artist }) {
   return (
     <aside
       className="hidden lg:flex flex-col w-44 min-h-screen shrink-0 py-3 px-2 gap-1"
-      style={{ background: "var(--inkby-border)" }}
+      style={{ background: "var(--border)" }}
     >
       {/* Artist card */}
       <Link
         href="/dashboard/profile"
         className="flex flex-col items-center gap-1.5 rounded-xl p-3 mb-1 transition-opacity hover:opacity-80 cursor-pointer"
-        style={{ background: "var(--inkby-chip)" }}
+        style={{ background: "var(--muted)" }}
       >
         <Avatar className="size-12">
           {artist.avatarUrl && <AvatarImage src={artist.avatarUrl} alt={displayName} />}
           <AvatarFallback
             className="text-sm font-semibold"
-            style={{ background: "var(--inkby-border-strong)", color: "var(--inkby-fg-secondary)" }}
+            style={{ background: "var(--border)", color: "var(--muted-foreground)" }}
           >
             {initials}
           </AvatarFallback>
         </Avatar>
         <div className="text-center">
-          <p className="text-xs font-semibold leading-tight text-inkby-fg">
+          <p className="text-xs font-semibold leading-tight text-foreground">
             {displayName}
           </p>
-          <p className="text-xs mt-0.5 text-inkby-fg-subtle">₮0.00</p>
+          <p className="text-xs mt-0.5 text-muted-foreground">₮0.00</p>
         </div>
       </Link>
 
@@ -159,10 +160,10 @@ export function Sidebar({ artist }: { artist: Artist }) {
           <Link
             key={href}
             href={isDisabled ? "#" : href}
-            className={cn("flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-medium transition-colors", isDisabled && "opacity-50 cursor-not-allowed text-inkby-fg-muted")}
+            className={cn("flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-medium transition-colors", isDisabled && "opacity-50 cursor-not-allowed text-muted-foreground")}
             style={{
-              background: isActive ? "var(--inkby-nav-active)" : "transparent",
-              color: isActive ? "var(--inkby-fg)" : "var(--inkby-fg-secondary)",
+              background: isActive ? "var(--accent)" : "transparent",
+              color: isActive ? "var(--foreground)" : "var(--muted-foreground)",
             }}
             suppressHydrationWarning
           >
@@ -173,7 +174,7 @@ export function Sidebar({ artist }: { artist: Artist }) {
       })}
 
       <div className="my-1 px-3">
-        <Separator style={{ background: "var(--inkby-border-strong)" }} />
+        <Separator style={{ background: "var(--border)" }} />
       </div>
 
       {/* Bottom nav */}
@@ -183,10 +184,10 @@ export function Sidebar({ artist }: { artist: Artist }) {
           <Link
             key={href}
             href={isDisabled ? "#" : href}
-            className={cn("flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-medium transition-colors", isDisabled && "opacity-50 cursor-not-allowed text-inkby-fg-muted")}
+            className={cn("flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-medium transition-colors", isDisabled && "opacity-50 cursor-not-allowed text-muted-foreground")}
             style={{
-              background: isActive ? "var(--inkby-fg)" : "transparent",
-              color: isActive ? "var(--inkby-surface)" : "var(--inkby-fg-secondary)",
+              background: isActive ? "var(--foreground)" : "transparent",
+              color: isActive ? "var(--card)" : "var(--muted-foreground)",
             }}
             suppressHydrationWarning
           >
@@ -196,11 +197,14 @@ export function Sidebar({ artist }: { artist: Artist }) {
         );
       })}
 
-      {/* Logout at bottom */}
-      <div className="mt-auto pt-2">
+      {/* Theme + logout */}
+      <div className="mt-auto pt-2 flex flex-col gap-1">
+        <div className="flex justify-center px-1">
+          <ThemeToggle />
+        </div>
         <button
           onClick={handleLogout}
-          className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-medium w-full transition-colors hover:opacity-70 cursor-pointer text-inkby-fg-muted"
+          className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-medium w-full transition-colors hover:opacity-70 cursor-pointer text-muted-foreground"
         >
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />

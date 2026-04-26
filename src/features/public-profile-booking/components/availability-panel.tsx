@@ -109,21 +109,21 @@ export function AvailabilityPanel({
     >
       <div
         className="relative flex flex-col w-full max-w-sm h-full overflow-hidden"
-        style={{ background: "var(--inkby-profile-canvas, #f5f0ea)" }}
+        style={{ background: "var(--background)" }}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center gap-3 px-4 pt-5 pb-3 shrink-0">
           <button
             onClick={onClose}
             className="w-8 h-8 flex items-center justify-center rounded-full transition-opacity hover:opacity-70 cursor-pointer shrink-0"
-            style={{ background: "var(--inkby-surface-neutral)", color: "var(--inkby-fg-secondary)" }}
+            style={{ background: "var(--muted)", color: "var(--muted-foreground)" }}
             aria-label="Close"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path d="M15 18l-6-6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </button>
-          <p className="text-sm font-semibold text-inkby-fg">@{slug}&apos;s availability</p>
+          <p className="text-sm font-semibold text-foreground">@{slug}&apos;s availability</p>
         </div>
 
         <div className="px-4 pb-3 shrink-0">
@@ -131,18 +131,18 @@ export function AvailabilityPanel({
             <button
               onClick={prevWeek}
               className="w-8 h-8 flex items-center justify-center rounded-full cursor-pointer transition-opacity hover:opacity-70"
-              style={{ background: "var(--inkby-surface-neutral)", color: "var(--inkby-fg-secondary)" }}
+              style={{ background: "var(--muted)", color: "var(--muted-foreground)" }}
               aria-label="Previous week"
             >
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path d="M15 18l-6-6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </button>
-            <p className="text-sm font-bold text-inkby-fg">{monthLabel}</p>
+            <p className="text-sm font-bold text-foreground">{monthLabel}</p>
             <button
               onClick={nextWeek}
               className="w-8 h-8 flex items-center justify-center rounded-full cursor-pointer transition-opacity hover:opacity-70"
-              style={{ background: "var(--inkby-surface-neutral)", color: "var(--inkby-fg-secondary)" }}
+              style={{ background: "var(--muted)", color: "var(--muted-foreground)" }}
               aria-label="Next week"
             >
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -164,19 +164,19 @@ export function AvailabilityPanel({
                   onClick={() => { setSelectedDay(ds); setSelectedSlot(null); }}
                   className="flex flex-col items-center gap-0.5 py-2 rounded-xl transition-colors cursor-pointer disabled:cursor-not-allowed"
                   style={{
-                    background: isSelected ? "var(--inkby-fg)" : "transparent",
+                    background: isSelected ? "var(--foreground)" : "transparent",
                     opacity: !hasSlots ? 0.35 : 1,
                   }}
                 >
                   <span
                     className="text-[9px] font-bold tracking-widest"
-                    style={{ color: isSelected ? "var(--inkby-surface)" : "var(--inkby-fg-muted)" }}
+                    style={{ color: isSelected ? "var(--card)" : "var(--muted-foreground)" }}
                   >
                     {WEEK_DAYS[d.getDay()].toUpperCase()}
                   </span>
                   <span
                     className="text-base font-bold leading-tight"
-                    style={{ color: isSelected ? "var(--inkby-surface)" : "var(--inkby-fg)" }}
+                    style={{ color: isSelected ? "var(--card)" : "var(--foreground)" }}
                   >
                     {d.getDate()}
                   </span>
@@ -193,8 +193,8 @@ export function AvailabilityPanel({
             </div>
           ) : !activeSlotDate ? (
             <div className="flex flex-col items-center justify-center gap-3 py-16 text-center">
-              <p className="text-sm font-semibold text-inkby-fg">No availability this week</p>
-              <p className="text-xs text-inkby-fg-muted max-w-xs">
+              <p className="text-sm font-semibold text-foreground">No availability this week</p>
+              <p className="text-xs text-muted-foreground max-w-xs">
                 Try navigating to another week.
               </p>
             </div>
@@ -210,14 +210,14 @@ export function AvailabilityPanel({
                     onClick={() => setSelectedSlot(slot.time)}
                     className="flex items-center justify-between py-3 px-1 border-b transition-opacity cursor-pointer disabled:cursor-not-allowed"
                     style={{
-                      borderColor: "var(--inkby-border)",
+                      borderColor: "var(--border)",
                       opacity: slot.available ? 1 : 0.35,
-                      background: isChosen ? "var(--inkby-surface-soft)" : "transparent",
+                      background: isChosen ? "var(--muted)" : "transparent",
                     }}
                   >
                     <span
                       className="text-sm font-semibold"
-                      style={{ color: "var(--inkby-fg)" }}
+                      style={{ color: "var(--foreground)" }}
                     >
                       {formatSlotTime(slot.time)}
                     </span>
@@ -225,10 +225,10 @@ export function AvailabilityPanel({
                       className="text-xs font-semibold rounded-full px-3 py-1"
                       style={
                         isChosen
-                          ? { background: "var(--inkby-fg)", color: "var(--inkby-surface)" }
+                          ? { background: "var(--foreground)", color: "var(--card)" }
                           : slot.available
-                            ? { background: "var(--inkby-surface-neutral)", color: "var(--inkby-fg-secondary)" }
-                            : { background: "transparent", color: "var(--inkby-fg-muted)" }
+                            ? { background: "var(--muted)", color: "var(--muted-foreground)" }
+                            : { background: "transparent", color: "var(--muted-foreground)" }
                       }
                     >
                       {slot.available ? "Available" : "Booked"}
@@ -242,7 +242,7 @@ export function AvailabilityPanel({
 
         <div
           className="absolute bottom-0 left-0 right-0 px-4 pb-8 pt-4"
-          style={{ background: "linear-gradient(to top, var(--inkby-profile-canvas, #f5f0ea) 70%, transparent)" }}
+          style={{ background: "linear-gradient(to top, var(--background) 70%, transparent)" }}
         >
           <button
             type="button"
@@ -250,8 +250,8 @@ export function AvailabilityPanel({
             onClick={handleConfirm}
             className="w-full h-12 rounded-full text-sm font-bold tracking-widest uppercase transition-opacity cursor-pointer disabled:cursor-not-allowed"
             style={{
-              background: "var(--inkby-fg)",
-              color: "var(--inkby-surface)",
+              background: "var(--foreground)",
+              color: "var(--card)",
               opacity: selectedSlot ? 1 : 0.45,
             }}
           >

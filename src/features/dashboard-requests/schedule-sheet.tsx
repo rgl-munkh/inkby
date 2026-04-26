@@ -63,7 +63,7 @@ function ShieldIcon() {
 function FieldBox({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="flex flex-col gap-1">
-      <p className="text-[10px] font-semibold tracking-widest uppercase text-inkby-fg-muted">
+      <p className="text-[10px] font-semibold tracking-widest uppercase text-muted-foreground">
         {label}
       </p>
       {children}
@@ -193,22 +193,22 @@ export function ScheduleSheet({
       <SheetContent
         side="right"
         className="w-full sm:max-w-md flex flex-col p-0 gap-0 overflow-y-auto"
-        style={{ background: "var(--inkby-surface-warm)" }}
+        style={{ background: "var(--muted)" }}
       >
-        <SheetHeader className="px-5 pt-5 pb-4 shrink-0" style={{ background: "var(--inkby-surface-warm)" }}>
+        <SheetHeader className="px-5 pt-5 pb-4 shrink-0" style={{ background: "var(--muted)" }}>
           <div className="flex items-start gap-3">
             <button
               onClick={() => onOpenChange(false)}
-              className="mt-0.5 w-8 h-8 flex items-center justify-center rounded-full transition-opacity hover:opacity-60 cursor-pointer shrink-0 text-inkby-fg"
+              className="mt-0.5 w-8 h-8 flex items-center justify-center rounded-full transition-opacity hover:opacity-60 cursor-pointer shrink-0 text-foreground"
               aria-label="Close"
             >
               <BackIcon />
             </button>
             <div>
-              <SheetTitle className="text-base font-semibold text-left text-inkby-fg">
+              <SheetTitle className="text-base font-semibold text-left text-foreground">
                 Schedule {request.firstName} {request.lastName}
               </SheetTitle>
-              <SheetDescription className="text-[10px] font-semibold tracking-widest uppercase text-left mt-0.5 text-inkby-fg-muted">
+              <SheetDescription className="text-[10px] font-semibold tracking-widest uppercase text-left mt-0.5 text-muted-foreground">
                 Custom
               </SheetDescription>
             </div>
@@ -216,13 +216,13 @@ export function ScheduleSheet({
         </SheetHeader>
 
         <div className="px-5 pb-4">
-          <div className="flex items-center gap-3 rounded-2xl p-3 bg-inkby-surface">
+          <div className="flex items-center gap-3 rounded-2xl p-3 bg-card">
             {photo ? (
               <div className="relative w-14 h-14 rounded-xl overflow-hidden shrink-0">
                 <Image src={photo} alt="Reference" fill className="object-cover" />
               </div>
             ) : (
-              <div className="w-14 h-14 rounded-xl shrink-0 flex items-center justify-center bg-inkby-surface-neutral">
+              <div className="w-14 h-14 rounded-xl shrink-0 flex items-center justify-center bg-muted">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                   <rect x="3" y="3" width="18" height="18" rx="2" stroke="#b0aca6" strokeWidth="1.5" />
                   <circle cx="8.5" cy="8.5" r="1.5" stroke="#b0aca6" strokeWidth="1.5" />
@@ -231,12 +231,12 @@ export function ScheduleSheet({
               </div>
             )}
             <div>
-              <p className="text-sm font-semibold text-inkby-fg">
+              <p className="text-sm font-semibold text-foreground">
                 {request.firstName} {request.lastName}
               </p>
               <div className="flex gap-1.5 mt-0.5 flex-wrap">
-                <span className="text-xs font-medium text-inkby-fg-muted">#{request.tattooSize}</span>
-                <span className="text-xs font-medium text-inkby-fg-muted">#{request.placement}</span>
+                <span className="text-xs font-medium text-muted-foreground">#{request.tattooSize}</span>
+                <span className="text-xs font-medium text-muted-foreground">#{request.placement}</span>
               </div>
             </div>
           </div>
@@ -251,13 +251,13 @@ export function ScheduleSheet({
                 onChange={(e) => setDuration(e.target.value)}
                 placeholder="1h30m"
                 className="rounded-xl px-3 h-11 placeholder:text-sm outline-none w-full"
-                style={{ background: "var(--inkby-surface)", color: "var(--inkby-fg)", border: "1px solid var(--inkby-border)" }}
+                style={{ background: "var(--card)", color: "var(--foreground)", border: "1px solid var(--border)" }}
               />
             </FieldBox>
             <FieldBox label="Deposit">
               <div
                 className="rounded-xl px-3 h-11 flex items-center text-sm"
-                style={{ background: "var(--inkby-surface)", color: "var(--inkby-fg-muted)", border: "1px solid var(--inkby-border)" }}
+                style={{ background: "var(--card)", color: "var(--muted-foreground)", border: "1px solid var(--border)" }}
               >
                 ₮0
               </div>
@@ -265,7 +265,7 @@ export function ScheduleSheet({
           </div>
 
           <div>
-            <Label className="mb-1 text-inkby-fg-muted text-[10px] font-semibold">PICK SPECIFIC DATE</Label>
+            <Label className="mb-1 text-muted-foreground text-[10px] font-semibold">PICK SPECIFIC DATE</Label>
             <div className="flex flex-col gap-2">
               {dates.map((d, i) => {
                 const { date: selDate, time: selTime } = splitDatetime(d);
@@ -278,12 +278,12 @@ export function ScheduleSheet({
                         value={d}
                         onChange={(e) => updateDate(i, e.target.value)}
                         className="flex-1 rounded-xl px-3 h-11 placeholder:text-sm outline-none"
-                        style={{ background: "var(--inkby-surface)", color: "var(--inkby-fg)", border: "1px solid var(--inkby-border)" }}
+                        style={{ background: "var(--card)", color: "var(--foreground)", border: "1px solid var(--border)" }}
                       />
                       {dates.length > 1 && (
                         <button
                           onClick={() => removeDate(i)}
-                          className="w-8 h-8 flex items-center justify-center rounded-full transition-opacity hover:opacity-60 cursor-pointer text-inkby-fg-muted"
+                          className="w-8 h-8 flex items-center justify-center rounded-full transition-opacity hover:opacity-60 cursor-pointer text-muted-foreground"
                         >
                           <TrashIcon />
                         </button>
@@ -308,7 +308,7 @@ export function ScheduleSheet({
                         updateDate(i, newDate ? `${newDate}T` : "");
                       }}
                       className="flex-1 rounded-xl px-3 h-11 text-sm outline-none cursor-pointer min-w-0"
-                      style={{ background: "var(--inkby-surface)", color: selDate ? "var(--inkby-fg)" : "var(--inkby-fg-placeholder)", border: "1px solid var(--inkby-border)" }}
+                      style={{ background: "var(--card)", color: selDate ? "var(--foreground)" : "var(--muted-foreground)", border: "1px solid var(--border)" }}
                     >
                       <option value="">Pick a date…</option>
                       {availableDates.map((a) => (
@@ -323,7 +323,7 @@ export function ScheduleSheet({
                       disabled={!selDate || slots.length === 0}
                       onChange={(e) => updateDate(i, selDate ? `${selDate}T${e.target.value}` : "")}
                       className="w-32 shrink-0 rounded-xl px-3 h-11 text-sm outline-none cursor-pointer disabled:cursor-not-allowed"
-                      style={{ background: "var(--inkby-surface)", color: selTime ? "var(--inkby-fg)" : "var(--inkby-fg-placeholder)", border: "1px solid var(--inkby-border)" }}
+                      style={{ background: "var(--card)", color: selTime ? "var(--foreground)" : "var(--muted-foreground)", border: "1px solid var(--border)" }}
                     >
                       <option value="">Time…</option>
                       {slots.map((s) => (
@@ -336,7 +336,7 @@ export function ScheduleSheet({
                     {dates.length > 1 && (
                       <button
                         onClick={() => removeDate(i)}
-                        className="w-8 h-8 flex items-center justify-center rounded-full transition-opacity hover:opacity-60 cursor-pointer text-inkby-fg-muted shrink-0"
+                        className="w-8 h-8 flex items-center justify-center rounded-full transition-opacity hover:opacity-60 cursor-pointer text-muted-foreground shrink-0"
                       >
                         <TrashIcon />
                       </button>
@@ -346,7 +346,7 @@ export function ScheduleSheet({
               })}
               <button
                 onClick={addDate}
-                className="flex items-center gap-1.5 text-xs font-medium transition-opacity hover:opacity-60 cursor-pointer text-inkby-fg-secondary"
+                className="flex items-center gap-1.5 text-xs font-medium transition-opacity hover:opacity-60 cursor-pointer text-muted-foreground"
               >
                 <PlusIcon />
                 Add another date
@@ -357,28 +357,28 @@ export function ScheduleSheet({
           <FieldBox label="Estimate">
             <div className="grid grid-cols-2 gap-3">
               <FieldBox label="Low">
-                <div className="flex items-center rounded-xl overflow-hidden" style={{ background: "var(--inkby-surface)", border: "1px solid var(--inkby-border)" }}>
-                  <span className="pl-3 pr-1 text-sm shrink-0 text-inkby-fg-muted">₮</span>
+                <div className="flex items-center rounded-xl overflow-hidden" style={{ background: "var(--card)", border: "1px solid var(--border)" }}>
+                  <span className="pl-3 pr-1 text-sm shrink-0 text-muted-foreground">₮</span>
                   <input
                     type="text"
                     inputMode="numeric"
                     value={lowAmount}
                     onChange={(e) => setLowAmount(formatAmountInput(e.target.value))}
                     placeholder="0"
-                    className="flex-1 h-11 pr-3 text-base placeholder:text-sm outline-none bg-transparent text-inkby-fg"
+                    className="flex-1 h-11 pr-3 text-base placeholder:text-sm outline-none bg-transparent text-foreground"
                   />
                 </div>
               </FieldBox>
               <FieldBox label="High">
-                <div className="flex items-center rounded-xl overflow-hidden" style={{ background: "var(--inkby-surface)", border: "1px solid var(--inkby-border)" }}>
-                  <span className="pl-3 pr-1 text-sm shrink-0 text-inkby-fg-muted">₮</span>
+                <div className="flex items-center rounded-xl overflow-hidden" style={{ background: "var(--card)", border: "1px solid var(--border)" }}>
+                  <span className="pl-3 pr-1 text-sm shrink-0 text-muted-foreground">₮</span>
                   <input
                     type="text"
                     inputMode="numeric"
                     value={highAmount}
                     onChange={(e) => setHighAmount(formatAmountInput(e.target.value))}
                     placeholder="0"
-                    className="flex-1 h-11 pr-3 text-base placeholder:text-sm outline-none bg-transparent text-inkby-fg"
+                    className="flex-1 h-11 pr-3 text-base placeholder:text-sm outline-none bg-transparent text-foreground"
                   />
                 </div>
               </FieldBox>
@@ -391,22 +391,22 @@ export function ScheduleSheet({
               onChange={(e) => setMessage(e.target.value)}
               rows={5}
               className="rounded-2xl px-4 py-3 text-sm resize-none outline-none w-full"
-              style={{ background: "var(--inkby-surface)", color: "var(--inkby-fg)", border: "1px solid var(--inkby-border)" }}
+              style={{ background: "var(--card)", color: "var(--foreground)", border: "1px solid var(--border)" }}
             />
           </FieldBox>
 
           {error && (
-            <p className="text-xs text-center text-inkby-error">{error}</p>
+            <p className="text-xs text-center text-destructive">{error}</p>
           )}
         </div>
 
         <div
           className="w-full sm:max-w-md px-5 pb-6 pt-3 flex flex-col gap-3"
-          style={{ background: "linear-gradient(to top, var(--inkby-surface-warm) 75%, transparent)" }}
+          style={{ background: "linear-gradient(to top, var(--muted) 75%, transparent)" }}
         >
           <div className="flex items-center justify-center gap-1.5">
             <ShieldIcon />
-            <p className="text-[10px] text-inkby-fg-muted">
+            <p className="text-[10px] text-muted-foreground">
               Covered by Artist Chargeback Protection
             </p>
           </div>
@@ -414,7 +414,7 @@ export function ScheduleSheet({
             onClick={handleSubmit}
             disabled={submitting}
             className="w-full rounded-full h-12 text-xs font-bold tracking-widest uppercase cursor-pointer"
-            style={{ background: "var(--inkby-fg)", color: "var(--inkby-surface)" }}
+            style={{ background: "var(--foreground)", color: "var(--card)" }}
           >
             {submitting ? "SENDING..." : `SEND TO ${request.firstName.toUpperCase()} ${request.lastName.toUpperCase()}`}
           </Button>

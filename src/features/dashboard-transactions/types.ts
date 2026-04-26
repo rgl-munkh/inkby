@@ -21,7 +21,7 @@ export const PERIOD_MAP: Record<Period, string> = {
 };
 
 export const STATUS_STYLES: Record<string, { label: string; bg: string; color: string }> = {
-  paid: { label: "Paid", bg: "var(--inkby-surface-neutral)", color: "var(--inkby-fg)" },
-  pending: { label: "Pending", bg: "var(--inkby-orange)", color: "var(--inkby-surface)" },
-  failed: { label: "Failed", bg: "var(--inkby-error, #e53e3e)", color: "var(--inkby-surface)" },
+  paid: { label: "Paid", bg: "var(--muted)", color: "var(--foreground)" },
+  pending: { label: "Pending", bg: "#f97316", color: "var(--card)" },
+  failed: { label: "Failed", bg: "var(--destructive)", color: "var(--card)" },
 };

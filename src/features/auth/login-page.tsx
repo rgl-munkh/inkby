@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { GoogleIcon } from "@/components/icons/GoogleIcon";
 import { Spinner } from "@/components/icons/spinner";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 const collageImages = [
     {
@@ -145,7 +146,7 @@ export default function LoginPage() {
     }
 
     return (
-        <main className="min-h-screen flex bg-inkby-canvas">
+        <main className="min-h-screen flex bg-background">
             {/* Left: photo collage */}
             <div className="hidden lg:grid lg:w-1/2 grid-cols-2 grid-rows-2 gap-1 p-1">
                 <div className="row-span-2 relative overflow-hidden rounded-lg">
@@ -175,17 +176,20 @@ export default function LoginPage() {
             </div>
 
             {/* Right: login form */}
-            <div className="flex flex-1 items-center justify-center px-6 py-12">
+            <div className="relative flex flex-1 items-center justify-center px-6 py-12">
+                <div className="absolute top-4 right-4 sm:top-6 sm:right-6">
+                    <ThemeToggle />
+                </div>
                 <div className="w-full max-w-sm flex flex-col items-center gap-6">
                     <LogoIcon />
 
                     <div className="text-center">
                         <h1
-                            className="text-3xl font-bold tracking-tight leading-tight text-inkby-fg"
+                            className="text-3xl font-bold tracking-tight leading-tight text-foreground"
                         >
                             Welcome back
                         </h1>
-                        <p className="mt-2 text-sm text-inkby-fg-secondary">
+                        <p className="mt-2 text-sm text-muted-foreground">
                             Good to see you again.
                         </p>
                     </div>
@@ -195,13 +199,13 @@ export default function LoginPage() {
                         onClick={handleGoogleSignIn}
                         disabled={googleLoading}
                         className="h-auto p-0 flex items-center justify-center gap-2 font-normal text-white cursor-pointer w-full py-4 px-6 rounded-full"
-                        style={{ background: "var(--inkby-google-btn)" }}
+                        style={{ background: "#18181b" }}
                     >
                         <GoogleIcon />
                         {googleLoading ? "Redirecting..." : "Continue with Google"}
                     </Button>
 
-                    <hr className="w-full border-t border-inkby-border-medium" />
+                    <hr className="w-full border-t border-border" />
 
                     <form onSubmit={handleSubmit} className="w-full flex flex-col gap-3">
                         <Input
@@ -210,11 +214,11 @@ export default function LoginPage() {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
-                            className="rounded-xl py-8 px-4 placeholder:text-sm placeholder:text-inkby-fg-placeholder focus-visible:ring-1 focus-visible:ring-inkby-fg-placeholder"
+                            className="rounded-xl py-8 px-4 placeholder:text-sm placeholder:text-muted-foreground focus-visible:ring-1 focus-visible:ring-ring"
                             style={{
-                                background: "var(--inkby-surface)",
-                                border: "1px solid var(--inkby-border-medium)",
-                                color: "var(--inkby-fg)",
+                                background: "var(--card)",
+                                border: "1px solid var(--border)",
+                                color: "var(--foreground)",
                             }}
                         />
 
@@ -225,11 +229,11 @@ export default function LoginPage() {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
-                                className="rounded-xl py-8 pl-4 pr-11 placeholder:text-sm placeholder:text-inkby-fg-placeholder focus-visible:ring-1 focus-visible:ring-inkby-fg-placeholder"
+                                className="rounded-xl py-8 pl-4 pr-11 placeholder:text-sm placeholder:text-muted-foreground focus-visible:ring-1 focus-visible:ring-ring"
                                 style={{
-                                    background: "var(--inkby-surface)",
-                                    border: "1px solid var(--inkby-border-medium)",
-                                    color: "var(--inkby-fg)",
+                                    background: "var(--card)",
+                                    border: "1px solid var(--border)",
+                                    color: "var(--foreground)",
                                 }}
                             />
                             <button
@@ -244,7 +248,7 @@ export default function LoginPage() {
                         </div>
 
                         {error && (
-                            <p className="text-xs text-center text-inkby-error">
+                            <p className="text-xs text-center text-destructive">
                                 {error}
                             </p>
                         )}
@@ -253,18 +257,18 @@ export default function LoginPage() {
                             type="submit"
                             disabled={loading}
                             className="w-full flex items-center justify-center gap-2 rounded-full py-6 px-4 text-xs font-semibold tracking-widest uppercase mt-1 cursor-pointer"
-                            style={{ background: "var(--inkby-fg)", color: "var(--inkby-surface)" }}
+                            style={{ background: "var(--foreground)", color: "var(--card)" }}
                         >
                             {loading && <Spinner />}
                             Log in
                         </Button>
                     </form>
 
-                    <p className="text-xs text-inkby-fg-subtle">
+                    <p className="text-xs text-muted-foreground">
                         Don&apos;t have an account?{" "}
                         <Link
                             href="/register"
-                            className="underline underline-offset-2 text-inkby-fg-subtle"
+                            className="underline underline-offset-2 text-muted-foreground"
                         >
                             Sign up
                         </Link>

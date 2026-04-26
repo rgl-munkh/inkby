@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { GoogleIcon } from "@/components/icons/GoogleIcon";
 import { Spinner } from "@/components/icons/spinner";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 const collageImages = [
     {
@@ -153,7 +154,7 @@ export default function RegisterPage() {
     }
 
     return (
-        <main className="min-h-screen flex bg-inkby-canvas">
+        <main className="min-h-screen flex bg-background">
             {/* Left: photo collage */}
             <div className="hidden lg:grid lg:w-1/2 grid-cols-2 grid-rows-2 gap-1 p-1">
                 <div className="row-span-2 relative overflow-hidden rounded-lg">
@@ -183,17 +184,20 @@ export default function RegisterPage() {
             </div>
 
             {/* Right: registration form */}
-            <div className="flex flex-1 items-center justify-center px-6 py-12">
+            <div className="relative flex flex-1 items-center justify-center px-6 py-12">
+                <div className="absolute top-4 right-4 sm:top-6 sm:right-6">
+                    <ThemeToggle />
+                </div>
                 <div className="w-full max-w-sm flex flex-col items-center gap-6">
                     <LogoIcon />
 
                     <div className="text-center">
                         <h1
-                            className="text-3xl font-bold tracking-tight leading-tight text-inkby-fg"
+                            className="text-3xl font-bold tracking-tight leading-tight text-foreground"
                         >
                             Create an account
                         </h1>
-                        <p className="mt-2 text-sm text-inkby-fg-secondary">
+                        <p className="mt-2 text-sm text-muted-foreground">
                             Welcome! Glad you&apos;re here.
                         </p>
                     </div>
@@ -203,13 +207,13 @@ export default function RegisterPage() {
                         onClick={handleGoogleSignIn}
                         disabled={googleLoading}
                         className="h-auto p-0 flex items-center justify-center gap-2 font-normal text-white cursor-pointer w-full py-4 px-6 rounded-full"
-                        style={{ background: "var(--inkby-google-btn)" }}
+                        style={{ background: "#18181b" }}
                     >
                         <GoogleIcon />
                         {googleLoading ? "Redirecting..." : "Continue with Google"}
                     </Button>
 
-                    <hr className="w-full border-t border-inkby-border-medium" />
+                    <hr className="w-full border-t border-border" />
 
                     <form onSubmit={handleSubmit} className="w-full flex flex-col gap-3">
                         <Input
@@ -218,11 +222,11 @@ export default function RegisterPage() {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
-                            className="rounded-xl py-8 px-4 placeholder:text-sm placeholder:text-inkby-fg-placeholder focus-visible:ring-1 focus-visible:ring-inkby-fg-placeholder"
+                            className="rounded-xl py-8 px-4 placeholder:text-sm placeholder:text-muted-foreground focus-visible:ring-1 focus-visible:ring-ring"
                             style={{
-                                background: "var(--inkby-surface)",
-                                border: "1px solid var(--inkby-border-medium)",
-                                color: "var(--inkby-fg)",
+                                background: "var(--card)",
+                                border: "1px solid var(--border)",
+                                color: "var(--foreground)",
                             }}
                         />
 
@@ -234,11 +238,11 @@ export default function RegisterPage() {
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
                                 minLength={6}
-                                className="rounded-xl py-8 pl-4 pr-11 placeholder:text-sm placeholder:text-inkby-fg-placeholder focus-visible:ring-1 focus-visible:ring-inkby-fg-placeholder"
+                                className="rounded-xl py-8 pl-4 pr-11 placeholder:text-sm placeholder:text-muted-foreground focus-visible:ring-1 focus-visible:ring-ring"
                                 style={{
-                                    background: "var(--inkby-surface)",
-                                    border: "1px solid var(--inkby-border-medium)",
-                                    color: "var(--inkby-fg)",
+                                    background: "var(--card)",
+                                    border: "1px solid var(--border)",
+                                    color: "var(--foreground)",
                                 }}
                             />
                             <button
@@ -260,11 +264,11 @@ export default function RegisterPage() {
                                 onChange={(e) => setConfirmPassword(e.target.value)}
                                 required
                                 minLength={6}
-                                className="rounded-xl py-8 pl-4 pr-11 placeholder:text-sm placeholder:text-inkby-fg-placeholder focus-visible:ring-1 focus-visible:ring-inkby-fg-placeholder"
+                                className="rounded-xl py-8 pl-4 pr-11 placeholder:text-sm placeholder:text-muted-foreground focus-visible:ring-1 focus-visible:ring-ring"
                                 style={{
-                                    background: "var(--inkby-surface)",
-                                    border: "1px solid var(--inkby-border-medium)",
-                                    color: "var(--inkby-fg)",
+                                    background: "var(--card)",
+                                    border: "1px solid var(--border)",
+                                    color: "var(--foreground)",
                                 }}
                             />
                             <button
@@ -279,7 +283,7 @@ export default function RegisterPage() {
                         </div>
 
                         {error && (
-                            <p className="text-xs text-center text-inkby-error">
+                            <p className="text-xs text-center text-destructive">
                                 {error}
                             </p>
                         )}
@@ -288,7 +292,7 @@ export default function RegisterPage() {
                             type="submit"
                             disabled={loading}
                             className="w-full flex items-center justify-center gap-2 rounded-full py-6 px-4 text-xs font-semibold tracking-widest uppercase mt-1 cursor-pointer"
-                            style={{ background: "var(--inkby-fg)", color: "var(--inkby-surface)" }}
+                            style={{ background: "var(--foreground)", color: "var(--card)" }}
                         >
                             {loading && <Spinner />}
                             Continue
@@ -296,11 +300,11 @@ export default function RegisterPage() {
                     </form>
 
                     <div className="flex flex-col items-center gap-1">
-                        <p className="text-xs text-inkby-fg-subtle">
+                        <p className="text-xs text-muted-foreground">
                             Already have an account?{" "}
                             <Link
                                 href="/login"
-                                className="underline underline-offset-2 text-inkby-fg-subtle"
+                                className="underline underline-offset-2 text-muted-foreground"
                             >
                                 Log in
                             </Link>

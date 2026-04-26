@@ -26,7 +26,7 @@ export function StepLanding({
         <div className="flex items-center gap-1">
           <button
             className="flex items-center gap-1 rounded-full border px-3 py-1.5 text-xs font-medium cursor-pointer transition-opacity hover:opacity-70"
-            style={{ borderColor: "var(--inkby-border-medium)", color: "var(--inkby-fg)", background: "transparent" }}
+            style={{ borderColor: "var(--border)", color: "var(--foreground)", background: "transparent" }}
           >
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path d="M15 18l-6-6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -35,7 +35,7 @@ export function StepLanding({
           </button>
           <button
             className="flex items-center gap-1 rounded-full border px-3 py-1.5 text-xs font-medium cursor-pointer transition-opacity hover:opacity-70"
-            style={{ borderColor: "transparent", color: "var(--inkby-fg-muted)", background: "transparent" }}
+            style={{ borderColor: "transparent", color: "var(--muted-foreground)", background: "transparent" }}
           >
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -68,16 +68,16 @@ export function StepLanding({
         ) : (
           <SmileyIcon size={96} />
         )}
-        <p className="text-2xl font-bold tracking-tight text-inkby-fg">
+        <p className="text-2xl font-bold tracking-tight text-foreground">
           @{artist.slug}
         </p>
         {artist.bio && (
-          <p className="text-sm text-center max-w-xs text-inkby-fg-secondary">{artist.bio}</p>
+          <p className="text-sm text-center max-w-xs text-muted-foreground">{artist.bio}</p>
         )}
         <Button
           onClick={onStartBooking}
           className="w-full max-w-xs rounded-full h-12 text-sm font-semibold cursor-pointer mt-2"
-          style={{ background: "var(--inkby-fg)", color: "var(--inkby-surface)" }}
+          style={{ background: "var(--foreground)", color: "var(--card)" }}
         >
           Book a tattoo
         </Button>
@@ -87,8 +87,8 @@ export function StepLanding({
           className="w-full max-w-xs rounded-full h-10 text-xs font-semibold cursor-pointer transition-opacity hover:opacity-80 border"
           style={{
             background: "transparent",
-            color: "var(--inkby-fg)",
-            borderColor: "var(--inkby-border-medium)",
+            color: "var(--foreground)",
+            borderColor: "var(--border)",
           }}
         >
           {chosenDatetime
@@ -102,12 +102,12 @@ export function StepLanding({
         {flashDeals.length > 0 && (
           <div className="w-full max-w-xs mt-2">
             <div className="flex items-center gap-2 mb-3">
-              <span className="text-[10px] font-bold tracking-widest uppercase text-inkby-fg-muted">
+              <span className="text-[10px] font-bold tracking-widest uppercase text-muted-foreground">
                 Flash
               </span>
               <span
                 className="text-[10px] font-semibold rounded-full px-1.5 py-0.5 leading-none"
-                style={{ background: "var(--inkby-surface-neutral)", color: "var(--inkby-fg-secondary)" }}
+                style={{ background: "var(--muted)", color: "var(--muted-foreground)" }}
               >
                 {flashDeals.length}
               </span>
@@ -122,23 +122,23 @@ export function StepLanding({
                     key={deal.id}
                     type="button"
                     onClick={() => onPickFlash(deal)}
-                    className="flex flex-col rounded-2xl overflow-hidden text-left transition-opacity hover:opacity-80 cursor-pointer bg-inkby-surface"
+                    className="flex flex-col rounded-2xl overflow-hidden text-left transition-opacity hover:opacity-80 cursor-pointer bg-card"
                   >
-                    <div className="relative aspect-square w-full bg-inkby-surface-soft">
+                    <div className="relative aspect-square w-full bg-muted">
                       <Image src={deal.photoUrl} alt={deal.title ?? "Flash"} fill className="object-cover" />
                     </div>
                     <div className="px-2.5 py-2 flex flex-col gap-0.5">
-                      <p className="text-xs font-semibold truncate text-inkby-fg">
+                      <p className="text-xs font-semibold truncate text-foreground">
                         {deal.title ?? "Flash"}
                       </p>
-                      <p className="text-[10px] text-inkby-fg-muted">
+                      <p className="text-[10px] text-muted-foreground">
                         {deal.isRepeatable ? "Repeatable" : "Non-repeatable"}
                       </p>
                       {minAmt !== null && (
-                        <p className="text-xs font-semibold text-inkby-fg">
+                        <p className="text-xs font-semibold text-foreground">
                           ₮{minAmt.toLocaleString("en-US")}
                           {deal.sizes.length > 1 && (
-                            <span className="text-[10px] font-normal text-inkby-fg-muted"> from</span>
+                            <span className="text-[10px] font-normal text-muted-foreground"> from</span>
                           )}
                         </p>
                       )}
@@ -157,9 +157,9 @@ export function StepLanding({
             <rect width="36" height="36" rx="8" fill="#1a1a1a" />
             <path d="M18 7C18 7 11 15.5 11 21a7 7 0 0 0 14 0c0-5.5-7-14-7-14Z" fill="#f5e642" />
           </svg>
-          <span className="text-xs font-bold tracking-widest uppercase text-inkby-fg">INKBY</span>
+          <span className="text-xs font-bold tracking-widest uppercase text-foreground">INKBY</span>
         </div>
-        <p className="text-[10px] text-right text-inkby-fg-muted">
+        <p className="text-[10px] text-right text-muted-foreground">
           Painlessly manage your<br />requests, books, and deposits
         </p>
       </div>
