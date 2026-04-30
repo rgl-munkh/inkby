@@ -1,6 +1,5 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -11,22 +10,11 @@ import {
   SheetTitle,
   SheetDescription,
 } from "@/components/ui/sheet";
-import { parseDuration, formatDateLabel, formatTimeLabel as formatSlotTime, formatAmountInput, parseAmountInput } from "@/lib/utils";
-
-type BookingRequest = {
-  id: string;
-  firstName: string;
-  lastName: string;
-  tattooSize: string;
-  placement: string;
-  photos: { id: string; photoUrl: string }[];
-};
-
-type AvailableDateEntry = {
-  date: string;
-  startTime: string;
-  endTime: string;
-};
+import { formatAmountInput } from "@/lib/domain/money";
+import { formatDateLabel, formatTimeLabel as formatSlotTime } from "@/lib/domain/dates";
+import { generate30MinSlots, splitDatetime } from "./lib/schedule-form";
+import { useScheduleRequestForm } from "./hooks/use-schedule-request-form";
+import type { ScheduleSheetBookingRequest } from "./types";
 
 function BackIcon() {
   return (
@@ -71,25 +59,6 @@ function FieldBox({ label, children }: { label: string; children: React.ReactNod
   );
 }
 
-function generate30MinSlots(startTime: string, endTime: string): string[] {
-  const slots: string[] = [];
-  const [sh, sm] = startTime.split(":").map(Number);
-  const [eh, em] = endTime.split(":").map(Number);
-  let mins = sh * 60 + sm;
-  const endMins = eh * 60 + em;
-  while (mins < endMins) {
-    slots.push(`${String(Math.floor(mins / 60)).padStart(2, "0")}:${String(mins % 60).padStart(2, "0")}`);
-    mins += 30;
-  }
-  return slots;
-}
-
-function splitDatetime(val: string): { date: string; time: string } {
-  if (!val) return { date: "", time: "" };
-  const [date, time = ""] = val.split("T");
-  return { date, time: time.slice(0, 5) };
-}
-
 export function ScheduleSheet({
   open,
   onOpenChange,
@@ -98,104 +67,37 @@ export function ScheduleSheet({
 }: {
   open: boolean;
   onOpenChange: (v: boolean) => void;
-  request: BookingRequest;
+  request: ScheduleSheetBookingRequest;
   onScheduled: () => void;
 }) {
   const photo = request.photos?.[0]?.photoUrl;
-  const [duration, setDuration] = useState("1h30m");
-  const [lowAmount, setLowAmount] = useState("");
-  const [highAmount, setHighAmount] = useState("");
-  const [dates, setDates] = useState<string[]>([""]);
-  const [message, setMessage] = useState(
-    `Hey ${request.firstName}, I'm so excited to work with you on this! Let me know if the dates work, if not we can find other times`
-  );
-  const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState("");
-  const [availableDates, setAvailableDates] = useState<AvailableDateEntry[]>([]);
-
-  useEffect(() => {
-    if (!open) return;
-    fetch("/api/artist/availability")
-      .then((r) => r.json())
-      .then((data) => { if (data.availableDates) setAvailableDates(data.availableDates); })
-      .catch(() => setAvailableDates([]));
-  }, [open]);
-
-  function addDate() {
-    setDates((prev) => [...prev, ""]);
-  }
-
-  function removeDate(i: number) {
-    setDates((prev) => prev.filter((_, idx) => idx !== i));
-  }
-
-  function updateDate(i: number, val: string) {
-    setDates((prev) => prev.map((d, idx) => (idx === i ? val : d)));
-  }
-
-  async function handleSubmit() {
-    setError("");
-    const durationMins = parseDuration(duration);
-    if (!durationMins) {
-      setError("Invalid duration. Use format like 1h30m, 2h, or 45m");
-      return;
-    }
-    const low = parseAmountInput(lowAmount);
-    const high = parseAmountInput(highAmount);
-    if (!lowAmount || isNaN(low) || low <= 0) {
-      setError("Enter a valid low estimate");
-      return;
-    }
-    if (!highAmount || isNaN(high) || high <= 0) {
-      setError("Enter a valid high estimate");
-      return;
-    }
-    if (high < low) {
-      setError("High estimate must be greater than or equal to low");
-      return;
-    }
-
-    const suggested_dates = dates
-      .filter(Boolean)
-      .map((d) => ({ datetime: new Date(d).toISOString() }));
-
-    setSubmitting(true);
-    try {
-      const res = await fetch(`/api/booking-requests/${request.id}/schedule`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          duration_minutes: durationMins,
-          suggested_dates,
-          low_amount: low,
-          high_amount: high,
-          message: message.trim() || undefined,
-        }),
-      });
-
-      if (!res.ok) {
-        const data = await res.json();
-        setError(data.error ?? "Something went wrong");
-        return;
-      }
-
-      onOpenChange(false);
-      onScheduled();
-    } catch {
-      setError("Network error. Please try again.");
-    } finally {
-      setSubmitting(false);
-    }
-  }
+  const {
+    addDate,
+    availableDates,
+    dates,
+    duration,
+    error,
+    handleSubmit,
+    highAmount,
+    lowAmount,
+    message,
+    removeDate,
+    setDuration,
+    setHighAmount,
+    setLowAmount,
+    setMessage,
+    submitting,
+    updateDate,
+  } = useScheduleRequestForm({ open, onOpenChange, onScheduled, request });
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent
         side="right"
-        className="w-full sm:max-w-md flex flex-col p-0 gap-0 overflow-y-auto"
+        className="w-full sm:max-w-md flex flex-col p-0 gap-0 overflow-y-auto border-border"
         style={{ background: "var(--muted)" }}
       >
-        <SheetHeader className="px-5 pt-5 pb-4 shrink-0" style={{ background: "var(--muted)" }}>
+        <SheetHeader className="px-5 pt-5 pb-4 shrink-0 border-b border-border" style={{ background: "var(--muted)" }}>
           <div className="flex items-start gap-3">
             <button
               onClick={() => onOpenChange(false)}
@@ -216,10 +118,10 @@ export function ScheduleSheet({
         </SheetHeader>
 
         <div className="px-5 pb-4">
-          <div className="flex items-center gap-3 rounded-2xl p-3 bg-card">
+          <div className="flex items-center gap-3 rounded-xl border border-border p-3 bg-card">
             {photo ? (
               <div className="relative w-14 h-14 rounded-xl overflow-hidden shrink-0">
-                <Image src={photo} alt="Reference" fill className="object-cover" />
+                <Image src={photo} alt="Reference" fill sizes="56px" className="object-cover" />
               </div>
             ) : (
               <div className="w-14 h-14 rounded-xl shrink-0 flex items-center justify-center bg-muted">
@@ -396,12 +298,12 @@ export function ScheduleSheet({
           </FieldBox>
 
           {error && (
-            <p className="text-xs text-center text-destructive">{error}</p>
+            <p className="rounded-xl border border-destructive/30 bg-destructive/10 px-3 py-2 text-center text-xs text-destructive">{error}</p>
           )}
         </div>
 
         <div
-          className="w-full sm:max-w-md px-5 pb-6 pt-3 flex flex-col gap-3"
+          className="w-full sm:max-w-md px-5 pb-[calc(1.5rem+env(safe-area-inset-bottom))] pt-4 flex flex-col gap-3 border-t border-border"
           style={{ background: "linear-gradient(to top, var(--muted) 75%, transparent)" }}
         >
           <div className="flex items-center justify-center gap-1.5">

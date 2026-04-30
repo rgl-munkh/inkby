@@ -48,7 +48,7 @@ export default function DashboardProfilePage() {
   const initials = displayName.replace("@", "").slice(0, 2).toUpperCase();
 
   return (
-    <div className="min-h-screen pb-24 lg:pb-8 bg-background">
+    <div className="min-h-screen pb-[calc(6rem+env(safe-area-inset-bottom))] lg:pb-8 bg-background">
       <div className="max-w-lg mx-auto">
 
         <div className="flex items-center px-4 pt-5 pb-2 relative">
@@ -67,9 +67,9 @@ export default function DashboardProfilePage() {
         <div className="px-4 flex flex-col gap-4 pt-3">
 
           <div className="flex flex-col items-center gap-2 pt-2 pb-1">
-            <div className="relative w-20 h-20 rounded-full overflow-hidden shrink-0 bg-border">
+            <div className="relative w-20 h-20 rounded-full overflow-hidden shrink-0 bg-card border border-border">
               {artist.avatarUrl ? (
-                <Image src={artist.avatarUrl} alt={displayName} fill className="object-cover" />
+                <Image src={artist.avatarUrl} alt={displayName} fill sizes="80px" className="object-cover" />
               ) : (
                 <div className="w-full h-full flex items-center justify-center text-lg font-semibold text-muted-foreground">
                   {initials}
@@ -114,7 +114,7 @@ export default function DashboardProfilePage() {
 
           <AvailabilitySection />
 
-          <div className="rounded-2xl p-5 flex flex-col gap-4 bg-card">
+          <div className="rounded-xl border border-border p-5 flex flex-col gap-4 bg-card">
             <div className="flex items-center justify-between">
               <p className="text-[10px] font-semibold tracking-widest uppercase text-muted-foreground">
                 Earnings
@@ -165,7 +165,7 @@ export default function DashboardProfilePage() {
             </div>
           </div>
 
-          <div className="rounded-2xl p-5 flex flex-col gap-3 bg-card">
+          <div className="rounded-xl border border-border p-5 flex flex-col gap-3 bg-card">
             <div>
               <p className="text-sm font-semibold text-foreground">Get ready to get paid</p>
               <p className="text-xs mt-1 leading-relaxed text-muted-foreground">
@@ -182,7 +182,7 @@ export default function DashboardProfilePage() {
             </Button>
           </div>
 
-          <div className="rounded-2xl p-5 flex items-start gap-4 bg-card">
+          <div className="rounded-xl border border-border p-5 flex items-start gap-4 bg-card">
             <div className="shrink-0 mt-0.5 text-muted-foreground">
               <ShieldIcon />
             </div>

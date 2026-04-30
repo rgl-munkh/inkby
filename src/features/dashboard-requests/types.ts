@@ -1,4 +1,5 @@
 export type Photo = { id: string; photoUrl: string };
+
 export type Schedule = {
   id: string;
   privateNote: string | null;
@@ -22,4 +23,15 @@ export type BookingRequest = {
   createdAt: string;
   photos: Photo[];
   schedules: Schedule[];
+};
+
+export type ScheduleSheetBookingRequest = Pick<
+  BookingRequest,
+  "id" | "firstName" | "lastName" | "tattooSize" | "placement" | "photos"
+>;
+
+export type AvailableDateEntry = {
+  date: string;
+  startTime: string;
+  endTime: string;
 };

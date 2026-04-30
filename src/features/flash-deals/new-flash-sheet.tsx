@@ -1,6 +1,5 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -11,77 +10,9 @@ import {
   SheetTitle,
   SheetDescription,
 } from "@/components/ui/sheet";
-import { parseDuration, formatAmountInput, parseAmountInput } from "@/lib/utils";
-
-const SIZES = [
-  { label: "X-Small", sublabel: "Under 2.5 cm" },
-  { label: "Small", sublabel: "2.5–8 cm" },
-  { label: "Medium", sublabel: "8–10 cm" },
-  { label: "Large", sublabel: "13–15 cm" },
-  { label: "X-Large", sublabel: "18+ cm" },
-] as const;
-
-const DEFAULT_DURATIONS = ["1h30m", "2h", "2h30m", "3h", "3h30m"] as const;
-const DEFAULT_AMOUNTS = ["150000", "175000", "200000", "225000", "250000"] as const;
-
-type SizeRowState = {
-  enabled: boolean;
-  duration: string;
-  amount: string;
-};
-
-/** Same shape as dashboard list / GET flash_deals (for edit mode). */
-export type FlashDealSheetDeal = {
-  id: string;
-  photoUrl: string;
-  title: string | null;
-  description: string | null;
-  isRepeatable: boolean;
-  isActive: boolean;
-  sizes: {
-    id: string;
-    sizeLabel: string;
-    estimatedAmount: string;
-    durationMinutes: number | null;
-  }[];
-};
-
-function defaultRows(): SizeRowState[] {
-  return SIZES.map((_, i) => ({
-    enabled: true,
-    duration: DEFAULT_DURATIONS[i],
-    amount: formatAmountInput(DEFAULT_AMOUNTS[i]),
-  }));
-}
-
-/** Compact duration string compatible with `parseDuration`. */
-function minutesToDurationInput(mins: number): string {
-  const h = Math.floor(mins / 60);
-  const m = mins % 60;
-  if (h > 0 && m > 0) return `${h}h${m}m`;
-  if (h > 0) return `${h}h`;
-  return `${m}m`;
-}
-
-function rowsFromDeal(deal: FlashDealSheetDeal): SizeRowState[] {
-  return SIZES.map((sz, i) => {
-    const expected = `${sz.label} (${sz.sublabel})`;
-    const row = deal.sizes.find((s) => s.sizeLabel === expected);
-    const defDuration = DEFAULT_DURATIONS[i];
-    const defAmount = formatAmountInput(DEFAULT_AMOUNTS[i]);
-    if (!row) {
-      return { enabled: false, duration: defDuration, amount: defAmount };
-    }
-    const dm = row.durationMinutes;
-    const duration =
-      dm != null && dm > 0 ? minutesToDurationInput(dm) : defDuration;
-    return {
-      enabled: true,
-      duration,
-      amount: formatAmountInput(String(row.estimatedAmount)),
-    };
-  });
-}
+import { formatAmountInput } from "@/lib/domain/money";
+import { useFlashDealForm } from "./hooks/use-flash-deal-form";
+import { FLASH_DEAL_SIZE_OPTIONS, type FlashDealSheetDeal } from "./types";
 
 export function NewFlashSheet({
   open,
@@ -94,149 +25,34 @@ export function NewFlashSheet({
   onCreated: () => void;
   deal?: FlashDealSheetDeal | null;
 }) {
-  const fileRef = useRef<HTMLInputElement>(null);
-  const cameraRef = useRef<HTMLInputElement>(null);
-  const [photoUrl, setPhotoUrl] = useState("");
-  const [uploading, setUploading] = useState(false);
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [isRepeatable, setIsRepeatable] = useState(false);
-  const [isActive, setIsActive] = useState(true);
-  const [rows, setRows] = useState<SizeRowState[]>(() => defaultRows());
-  const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState("");
-
-  const isEdit = Boolean(deal);
-
-  useEffect(() => {
-    if (!open) return;
-    if (deal) {
-      setPhotoUrl(deal.photoUrl);
-      setTitle(deal.title ?? "");
-      setDescription(deal.description ?? "");
-      setIsRepeatable(deal.isRepeatable);
-      setIsActive(deal.isActive);
-      setRows(rowsFromDeal(deal));
-      setError("");
-      return;
-    }
-    setPhotoUrl("");
-    setTitle("");
-    setDescription("");
-    setIsRepeatable(false);
-    setIsActive(true);
-    setRows(defaultRows());
-    setError("");
-  }, [open, deal]);
-
-  async function uploadFile(file: File) {
-    setUploading(true);
-    setError("");
-    try {
-      const fd = new FormData();
-      fd.append("file", file);
-      fd.append("bucket", "flash-deal-photos");
-      const res = await fetch("/api/upload", { method: "POST", body: fd });
-      const data = await res.json();
-      if (!res.ok) {
-        setError(data.error ?? "Upload failed");
-        return;
-      }
-      setPhotoUrl(data.url);
-    } catch {
-      setError("Upload failed");
-    } finally {
-      setUploading(false);
-    }
-  }
-
-  function setRow(i: number, patch: Partial<SizeRowState>) {
-    setRows((prev) => prev.map((r, j) => (j === i ? { ...r, ...patch } : r)));
-  }
-
-  async function handleSubmit() {
-    setError("");
-    if (!photoUrl) {
-      setError(isEdit ? "Photo is missing" : "Upload a photo");
-      return;
-    }
-    const enabled = rows
-      .map((r, i) => ({ r, i }))
-      .filter(({ r }) => r.enabled);
-    if (enabled.length === 0) {
-      setError("Enable at least one size");
-      return;
-    }
-    const payloadSizes: {
-      size_label: string;
-      estimated_amount: number;
-      duration_minutes?: number;
-    }[] = [];
-    for (const { r, i } of enabled) {
-      const mins = parseDuration(r.duration);
-      if (!mins) {
-        setError(`Invalid duration for ${SIZES[i].label}. Use e.g. 1h30m, 2h, 45m`);
-        return;
-      }
-      const amt = parseAmountInput(r.amount);
-      if (!r.amount.trim() || isNaN(amt) || amt <= 0) {
-        setError(`Enter a valid estimate for ${SIZES[i].label}`);
-        return;
-      }
-      const { label, sublabel } = SIZES[i];
-      payloadSizes.push({
-        size_label: `${label} (${sublabel})`,
-        estimated_amount: amt,
-        duration_minutes: mins,
-      });
-    }
-
-    const dealId = deal?.id;
-    if (isEdit && !dealId) {
-      setError("Something went wrong");
-      return;
-    }
-
-    setSubmitting(true);
-    try {
-      const body = {
-        photo_url: photoUrl,
-        title: title.trim() || undefined,
-        description: description.trim() || undefined,
-        is_repeatable: isRepeatable,
-        sizes: payloadSizes,
-        ...(isEdit ? { is_active: isActive } : {}),
-      };
-      const res = await fetch(
-        isEdit ? `/api/flash-deals/${dealId}` : "/api/flash-deals",
-        {
-          method: isEdit ? "PATCH" : "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(body),
-        },
-      );
-      const data = await res.json();
-      if (!res.ok) {
-        setError(
-          data.error ?? (isEdit ? "Could not update flash" : "Could not create flash"),
-        );
-        return;
-      }
-      onOpenChange(false);
-      onCreated();
-    } catch {
-      setError("Network error");
-    } finally {
-      setSubmitting(false);
-    }
-  }
+  const {
+    cameraRef,
+    description,
+    error,
+    fileRef,
+    handleSubmit,
+    isActive,
+    isEdit,
+    isRepeatable,
+    photoUrl,
+    rows,
+    setDescription,
+    setIsActive,
+    setIsRepeatable,
+    setRow,
+    setTitle,
+    submitting,
+    title,
+    uploadFile,
+    uploading,
+  } = useFlashDealForm({ open, deal, onOpenChange, onCreated });
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent
         side="right"
         showCloseButton={false}
-        className="h-screen overflow-y-auto rounded-t-2xl border-0 p-0 gap-0"
+        className="h-screen overflow-y-auto border-border p-0 gap-0"
         style={{ background: "var(--muted)" }}
       >
         <SheetHeader
@@ -293,7 +109,7 @@ export function NewFlashSheet({
               type="button"
               disabled={uploading}
               onClick={() => fileRef.current?.click()}
-              className="flex-1 rounded-xl py-3 px-3 flex flex-col items-center gap-1.5 text-xs font-medium transition-opacity hover:opacity-80 disabled:opacity-50"
+              className="flex-1 rounded-xl py-3 px-3 flex flex-col items-center gap-1.5 text-xs font-semibold transition-opacity hover:opacity-80 disabled:opacity-50"
               style={{ background: "var(--card)", border: "1px solid var(--border)", color: "var(--foreground)" }}
             >
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -307,7 +123,7 @@ export function NewFlashSheet({
               type="button"
               disabled={uploading}
               onClick={() => cameraRef.current?.click()}
-              className="flex-1 rounded-xl py-3 px-3 flex flex-col items-center gap-1.5 text-xs font-medium transition-opacity hover:opacity-80 disabled:opacity-50"
+              className="flex-1 rounded-xl py-3 px-3 flex flex-col items-center gap-1.5 text-xs font-semibold transition-opacity hover:opacity-80 disabled:opacity-50"
               style={{ background: "var(--card)", border: "1px solid var(--border)", color: "var(--foreground)" }}
             >
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -323,7 +139,7 @@ export function NewFlashSheet({
 
           {photoUrl && (
             <div className="relative w-full aspect-video rounded-xl overflow-hidden bg-muted">
-              <Image src={photoUrl} alt="Preview" fill className="object-contain" />
+              <Image src={photoUrl} alt="Preview" fill sizes="(max-width: 640px) 100vw, 384px" className="object-contain" />
             </div>
           )}
 
@@ -408,7 +224,7 @@ export function NewFlashSheet({
               SIZE, DURATION, ESTIMATE
             </p>
             <div className="flex flex-col gap-2">
-              {SIZES.map((sz, i) => (
+              {FLASH_DEAL_SIZE_OPTIONS.map((sz, i) => (
                 <div
                   key={sz.label}
                   className="rounded-xl p-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3"
@@ -464,14 +280,14 @@ export function NewFlashSheet({
           </div>
 
           {error && (
-            <p className="text-xs text-center text-destructive">
+            <p className="rounded-xl border border-destructive/30 bg-destructive/10 px-3 py-2 text-center text-xs text-destructive">
               {error}
             </p>
           )}
         </div>
 
         <div
-          className="w-full p-4 flex gap-3 z-[60] border-t"
+          className="w-full p-4 pb-[calc(1rem+env(safe-area-inset-bottom))] flex gap-3 z-[60] border-t"
           style={{ background: "var(--muted)", borderColor: "var(--border)" }}
         >
           <Button

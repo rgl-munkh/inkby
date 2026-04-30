@@ -1,96 +1,17 @@
 "use client";
 
-import Image from "next/image";
-import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { GoogleIcon } from "@/components/icons/GoogleIcon";
-import { Spinner } from "@/components/icons/spinner";
-import { ThemeToggle } from "@/components/theme-toggle";
-
-const collageImages = [
-    {
-        src: "https://images.unsplash.com/photo-1598371839696-5c5bb00bdc28?w=600&q=100",
-        alt: "Tattoo artist at work",
-    },
-    {
-        src: "https://images.unsplash.com/photo-1565058379802-bbe93b2f703a?w=600&q=100",
-        alt: "Tattoo studio supplies",
-    },
-    {
-        src: "https://images.unsplash.com/photo-1611501275019-9b5cda994e8d?w=800&q=100",
-        alt: "Clients at a tattoo studio",
-    },
-];
-
-function LogoIcon() {
-    return (
-        <svg
-            width="36"
-            height="36"
-            viewBox="0 0 36 36"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-        >
-            <rect width="36" height="36" rx="8" fill="#1a1a1a" />
-            <path
-                d="M18 7C18 7 11 15.5 11 21a7 7 0 0 0 14 0c0-5.5-7-14-7-14Z"
-                fill="#f5e642"
-            />
-        </svg>
-    );
-}
-
-function EyeIcon({ open }: { open: boolean }) {
-    return open ? (
-        <svg
-            width="18"
-            height="18"
-            viewBox="0 0 18 18"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-        >
-            <path
-                d="M1 9s3-5.5 8-5.5S17 9 17 9s-3 5.5-8 5.5S1 9 1 9Z"
-                stroke="#b0aca6"
-                strokeWidth="1.5"
-                strokeLinejoin="round"
-            />
-            <circle cx="9" cy="9" r="2.5" stroke="#b0aca6" strokeWidth="1.5" />
-        </svg>
-    ) : (
-        <svg
-            width="18"
-            height="18"
-            viewBox="0 0 18 18"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-        >
-            <path
-                d="M1 9s3-5.5 8-5.5S17 9 17 9s-3 5.5-8 5.5S1 9 1 9Z"
-                stroke="#b0aca6"
-                strokeWidth="1.5"
-                strokeLinejoin="round"
-            />
-            <circle cx="9" cy="9" r="2.5" stroke="#b0aca6" strokeWidth="1.5" />
-            <line
-                x1="2"
-                y1="2"
-                x2="16"
-                y2="16"
-                stroke="#b0aca6"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-            />
-        </svg>
-    );
-}
+import {
+    AuthError,
+    AuthPasswordInput,
+    AuthShell,
+    AuthSubmitButton,
+    AuthSwitchLink,
+    AuthTextInput,
+    GoogleAuthButton,
+} from "./auth-ui";
 
 export default function RegisterPage() {
     const router = useRouter();
@@ -154,164 +75,46 @@ export default function RegisterPage() {
     }
 
     return (
-        <main className="min-h-screen flex bg-background">
-            {/* Left: photo collage */}
-            <div className="hidden lg:grid lg:w-1/2 grid-cols-2 grid-rows-2 gap-1 p-1">
-                <div className="row-span-2 relative overflow-hidden rounded-lg">
-                    <Image
-                        src={collageImages[2].src}
-                        alt={collageImages[2].alt}
-                        fill
-                        className="object-cover"
-                    />
-                </div>
-                <div className="relative overflow-hidden rounded-lg">
-                    <Image
-                        src={collageImages[1].src}
-                        alt={collageImages[1].alt}
-                        fill
-                        className="object-cover"
-                    />
-                </div>
-                <div className="relative overflow-hidden rounded-lg">
-                    <Image
-                        src={collageImages[0].src}
-                        alt={collageImages[0].alt}
-                        fill
-                        className="object-cover"
-                    />
-                </div>
-            </div>
-
-            {/* Right: registration form */}
-            <div className="relative flex flex-1 items-center justify-center px-6 py-12">
-                <div className="absolute top-4 right-4 sm:top-6 sm:right-6">
-                    <ThemeToggle />
-                </div>
-                <div className="w-full max-w-sm flex flex-col items-center gap-6">
-                    <LogoIcon />
-
-                    <div className="text-center">
-                        <h1
-                            className="text-3xl font-bold tracking-tight leading-tight text-foreground"
-                        >
-                            Create an account
-                        </h1>
-                        <p className="mt-2 text-sm text-muted-foreground">
-                            Welcome! Glad you&apos;re here.
-                        </p>
-                    </div>
-
-                    <Button
-                        type="button"
-                        onClick={handleGoogleSignIn}
-                        disabled={googleLoading}
-                        className="h-auto p-0 flex items-center justify-center gap-2 font-normal text-white cursor-pointer w-full py-4 px-6 rounded-full"
-                        style={{ background: "#18181b" }}
-                    >
-                        <GoogleIcon />
-                        {googleLoading ? "Redirecting..." : "Continue with Google"}
-                    </Button>
-
-                    <hr className="w-full border-t border-border" />
-
-                    <form onSubmit={handleSubmit} className="w-full flex flex-col gap-3">
-                        <Input
-                            type="email"
-                            placeholder="Email address"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                            className="rounded-xl py-8 px-4 placeholder:text-sm placeholder:text-muted-foreground focus-visible:ring-1 focus-visible:ring-ring"
-                            style={{
-                                background: "var(--card)",
-                                border: "1px solid var(--border)",
-                                color: "var(--foreground)",
-                            }}
-                        />
-
-                        <div className="relative">
-                            <Input
-                                type={showPassword ? "text" : "password"}
-                                placeholder="Password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                required
-                                minLength={6}
-                                className="rounded-xl py-8 pl-4 pr-11 placeholder:text-sm placeholder:text-muted-foreground focus-visible:ring-1 focus-visible:ring-ring"
-                                style={{
-                                    background: "var(--card)",
-                                    border: "1px solid var(--border)",
-                                    color: "var(--foreground)",
-                                }}
-                            />
-                            <button
-                                type="button"
-                                onClick={() => setShowPassword((v) => !v)}
-                                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 cursor-pointer"
-                                tabIndex={-1}
-                                aria-label={showPassword ? "Hide password" : "Show password"}
-                            >
-                                <EyeIcon open={showPassword} />
-                            </button>
-                        </div>
-
-                        <div className="relative">
-                            <Input
-                                type={showConfirmPassword ? "text" : "password"}
-                                placeholder="Confirm Password"
-                                value={confirmPassword}
-                                onChange={(e) => setConfirmPassword(e.target.value)}
-                                required
-                                minLength={6}
-                                className="rounded-xl py-8 pl-4 pr-11 placeholder:text-sm placeholder:text-muted-foreground focus-visible:ring-1 focus-visible:ring-ring"
-                                style={{
-                                    background: "var(--card)",
-                                    border: "1px solid var(--border)",
-                                    color: "var(--foreground)",
-                                }}
-                            />
-                            <button
-                                type="button"
-                                onClick={() => setShowConfirmPassword((v) => !v)}
-                                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 cursor-pointer"
-                                tabIndex={-1}
-                                aria-label={showConfirmPassword ? "Hide password" : "Show password"}
-                            >
-                                <EyeIcon open={showConfirmPassword} />
-                            </button>
-                        </div>
-
-                        {error && (
-                            <p className="text-xs text-center text-destructive">
-                                {error}
-                            </p>
-                        )}
-
-                        <Button
-                            type="submit"
-                            disabled={loading}
-                            className="w-full flex items-center justify-center gap-2 rounded-full py-6 px-4 text-xs font-semibold tracking-widest uppercase mt-1 cursor-pointer"
-                            style={{ background: "var(--foreground)", color: "var(--card)" }}
-                        >
-                            {loading && <Spinner />}
-                            Continue
-                        </Button>
-                    </form>
-
-                    <div className="flex flex-col items-center gap-1">
-                        <p className="text-xs text-muted-foreground">
-                            Already have an account?{" "}
-                            <Link
-                                href="/login"
-                                className="underline underline-offset-2 text-muted-foreground"
-                            >
-                                Log in
-                            </Link>
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </main>
+        <AuthShell title="Create an account" subtitle="Welcome! Glad you're here.">
+            <GoogleAuthButton loading={googleLoading} onClick={handleGoogleSignIn} />
+            <div className="h-px w-full bg-border" />
+            <form onSubmit={handleSubmit} className="flex w-full flex-col gap-3">
+                <AuthTextInput
+                    type="email"
+                    placeholder="Email address"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    autoComplete="email"
+                />
+                <AuthPasswordInput
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    minLength={6}
+                    autoComplete="new-password"
+                    showPassword={showPassword}
+                    onTogglePassword={() => setShowPassword((v) => !v)}
+                />
+                <AuthPasswordInput
+                    placeholder="Confirm password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    required
+                    minLength={6}
+                    autoComplete="new-password"
+                    showPassword={showConfirmPassword}
+                    onTogglePassword={() => setShowConfirmPassword((v) => !v)}
+                />
+                <AuthError message={error} />
+                <AuthSubmitButton loading={loading}>Continue</AuthSubmitButton>
+            </form>
+            <AuthSwitchLink
+                label="Already have an account?"
+                href="/login"
+                linkText="Log in"
+            />
+        </AuthShell>
     );
 }

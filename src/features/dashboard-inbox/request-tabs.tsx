@@ -5,7 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Skeleton } from "@/components/ui/skeleton";
-import { cn, timeAgo } from "@/lib/utils";
+import { cn } from "@/lib/utils";
+import { timeAgo } from "./lib/time-ago";
 import { useClipboardCopy } from "@/hooks/use-clipboard-copy";
 import { BOOKING_REQUEST_LIMIT } from "@/lib/constants";
 

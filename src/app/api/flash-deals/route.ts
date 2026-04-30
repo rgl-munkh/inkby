@@ -1,6 +1,3 @@
-import { db } from "@/lib/db";
-import { flashDeals, flashDealSizes } from "@/lib/db/schema";
-import { eq } from "drizzle-orm";
 import {
   getAuthenticatedArtist,
   unauthorized,
@@ -9,6 +6,10 @@ import {
 } from "@/lib/auth";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
+import {
+  createFlashDealForArtist,
+  listFlashDealsForArtist,
+} from "@/features/flash-deals/services/flash-deals-server";
 
 const createFlashDealSchema = z.object({
   photo_url: z.string().url(),
@@ -40,29 +41,13 @@ export async function POST(request: NextRequest) {
 
     const { sizes, photo_url, title, description, is_repeatable } = parsed.data;
 
-    const [deal] = await db
-      .insert(flashDeals)
-      .values({
-        artistId: user.id,
-        photoUrl: photo_url,
-        title: title ?? null,
-        description: description ?? null,
-        isRepeatable: is_repeatable,
-      })
-      .returning();
-
-    await db.insert(flashDealSizes).values(
-      sizes.map((s) => ({
-        flashDealId: deal.id,
-        sizeLabel: s.size_label,
-        durationMinutes: s.duration_minutes ?? null,
-        estimatedAmount: String(s.estimated_amount),
-      }))
-    );
-
-    const fullDeal = await db.query.flashDeals.findFirst({
-      where: eq(flashDeals.id, deal.id),
-      with: { sizes: true },
+    const fullDeal = await createFlashDealForArtist({
+      artistId: user.id,
+      photoUrl: photo_url,
+      title,
+      description,
+      isRepeatable: is_repeatable,
+      sizes,
     });
 
     return NextResponse.json({ flash_deal: fullDeal }, { status: 201 });
@@ -76,11 +61,7 @@ export async function GET() {
     const { user, error: authError } = await getAuthenticatedArtist();
     if (authError || !user) return unauthorized();
 
-    const deals = await db.query.flashDeals.findMany({
-      where: eq(flashDeals.artistId, user.id),
-      with: { sizes: true },
-      orderBy: (t, { desc }) => [desc(t.createdAt)],
-    });
+    const deals = await listFlashDealsForArtist(user.id);
 
     return NextResponse.json({ flash_deals: deals });
   } catch {

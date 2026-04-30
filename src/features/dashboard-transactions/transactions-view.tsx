@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { formatAmount, formatDate } from "@/lib/utils";
+import { formatAmount } from "@/lib/domain/money";
+import { formatDate } from "@/lib/domain/dates";
 import type { Transaction, Period } from "./types";
 import { PERIOD_TABS, PERIOD_MAP, STATUS_STYLES } from "./types";
 

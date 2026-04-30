@@ -3,6 +3,10 @@
 import { useState, useRef } from "react";
 import type { Artist, FlashDeal } from "../types";
 import { mapTattooSizeToApi } from "../lib/map-tattoo-size";
+import {
+  createBookingRequest,
+  uploadReferencePhoto,
+} from "../services/booking-flow-service";
 
 export function useProfileBookingFlow({
   artist,
@@ -51,14 +55,8 @@ export function useProfileBookingFlow({
   async function uploadPhotos(): Promise<string[]> {
     const urls: string[] = [];
     for (const file of photoFiles) {
-      const fd = new FormData();
-      fd.append("file", file);
-      fd.append("bucket", "reference-photos");
-      const res = await fetch("/api/upload", { method: "POST", body: fd });
-      if (res.ok) {
-        const data = await res.json();
-        urls.push(data.url);
-      }
+      const url = await uploadReferencePhoto(file);
+      if (url) urls.push(url);
     }
     return urls;
   }
@@ -93,30 +91,24 @@ export function useProfileBookingFlow({
         ? [selectedFlashPhotoUrl, ...uploadedUrls]
         : uploadedUrls;
 
-      const res = await fetch("/api/booking-requests", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          artist_id: artist.id,
-          first_name: firstName,
-          last_name: lastName,
-          phone,
-          email,
-          idea_description: idea,
-          tattoo_size: mapTattooSizeToApi(size),
-          placement: placement.toLowerCase(),
-          photo_urls,
-        }),
+      const result = await createBookingRequest({
+        artist_id: artist.id,
+        first_name: firstName,
+        last_name: lastName,
+        phone,
+        email,
+        idea_description: idea,
+        tattoo_size: mapTattooSizeToApi(size),
+        placement: placement.toLowerCase(),
+        photo_urls,
       });
-
-      const data = await res.json();
-      if (!res.ok) {
-        setError(data.error ?? "Something went wrong");
+      if (result.error) {
+        setError(result.error);
         return;
       }
 
       setStep(3);
-      setBookingRequestId(data.booking_request?.id ?? null);
+      setBookingRequestId(result.bookingRequestId);
     } catch {
       setError("Network error. Please try again.");
     } finally {

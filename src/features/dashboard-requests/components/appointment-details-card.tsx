@@ -1,4 +1,4 @@
-import { formatDuration } from "@/lib/utils";
+import { formatDuration } from "@/lib/domain/duration";
 import type { BookingRequest, Schedule } from "../types";
 import { STATUS_BADGE } from "../constants";
 import { CalendarIconSm, ClockIconSm } from "./request-detail-icons";

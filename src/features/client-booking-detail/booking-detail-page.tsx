@@ -61,21 +61,21 @@ export default function ClientBookingPage() {
   }
 
   return (
-    <div className="min-h-screen pb-28 bg-background">
+    <div className="min-h-screen pb-[calc(7rem+env(safe-area-inset-bottom))] bg-background">
       <div className="max-w-lg mx-auto">
-        <div className="flex items-center gap-3 px-4 pt-6 pb-4">
-          <div className="relative w-12 h-12 rounded-full overflow-hidden shrink-0 bg-border">
+        <div className="flex items-center gap-3 px-4 pt-5 pb-4">
+          <div className="relative w-11 h-11 rounded-full overflow-hidden shrink-0 bg-card border border-border">
             {artist.avatarUrl ? (
-              <Image src={artist.avatarUrl} alt={artistName} fill className="object-cover" unoptimized />
+              <Image src={artist.avatarUrl} alt={artistName} fill sizes="44px" className="object-cover" unoptimized />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-sm font-semibold text-muted-foreground">
                 {artistName.replace("@", "").charAt(0).toUpperCase()}
               </div>
             )}
           </div>
-          <div>
+          <div className="min-w-0">
             <p className="text-sm font-semibold text-foreground">{artistHandle}</p>
-            <p className="text-xs text-muted-foreground">
+            <p className="truncate text-xs text-muted-foreground">
               {typeof window !== "undefined" ? window.location.host : "inkby.mn"}/{artistHandle}
             </p>
           </div>
@@ -122,7 +122,7 @@ export default function ClientBookingPage() {
 
       {(isScheduled || isPendingPayment) && (
         <div
-          className="fixed bottom-0 left-0 right-0 px-4 pb-6 pt-3 z-20"
+          className="fixed bottom-0 left-0 right-0 px-4 pb-[calc(1.5rem+env(safe-area-inset-bottom))] pt-5 z-20"
           style={{ background: "linear-gradient(to top, var(--background) 70%, transparent)" }}
         >
           <div className="max-w-lg mx-auto flex flex-col gap-2">

@@ -1,4 +1,4 @@
-import { formatAmount } from "@/lib/utils";
+import { formatAmount } from "@/lib/domain/money";
 import type { BookingRequest, Schedule } from "../types";
 import { timeAgoLong } from "../lib/time-ago";
 import {
@@ -37,7 +37,7 @@ export function AppointmentTab({
 
       {isPending && (
         <div
-          className="rounded-2xl p-6 flex flex-col items-center gap-2 text-center bg-card"
+          className="rounded-xl border border-border p-6 flex flex-col items-center gap-2 text-center bg-card"
         >
           <div className="text-muted-foreground">
             <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
@@ -57,14 +57,13 @@ export function AppointmentTab({
           {booking.schedules.map((s, i) => (
             <div
               key={s.id}
-              className="rounded-2xl px-4 py-3 flex items-center justify-between cursor-pointer transition-opacity hover:opacity-80"
+              className="rounded-xl px-4 py-3 flex items-center justify-between cursor-pointer transition-opacity hover:opacity-85 bg-card"
               style={{
-                background: "var(--card)",
                 border: isPaid
                   ? "1.5px solid #22c55e"
                   : isConfirmed
                     ? "1.5px solid #f59e0b"
-                    : "1.5px solid transparent",
+                    : "1px solid var(--border)",
               }}
               onClick={() => {
                 if (isScheduled) {
@@ -135,7 +134,7 @@ export function AppointmentTab({
             {isScheduled && (
               <button
                 onClick={() => onOpenChooseTime(null)}
-                className="rounded-2xl p-4 flex items-center justify-between w-full text-left transition-opacity hover:opacity-80 cursor-pointer bg-card"
+                className="rounded-xl border border-border p-4 flex items-center justify-between w-full text-left transition-opacity hover:opacity-85 cursor-pointer bg-card"
               >
                 <div>
                   <p className="text-xs font-semibold text-muted-foreground">Book it yourself</p>
@@ -152,7 +151,7 @@ export function AppointmentTab({
 
             {isPaid && (
               <div
-                className="rounded-2xl px-4 py-3 flex items-center gap-2"
+                className="rounded-xl px-4 py-3 flex items-center gap-2"
                 style={{ background: "#f0fdf4", border: "1px solid #bbf7d0" }}
               >
                 <span className="text-emerald-600"><CheckCircleIcon /></span>
@@ -163,7 +162,7 @@ export function AppointmentTab({
             )}
 
             {schedule?.message && (
-              <div className="rounded-2xl p-4 flex gap-3 bg-muted">
+              <div className="rounded-xl border border-border p-4 flex gap-3 bg-card">
                 <div
                   className="w-8 h-8 rounded-full shrink-0 flex items-center justify-center text-xs font-semibold"
                   style={{ background: "var(--border)", color: "var(--muted-foreground)" }}

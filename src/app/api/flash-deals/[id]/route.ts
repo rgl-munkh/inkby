@@ -1,6 +1,3 @@
-import { db } from "@/lib/db";
-import { flashDeals, flashDealSizes } from "@/lib/db/schema";
-import { eq, and } from "drizzle-orm";
 import {
   getAuthenticatedArtist,
   unauthorized,
@@ -10,6 +7,11 @@ import {
 } from "@/lib/auth";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
+import {
+  deleteFlashDealForArtist,
+  getFlashDealById,
+  updateFlashDealForArtist,
+} from "@/features/flash-deals/services/flash-deals-server";
 
 const updateFlashDealSchema = z.object({
   photo_url: z.string().url().optional(),
@@ -35,10 +37,7 @@ export async function GET(
   try {
     const { id } = await params;
 
-    const deal = await db.query.flashDeals.findFirst({
-      where: eq(flashDeals.id, id),
-      with: { sizes: true },
-    });
+    const deal = await getFlashDealById(id);
 
     if (!deal) {
       return notFound("Flash deal not found");
@@ -66,45 +65,23 @@ export async function PATCH(
       return badRequest(parsed.error.issues[0].message);
     }
 
-    const existing = await db.query.flashDeals.findFirst({
-      where: (t, { and, eq }) => and(eq(t.id, id), eq(t.artistId, user.id)),
-      columns: { id: true },
-    });
-
-    if (!existing) {
-      return notFound("Flash deal not found");
-    }
-
     const { sizes, title, description, is_repeatable, is_active, photo_url } =
       parsed.data;
 
-    const updateValues: Partial<typeof flashDeals.$inferInsert> = {};
-    if (photo_url !== undefined) updateValues.photoUrl = photo_url;
-    if (title !== undefined) updateValues.title = title;
-    if (description !== undefined) updateValues.description = description;
-    if (is_repeatable !== undefined) updateValues.isRepeatable = is_repeatable;
-    if (is_active !== undefined) updateValues.isActive = is_active;
-
-    if (Object.keys(updateValues).length > 0) {
-      await db.update(flashDeals).set(updateValues).where(eq(flashDeals.id, id));
-    }
-
-    if (sizes) {
-      await db.delete(flashDealSizes).where(eq(flashDealSizes.flashDealId, id));
-      await db.insert(flashDealSizes).values(
-        sizes.map((s) => ({
-          flashDealId: id,
-          sizeLabel: s.size_label,
-          durationMinutes: s.duration_minutes ?? null,
-          estimatedAmount: String(s.estimated_amount),
-        }))
-      );
-    }
-
-    const updated = await db.query.flashDeals.findFirst({
-      where: eq(flashDeals.id, id),
-      with: { sizes: true },
+    const updated = await updateFlashDealForArtist({
+      id,
+      artistId: user.id,
+      photoUrl: photo_url,
+      title,
+      description,
+      isRepeatable: is_repeatable,
+      isActive: is_active,
+      sizes,
     });
+
+    if (!updated) {
+      return notFound("Flash deal not found");
+    }
 
     return NextResponse.json({ flash_deal: updated });
   } catch {
@@ -122,9 +99,7 @@ export async function DELETE(
 
     const { id } = await params;
 
-    await db
-      .delete(flashDeals)
-      .where(and(eq(flashDeals.id, id), eq(flashDeals.artistId, user.id)));
+    await deleteFlashDealForArtist({ id, artistId: user.id });
 
     return NextResponse.json({ message: "Flash deal deleted" });
   } catch {

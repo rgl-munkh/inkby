@@ -1,9 +1,11 @@
-import { db } from "@/lib/db";
-import { bookingRequests, bookingRequestPhotos } from "@/lib/db/schema";
-import { eq, and, desc, count } from "drizzle-orm";
+import { bookingRequests } from "@/lib/db/schema";
 import { getAuthenticatedArtist, unauthorized, badRequest, serverError } from "@/lib/auth";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
+import {
+  createPublicBookingRequest,
+  listBookingRequestsForArtist,
+} from "@/features/dashboard-requests/services/booking-requests-server";
 
 const createBookingSchema = z.object({
   artist_id: z.string().uuid(),
@@ -28,28 +30,17 @@ export async function POST(request: NextRequest) {
 
     const { photo_urls, artist_id, first_name, last_name, phone, email, idea_description, tattoo_size, placement } = parsed.data;
 
-    const [booking] = await db
-      .insert(bookingRequests)
-      .values({
-        artistId: artist_id,
-        firstName: first_name,
-        lastName: last_name,
-        phone,
-        email,
-        ideaDescription: idea_description,
-        tattooSize: tattoo_size,
-        placement,
-      })
-      .returning();
-
-    if (photo_urls && photo_urls.length > 0) {
-      await db.insert(bookingRequestPhotos).values(
-        photo_urls.map((url) => ({
-          bookingRequestId: booking.id,
-          photoUrl: url,
-        }))
-      );
-    }
+    const booking = await createPublicBookingRequest({
+      artistId: artist_id,
+      firstName: first_name,
+      lastName: last_name,
+      phone,
+      email,
+      ideaDescription: idea_description,
+      tattooSize: tattoo_size,
+      placement,
+      photoUrls: photo_urls,
+    });
 
     return NextResponse.json({ booking_request: booking }, { status: 201 });
   } catch {
@@ -66,31 +57,16 @@ export async function GET(request: NextRequest) {
     const status = searchParams.get("status") as typeof bookingRequests.$inferSelect.status | null;
     const page = parseInt(searchParams.get("page") || "1");
     const limit = parseInt(searchParams.get("limit") || "20");
-    const offset = (page - 1) * limit;
-
-    const [requests, [{ total }]] = await Promise.all([
-      db.query.bookingRequests.findMany({
-        where: status
-          ? (t, { and, eq }) => and(eq(t.artistId, user.id), eq(t.status, status))
-          : (t, { eq }) => eq(t.artistId, user.id),
-        with: { photos: true },
-        orderBy: (t, { desc }) => [desc(t.createdAt)],
-        limit,
-        offset,
-      }),
-      db
-        .select({ total: count() })
-        .from(bookingRequests)
-        .where(
-          status
-            ? and(eq(bookingRequests.artistId, user.id), eq(bookingRequests.status, status))
-            : eq(bookingRequests.artistId, user.id)
-        ),
-    ]);
+    const { requests, total } = await listBookingRequestsForArtist({
+      artistId: user.id,
+      status,
+      page,
+      limit,
+    });
 
     return NextResponse.json({
       booking_requests: requests,
-      pagination: { page, limit, total: Number(total) },
+      pagination: { page, limit, total },
     });
   } catch {
     return serverError();

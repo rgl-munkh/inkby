@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
-import { formatDateLabel, formatTimeLabel, todayStr } from "@/lib/utils";
+import { formatDateLabel, formatTimeLabel, todayStr } from "@/lib/domain/dates";
 import type { AvailableDate } from "../types";
 import { ClockIcon, TrashSmIcon } from "./profile-icons";
 
@@ -77,7 +77,7 @@ export function AvailabilitySection() {
   }
 
   return (
-    <div className="rounded-2xl p-5 flex flex-col gap-4 bg-card">
+    <div className="rounded-xl border border-border p-5 flex flex-col gap-4 bg-card">
       <div className="flex items-center gap-2">
         <span className="text-muted-foreground"><ClockIcon /></span>
         <p className="text-xs font-bold tracking-widest uppercase text-foreground">
@@ -100,7 +100,7 @@ export function AvailabilitySection() {
               {dates.map((row) => (
                 <div
                   key={row.date}
-                  className="flex items-center gap-3 rounded-xl px-3 h-11"
+                  className="flex items-center gap-3 rounded-xl border border-border px-3 h-11"
                   style={{ background: "var(--muted)" }}
                 >
                   <span className="flex-1 text-xs font-semibold text-foreground truncate">

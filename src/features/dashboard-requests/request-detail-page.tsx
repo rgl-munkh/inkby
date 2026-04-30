@@ -42,9 +42,9 @@ export default function RequestDetailPage() {
   }
 
   return (
-    <div className="max-w-xl mx-auto flex flex-col min-h-screen bg-background">
+    <div className="max-w-xl mx-auto flex flex-col min-h-screen bg-background pb-[calc(6.5rem+env(safe-area-inset-bottom))]">
       <div
-        className="sticky top-0 z-20 flex items-center px-2 py-3 gap-2 bg-background"
+        className="sticky top-0 z-20 flex items-center px-2 py-3 gap-2 border-b border-border bg-background/95 backdrop-blur"
       >
         <button
           onClick={() => router.back()}
@@ -80,7 +80,7 @@ export default function RequestDetailPage() {
           ))}
         </TabsList>
 
-        <TabsContent value="appointment" className="flex-1 pb:4 lg:pb-28">
+        <TabsContent value="appointment" className="flex-1 lg:pb-28">
           {loading ? (
             <DetailSkeleton />
           ) : fetchError ? (
@@ -99,9 +99,16 @@ export default function RequestDetailPage() {
             </div>
           ) : (
             <div className="flex flex-col">
-              <div className="relative w-full h-72 bg-muted">
+              <div className="relative w-full h-72 bg-muted border-b border-border">
                 {photo ? (
-                  <Image src={photo} alt="Reference" fill className="object-cover" />
+                  <Image
+                    src={photo}
+                    alt="Reference"
+                    fill
+                    priority
+                    sizes="(max-width: 640px) 100vw, 576px"
+                    className="object-cover"
+                  />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center">
                     <svg width="40" height="40" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -115,16 +122,16 @@ export default function RequestDetailPage() {
                   <div className="absolute top-3 right-3 flex gap-2">
                     <button
                       onClick={handleDownload}
-                      className="w-8 h-8 rounded-full flex items-center justify-center transition-opacity hover:opacity-70 cursor-pointer"
-                      style={{ background: "rgba(255,255,255,0.85)", color: "var(--foreground)" }}
+                    className="w-8 h-8 rounded-full flex items-center justify-center border border-white/20 transition-opacity hover:opacity-80 cursor-pointer"
+                      style={{ background: "rgba(0,0,0,0.55)", color: "white" }}
                       aria-label="Download photo"
                     >
                       <DownloadIcon />
                     </button>
                     <button
                       onClick={() => navigator.share?.({ url: photo })}
-                      className="w-8 h-8 rounded-full flex items-center justify-center transition-opacity hover:opacity-70 cursor-pointer"
-                      style={{ background: "rgba(255,255,255,0.85)", color: "var(--foreground)" }}
+                    className="w-8 h-8 rounded-full flex items-center justify-center border border-white/20 transition-opacity hover:opacity-80 cursor-pointer"
+                      style={{ background: "rgba(0,0,0,0.55)", color: "white" }}
                       aria-label="Share photo"
                     >
                       <ShareIcon />
@@ -152,7 +159,7 @@ export default function RequestDetailPage() {
 
                 {isPending ? (
                   <>
-                    <div className="rounded-2xl p-4 flex flex-col gap-1 bg-card">
+                    <div className="rounded-xl border border-border p-4 flex flex-col gap-1 bg-card">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
                           <span className="text-muted-foreground"><NoteIcon /></span>
@@ -173,7 +180,7 @@ export default function RequestDetailPage() {
                       )}
                     </div>
 
-                    <div className="rounded-2xl overflow-hidden bg-card">
+                    <div className="rounded-xl overflow-hidden border border-border bg-card">
                       <div className="px-4 pt-4 pb-2">
                         <p className="text-[10px] font-semibold tracking-widest uppercase text-muted-foreground">
                           Additional Questions
@@ -219,7 +226,7 @@ export default function RequestDetailPage() {
 
       {!loading && request && (
         <div
-          className="lg:mx-auto lg:max-w-xl lg:fixed bottom-0 left-0 right-0 lg:left-44 px-4 pb-6 pt-3 z-20"
+          className="lg:mx-auto lg:max-w-xl lg:fixed bottom-0 left-0 right-0 lg:left-44 px-4 pb-[calc(1.5rem+env(safe-area-inset-bottom))] pt-5 z-20"
           style={{ background: "linear-gradient(to top, var(--background) 70%, transparent)" }}
         >
           <Button

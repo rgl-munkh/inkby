@@ -10,7 +10,7 @@ import {
   SheetTitle,
   SheetDescription,
 } from "@/components/ui/sheet";
-import { formatAmount } from "@/lib/utils";
+import { formatAmount } from "@/lib/domain/money";
 import { PAYMENT_POLL_MS, PAYMENT_REDIRECT_DELAY_MS } from "@/lib/constants";
 import type { QPayInvoice } from "../types";
 import { CheckCircleIcon, QRIcon } from "./booking-detail-icons";
@@ -101,9 +101,9 @@ export function PaymentSheet({
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent
         side="bottom"
-        className="rounded-t-2xl p-6 flex flex-col gap-5 max-h-[90dvh] overflow-y-auto"
+        className="rounded-t-xl border-border p-5 pb-[calc(1.25rem+env(safe-area-inset-bottom))] flex flex-col gap-5 max-h-[92dvh] overflow-y-auto"
       >
-        <SheetHeader>
+        <SheetHeader className="p-0 pr-8">
           <SheetTitle className="text-base font-semibold text-left text-foreground">
             Pay deposit
           </SheetTitle>
@@ -114,7 +114,7 @@ export function PaymentSheet({
 
         {loadingInvoice && (
           <div className="flex flex-col items-center gap-3 py-8">
-            <Skeleton className="w-48 h-48 rounded-2xl" />
+            <Skeleton className="w-48 h-48 rounded-xl" />
             <Skeleton className="h-4 w-24" />
             <div className="grid grid-cols-2 gap-2 w-full pt-2">
               {[...Array(4)].map((_, i) => (
@@ -126,7 +126,7 @@ export function PaymentSheet({
 
         {invoiceError && !loadingInvoice && (
           <div className="flex flex-col items-center gap-3 py-6 text-center">
-            <p className="text-sm text-destructive">{invoiceError}</p>
+            <p className="rounded-xl border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive">{invoiceError}</p>
             <Button
               onClick={() => onOpenChange(false)}
               variant="outline"
@@ -147,7 +147,7 @@ export function PaymentSheet({
 
         {invoice && paymentStatus !== "paid" && !loadingInvoice && (
           <>
-            <div className="flex items-center justify-between px-4 py-3 rounded-2xl bg-muted">
+            <div className="flex items-center justify-between px-4 py-3 rounded-xl border border-border bg-card">
               <div>
                 <p className="text-[10px] font-semibold tracking-widest uppercase text-muted-foreground">
                   Deposit amount
@@ -161,7 +161,7 @@ export function PaymentSheet({
 
             <div className="flex flex-col items-center gap-2">
               <div
-                className="rounded-2xl overflow-hidden p-3"
+                className="rounded-xl overflow-hidden p-3"
                 style={{ background: "var(--card)", border: "1px solid var(--border)" }}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -188,8 +188,8 @@ export function PaymentSheet({
                     <a
                       key={bank.name}
                       href={bank.link}
-                      className="flex items-center gap-2 px-3 h-11 rounded-xl text-xs font-medium transition-opacity hover:opacity-75 active:opacity-60"
-                      style={{ background: "var(--muted)", color: "var(--foreground)" }}
+                    className="flex items-center gap-2 px-3 h-11 rounded-xl border border-border text-xs font-medium transition-opacity hover:opacity-75 active:opacity-60"
+                      style={{ background: "var(--card)", color: "var(--foreground)" }}
                     >
                       {bank.logo && (
                         // eslint-disable-next-line @next/next/no-img-element

@@ -46,8 +46,11 @@ export function ChooseTimeSheet({
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent side="bottom" className="rounded-t-2xl p-6 flex flex-col gap-5">
-        <SheetHeader>
+      <SheetContent
+        side="bottom"
+        className="rounded-t-xl border-border p-5 pb-[calc(1.25rem+env(safe-area-inset-bottom))] flex flex-col gap-5"
+      >
+        <SheetHeader className="p-0 pr-8">
           <SheetTitle className="text-base font-semibold text-left text-foreground">
             Choose a time
           </SheetTitle>
@@ -63,7 +66,7 @@ export function ChooseTimeSheet({
           style={{ background: "var(--muted)", color: "var(--foreground)", border: "1px solid var(--border)" }}
         />
         {error && (
-          <p className="text-xs text-center text-destructive">{error}</p>
+          <p className="rounded-xl border border-destructive/30 bg-destructive/10 px-3 py-2 text-center text-xs text-destructive">{error}</p>
         )}
         <Button
           onClick={handleSubmit}
