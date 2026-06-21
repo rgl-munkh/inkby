@@ -14,6 +14,8 @@ const updateProfileSchema = z.object({
   studio_lng: z.number().optional(),
   bio: z.string().max(500).optional(),
   avatar_url: z.string().url().optional(),
+  cancellation_notice_hours: z.number().int().min(0).max(720).optional(),
+  max_reschedules: z.number().int().min(0).max(20).optional(),
 });
 
 export async function GET() {
@@ -56,6 +58,8 @@ export async function PATCH(request: NextRequest) {
       studio_lng,
       bio,
       avatar_url,
+      cancellation_notice_hours,
+      max_reschedules,
     } = parsed.data;
 
     const updateValues: Partial<typeof artists.$inferInsert> = {};
@@ -67,6 +71,8 @@ export async function PATCH(request: NextRequest) {
     if (studio_lng !== undefined) updateValues.studioLng = studio_lng;
     if (bio !== undefined) updateValues.bio = bio;
     if (avatar_url !== undefined) updateValues.avatarUrl = avatar_url;
+    if (cancellation_notice_hours !== undefined) updateValues.cancellationNoticeHours = cancellation_notice_hours;
+    if (max_reschedules !== undefined) updateValues.maxReschedules = max_reschedules;
 
     const [updated] = await db
       .update(artists)

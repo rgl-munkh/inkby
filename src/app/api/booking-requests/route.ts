@@ -1,5 +1,6 @@
 import { bookingRequests } from "@/lib/db/schema";
 import { getAuthenticatedArtist, unauthorized, badRequest, serverError } from "@/lib/auth";
+import { signBookingToken } from "@/lib/booking-token";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import {
@@ -42,7 +43,13 @@ export async function POST(request: NextRequest) {
       photoUrls: photo_urls,
     });
 
-    return NextResponse.json({ booking_request: booking }, { status: 201 });
+    // Hand the client a scoped access token for their booking management link.
+    const token = signBookingToken(booking.id);
+
+    return NextResponse.json(
+      { booking_request: booking, access_token: token },
+      { status: 201 }
+    );
   } catch {
     return serverError();
   }

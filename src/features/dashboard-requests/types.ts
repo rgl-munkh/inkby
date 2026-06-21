@@ -10,6 +10,16 @@ export type Schedule = {
   suggestedDatetime: string | null;
 };
 
+export type Appointment = {
+  id: string;
+  status: string;
+  chosenDatetime: string | null;
+  rescheduleCount: number;
+  cancelledAt: string | null;
+  cancelledBy: string | null;
+  cancellationReason: string | null;
+};
+
 export type BookingRequest = {
   id: string;
   firstName: string;
@@ -23,6 +33,7 @@ export type BookingRequest = {
   createdAt: string;
   photos: Photo[];
   schedules: Schedule[];
+  appointment: Appointment | null;
 };
 
 export type ScheduleSheetBookingRequest = Pick<

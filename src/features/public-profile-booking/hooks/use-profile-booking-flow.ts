@@ -19,6 +19,7 @@ export function useProfileBookingFlow({
 
   const [step, setStep] = useState(0);
   const [bookingRequestId, setBookingRequestId] = useState<string | null>(null);
+  const [bookingToken, setBookingToken] = useState<string | null>(null);
   const [showAvailability, setShowAvailability] = useState(false);
   const [chosenDatetime, setChosenDatetime] = useState<string | null>(null);
   const [flashDeals] = useState<FlashDeal[]>(initialFlashDeals);
@@ -99,7 +100,7 @@ export function useProfileBookingFlow({
         email,
         idea_description: idea,
         tattoo_size: mapTattooSizeToApi(size),
-        placement: placement.toLowerCase(),
+        placement,
         photo_urls,
       });
       if (result.error) {
@@ -109,6 +110,7 @@ export function useProfileBookingFlow({
 
       setStep(3);
       setBookingRequestId(result.bookingRequestId);
+      setBookingToken(result.accessToken);
     } catch {
       setError("Network error. Please try again.");
     } finally {
@@ -144,6 +146,7 @@ export function useProfileBookingFlow({
     step,
     setStep,
     bookingRequestId,
+    bookingToken,
     showAvailability,
     setShowAvailability,
     chosenDatetime,

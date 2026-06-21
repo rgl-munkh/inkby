@@ -19,13 +19,17 @@ export function PaymentSheet({
   open,
   onOpenChange,
   appointmentId,
+  token,
   onPaymentSuccess,
 }: {
   open: boolean;
   onOpenChange: (v: boolean) => void;
   appointmentId: string;
+  token?: string | null;
   onPaymentSuccess: () => void;
 }) {
+  const authHeaders: Record<string, string> = {};
+  if (token) authHeaders["x-booking-token"] = token;
   const [invoice, setInvoice] = useState<QPayInvoice | null>(null);
   const [loadingInvoice, setLoadingInvoice] = useState(false);
   const [invoiceError, setInvoiceError] = useState("");
@@ -47,7 +51,7 @@ export function PaymentSheet({
       try {
         const res = await fetch("/api/qpay/create-invoice", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "application/json", ...authHeaders },
           body: JSON.stringify({ appointment_id: appointmentId }),
         });
         const data = await res.json();
@@ -73,7 +77,9 @@ export function PaymentSheet({
     pollRef.current = setInterval(async () => {
       try {
         setPaymentStatus("checking");
-        const res = await fetch(`/api/qpay/check/${apptId}`);
+        const res = await fetch(`/api/qpay/check/${apptId}`, {
+          headers: authHeaders,
+        });
         const data = await res.json();
         if (res.ok && data.payment?.status === "paid") {
           clearInterval(pollRef.current!);

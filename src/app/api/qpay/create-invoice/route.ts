@@ -2,7 +2,14 @@ import { db } from "@/lib/db";
 import { appointments, payments } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { createInvoice } from "@/lib/qpay";
-import { badRequest, notFound, serverError } from "@/lib/auth";
+import {
+  badRequest,
+  getAuthenticatedArtist,
+  notFound,
+  serverError,
+  unauthorized,
+} from "@/lib/auth";
+import { getBookingTokenFromRequest, verifyBookingToken } from "@/lib/booking-token";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -21,7 +28,7 @@ export async function POST(request: NextRequest) {
 
     const appointment = await db.query.appointments.findFirst({
       where: eq(appointments.id, parsed.data.appointment_id),
-      columns: { id: true, status: true, artistId: true },
+      columns: { id: true, status: true, artistId: true, bookingRequestId: true },
       with: {
         artist: { columns: { depositAmount: true, displayName: true } },
       },
@@ -31,15 +38,33 @@ export async function POST(request: NextRequest) {
       return notFound("Appointment not found");
     }
 
+    // Authorize: the owning artist (session) or a valid per-booking token.
+    const { user } = await getAuthenticatedArtist();
+    const isArtist = !!user && user.id === appointment.artistId;
+    const hasToken = verifyBookingToken(
+      appointment.bookingRequestId,
+      getBookingTokenFromRequest(request)
+    );
+    if (!isArtist && !hasToken) {
+      return unauthorized();
+    }
+
     if (appointment.status !== "pending_payment") {
       return badRequest("Appointment is not awaiting payment");
     }
 
-    // const depositAmount = appointment.artist?.depositAmount;
-    const depositAmount = 100; // TESTING
+    const depositAmount = Number(appointment.artist?.depositAmount ?? 0);
 
-    if (!depositAmount) {
+    if (!depositAmount || depositAmount <= 0) {
       return serverError("Artist has not set a deposit amount");
+    }
+
+    // Include the callback secret (when configured) so the callback can verify authenticity.
+    const callbackSecret = process.env.QPAY_CALLBACK_SECRET;
+    const callbackUrl = new URL(process.env.QPAY_CALLBACK_URL!);
+    callbackUrl.searchParams.set("appointment_id", appointment.id);
+    if (callbackSecret) {
+      callbackUrl.searchParams.set("secret", callbackSecret);
     }
 
     const invoiceData = {
@@ -47,8 +72,8 @@ export async function POST(request: NextRequest) {
       sender_invoice_no: appointment.id,
       invoice_receiver_code: "terminal",
       invoice_description: `Inkby Tattoo Deposit - ${appointment.artist?.displayName || "Artist"}`,
-      amount: Number(depositAmount),
-      callback_url: `${process.env.QPAY_CALLBACK_URL}?appointment_id=${appointment.id}`,
+      amount: depositAmount,
+      callback_url: callbackUrl.toString(),
     };
 
     const qpayResponse = await createInvoice(invoiceData);
@@ -65,7 +90,7 @@ export async function POST(request: NextRequest) {
       qr_text: qpayResponse.qr_text,
       qr_image: qpayResponse.qr_image,
       urls: qpayResponse.urls,
-      amount: Number(depositAmount),
+      amount: depositAmount,
     });
   } catch (err) {
     console.error("QPAY create invoice error:", err);

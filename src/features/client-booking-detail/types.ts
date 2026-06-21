@@ -3,6 +3,8 @@ export type Artist = {
   displayName: string | null;
   avatarUrl: string | null;
   instagramUsername: string | null;
+  cancellationNoticeHours: number;
+  maxReschedules: number;
 };
 
 export type Schedule = {
@@ -18,6 +20,11 @@ export type Schedule = {
 export type Appointment = {
   id: string;
   status: string;
+  chosenDatetime: string | null;
+  rescheduleCount: number;
+  cancelledAt: string | null;
+  cancelledBy: string | null;
+  cancellationReason: string | null;
 };
 
 export type BookingRequest = {

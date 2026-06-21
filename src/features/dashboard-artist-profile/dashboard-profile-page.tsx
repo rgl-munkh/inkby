@@ -9,6 +9,7 @@ import { useClipboardCopy } from "@/hooks/use-clipboard-copy";
 import { useArtistProfile } from "./hooks/use-artist-profile";
 import { useArtistEarnings } from "./hooks/use-artist-earnings";
 import { AvailabilitySection } from "./components/availability-section";
+import { CancellationPolicySection } from "./components/cancellation-policy-section";
 import { ProfileSkeleton } from "./components/profile-skeleton";
 import {
   ExternalLinkIcon,
@@ -19,6 +20,10 @@ import {
 } from "./components/profile-icons";
 import { PERIOD_TABS, type Period } from "./types";
 
+// Our public booking link comes from NEXT_PUBLIC_APP_URL (e.g. https://inkby.app).
+const APP_URL = (process.env.NEXT_PUBLIC_APP_URL ?? "").replace(/\/+$/, "");
+const APP_HOST = APP_URL.replace(/^https?:\/\//, "");
+
 export default function DashboardProfilePage() {
   const { artist, loading } = useArtistProfile();
   const { copied, copy: copyToClipboard } = useClipboardCopy();
@@ -27,7 +32,8 @@ export default function DashboardProfilePage() {
 
   function handleCopyLink() {
     const handle = artist?.slug ?? artist?.instagramUsername ?? "";
-    const url = `${window.location.origin}/@${handle}`;
+    const origin = APP_URL || window.location.origin;
+    const url = `${origin}/@${handle}`;
     copyToClipboard(url);
   }
 
@@ -84,7 +90,7 @@ export default function DashboardProfilePage() {
                 rel="noopener noreferrer"
                 className="flex items-center gap-1 text-xs transition-opacity hover:opacity-70 text-muted-foreground"
               >
-                venue.inkl/@{handle}
+                {APP_HOST}/@{handle}
                 <ExternalLinkIcon />
               </a>
             )}
@@ -113,6 +119,11 @@ export default function DashboardProfilePage() {
           </div>
 
           <AvailabilitySection />
+
+          <CancellationPolicySection
+            initialNoticeHours={artist.cancellationNoticeHours}
+            initialMaxReschedules={artist.maxReschedules}
+          />
 
           <div className="rounded-xl border border-border p-5 flex flex-col gap-4 bg-card">
             <div className="flex items-center justify-between">

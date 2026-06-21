@@ -22,39 +22,16 @@ export function StepLanding({
 }) {
   return (
     <>
-      <div className="flex items-center justify-between px-4 py-3">
-        <div className="flex items-center gap-1">
-          <button
-            className="flex items-center gap-1 rounded-full border px-3 py-1.5 text-xs font-semibold cursor-pointer transition-opacity hover:opacity-70"
-            style={{ borderColor: "var(--border)", color: "var(--foreground)", background: "transparent" }}
-          >
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M15 18l-6-6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-            Profile
-          </button>
-        </div>
-        <div className="flex items-center gap-3">
-          <button className="cursor-pointer opacity-50 hover:opacity-100 transition-opacity" aria-label="Share">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8M16 6l-4-4-4 4M12 2v13" stroke="#6b6b6b" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </button>
-          <button className="cursor-pointer opacity-50 hover:opacity-100 transition-opacity" aria-label="Grid">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <rect x="3" y="3" width="7" height="7" rx="1" stroke="#6b6b6b" strokeWidth="1.5" />
-              <rect x="14" y="3" width="7" height="7" rx="1" stroke="#6b6b6b" strokeWidth="1.5" />
-              <rect x="3" y="14" width="7" height="7" rx="1" stroke="#6b6b6b" strokeWidth="1.5" />
-              <rect x="14" y="14" width="7" height="7" rx="1" stroke="#6b6b6b" strokeWidth="1.5" />
-            </svg>
-          </button>
-        </div>
-      </div>
-
       <div className="flex-1 flex flex-col items-center justify-center gap-5 px-5 py-10">
         {artist.avatarUrl ? (
           <div className="w-24 h-24 rounded-full overflow-hidden relative border border-border bg-card">
-            <Image src={artist.avatarUrl} alt={displayName} fill sizes="96px" className="object-cover" />
+            <Image
+              src={artist.avatarUrl}
+              alt={displayName}
+              fill
+              sizes="96px"
+              className="object-cover"
+            />
           </div>
         ) : (
           <SmileyIcon size={96} />
@@ -64,7 +41,9 @@ export function StepLanding({
             @{artist.slug}
           </p>
           {artist.bio && (
-            <p className="max-w-xs text-sm leading-5 text-muted-foreground">{artist.bio}</p>
+            <p className="max-w-xs text-sm leading-5 text-muted-foreground">
+              {artist.bio}
+            </p>
           )}
         </div>
         <Button
@@ -74,7 +53,7 @@ export function StepLanding({
         >
           Book a tattoo
         </Button>
-        <button
+        <Button
           type="button"
           onClick={onOpenAvailability}
           className="w-full max-w-xs rounded-full h-11 text-xs font-semibold cursor-pointer transition-colors hover:bg-muted border"
@@ -90,7 +69,7 @@ export function StepLanding({
                 return `${d.toLocaleDateString("en-US", { month: "short", day: "numeric" })} · ${d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })}`;
               })()
             : "Check availability"}
-        </button>
+        </Button>
 
         {flashDeals.length > 0 && (
           <div className="w-full max-w-xs mt-2">
@@ -100,7 +79,10 @@ export function StepLanding({
               </span>
               <span
                 className="text-[10px] font-semibold rounded-full px-1.5 py-0.5 leading-none"
-                style={{ background: "var(--muted)", color: "var(--muted-foreground)" }}
+                style={{
+                  background: "var(--muted)",
+                  color: "var(--muted-foreground)",
+                }}
               >
                 {flashDeals.length}
               </span>
@@ -108,7 +90,9 @@ export function StepLanding({
             <div className="grid grid-cols-2 gap-2.5">
               {flashDeals.map((deal) => {
                 const minAmt = deal.sizes.length
-                  ? Math.min(...deal.sizes.map((s) => Number(s.estimatedAmount)))
+                  ? Math.min(
+                      ...deal.sizes.map((s) => Number(s.estimatedAmount)),
+                    )
                   : null;
                 return (
                   <button
@@ -137,7 +121,10 @@ export function StepLanding({
                         <p className="text-xs font-semibold text-foreground">
                           ₮{minAmt.toLocaleString("en-US")}
                           {deal.sizes.length > 1 && (
-                            <span className="text-[10px] font-normal text-muted-foreground"> from</span>
+                            <span className="text-[10px] font-normal text-muted-foreground">
+                              {" "}
+                              from
+                            </span>
                           )}
                         </p>
                       )}
@@ -152,14 +139,27 @@ export function StepLanding({
 
       <div className="flex items-end justify-between px-6 pb-6 pt-4">
         <div className="flex items-center gap-1.5">
-          <svg width="14" height="14" viewBox="0 0 36 36" fill="none" aria-hidden="true">
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 36 36"
+            fill="none"
+            aria-hidden="true"
+          >
             <rect width="36" height="36" rx="8" fill="#1a1a1a" />
-            <path d="M18 7C18 7 11 15.5 11 21a7 7 0 0 0 14 0c0-5.5-7-14-7-14Z" fill="#f5e642" />
+            <path
+              d="M18 7C18 7 11 15.5 11 21a7 7 0 0 0 14 0c0-5.5-7-14-7-14Z"
+              fill="#f5e642"
+            />
           </svg>
-          <span className="text-xs font-bold tracking-widest uppercase text-foreground">INKBY</span>
+          <span className="text-xs font-bold tracking-widest uppercase text-foreground">
+            INKBY
+          </span>
         </div>
         <p className="text-[10px] text-right text-muted-foreground">
-          Painlessly manage your<br />requests, books, and deposits
+          Painlessly manage your
+          <br />
+          requests, books, and deposits
         </p>
       </div>
     </>

@@ -7,6 +7,8 @@ export type Artist = {
   bio: string | null;
   depositAmount: string | null;
   studioLocation: string | null;
+  cancellationNoticeHours: number;
+  maxReschedules: number;
 };
 
 export type AvailableDate = {

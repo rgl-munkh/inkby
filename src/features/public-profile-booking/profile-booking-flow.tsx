@@ -46,7 +46,10 @@ export function ProfileBookingFlow({
           placement={v.placement}
           setPlacement={v.setPlacement}
           error={v.error}
-          onBack={() => { v.setError(""); v.setStep(0); }}
+          onBack={() => {
+            v.setError("");
+            v.setStep(0);
+          }}
           onContinue={v.continueFromTattooStep}
         />
       )}
@@ -64,7 +67,10 @@ export function ProfileBookingFlow({
           setEmail={v.setEmail}
           error={v.error}
           submitting={v.submitting}
-          onBack={() => { v.setError(""); v.setStep(1); }}
+          onBack={() => {
+            v.setError("");
+            v.setStep(1);
+          }}
           onSubmit={v.handleSubmit}
         />
       )}
@@ -78,6 +84,7 @@ export function ProfileBookingFlow({
           idea={v.idea}
           photoUrls={v.photoUrls}
           bookingRequestId={v.bookingRequestId}
+          bookingToken={v.bookingToken}
           onDone={v.resetAfterSuccess}
         />
       )}
@@ -86,10 +93,6 @@ export function ProfileBookingFlow({
         <AvailabilityPanel
           slug={v.artist.slug}
           onClose={() => v.setShowAvailability(false)}
-          onSelect={(datetime) => {
-            v.setChosenDatetime(datetime);
-            v.setShowAvailability(false);
-          }}
         />
       )}
     </main>

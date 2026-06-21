@@ -24,6 +24,7 @@ export async function createBookingRequest(body: {
   photo_urls: string[];
 }): Promise<{
   bookingRequestId: string | null;
+  accessToken: string | null;
   error: string | null;
 }> {
   const res = await fetch("/api/booking-requests", {
@@ -34,8 +35,16 @@ export async function createBookingRequest(body: {
   const data = await res.json();
 
   if (!res.ok) {
-    return { bookingRequestId: null, error: data.error ?? "Something went wrong" };
+    return {
+      bookingRequestId: null,
+      accessToken: null,
+      error: data.error ?? "Something went wrong",
+    };
   }
 
-  return { bookingRequestId: data.booking_request?.id ?? null, error: null };
+  return {
+    bookingRequestId: data.booking_request?.id ?? null,
+    accessToken: data.access_token ?? null,
+    error: null,
+  };
 }

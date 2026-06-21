@@ -216,6 +216,7 @@ export function RequestTabs({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [counts, setCounts] = useState<Record<string, number>>({ pending: initialCount });
+  const [reloadKey, setReloadKey] = useState(0);
   const { copied, copy: copyLink } = useClipboardCopy();
 
   useEffect(() => {
@@ -240,7 +241,22 @@ export function RequestTabs({
       })
       .catch(() => setError("Failed to load requests"))
       .finally(() => setLoading(false));
-  }, [activeTab, initialRequests, initialCount]);
+  }, [activeTab, reloadKey, initialRequests, initialCount]);
+
+  // Switch tabs without flashing the previous tab's list: show the correct
+  // base state (server inbox for pending, skeleton for the fetched tabs)
+  // immediately, before the effect runs.
+  function handleTabChange(value: string) {
+    if (value === activeTab) return;
+    setError(null);
+    if (value === "pending") {
+      setRequests(initialRequests);
+    } else {
+      setLoading(true);
+      setRequests([]);
+    }
+    setActiveTab(value);
+  }
 
   const slug = artist.slug ?? "";
 
@@ -271,7 +287,7 @@ export function RequestTabs({
       </div>
 
       <div className="px-2 lg:px-4 pt-4 lg:max-w-xl mx-auto lg:px-6 lg:pt-6">
-        <Tabs value={activeTab} onValueChange={setActiveTab}>
+        <Tabs value={activeTab} onValueChange={handleTabChange}>
           <div className="overflow-x-auto scrollbar-none -mx-4 lg:px-4 lg:-mx-6 lg:px-6">
             <TabsList
               variant="line"
@@ -311,7 +327,7 @@ export function RequestTabs({
                   <p className="text-sm font-semibold text-foreground">Something went wrong</p>
                   <p className="text-xs text-muted-foreground">{error}</p>
                   <button
-                    onClick={() => { setError(null); setActiveTab(value); }}
+                    onClick={() => { setError(null); setReloadKey((k) => k + 1); }}
                     className="text-xs font-semibold underline text-muted-foreground cursor-pointer"
                   >
                     Retry

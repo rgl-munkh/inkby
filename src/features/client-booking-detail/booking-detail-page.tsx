@@ -1,19 +1,23 @@
 "use client";
 
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { useClientBookingDetail } from "./hooks/use-client-booking-detail";
 import { ClientBookingPageSkeleton } from "./components/page-skeleton";
 import { ChooseTimeSheet } from "./components/choose-time-sheet";
+import { CancelSheet } from "./components/cancel-sheet";
 import { PaymentSheet } from "./components/payment-sheet";
 import { AppointmentTab } from "./components/appointment-tab";
 import { CalendarIcon, QRIcon } from "./components/booking-detail-icons";
+import { getCancellationState } from "@/lib/domain/cancellation";
 
 export default function ClientBookingPage() {
   const params = useParams();
   const id = params.id as string;
+  const searchParams = useSearchParams();
+  const token = searchParams.get("t");
 
   const {
     booking,
@@ -30,7 +34,15 @@ export default function ClientBookingPage() {
     confirmError,
     handleConfirm,
     handlePaymentSuccess,
-  } = useClientBookingDetail(id);
+    rescheduleOpen,
+    setRescheduleOpen,
+    cancelOpen,
+    setCancelOpen,
+    actionSubmitting,
+    actionError,
+    handleReschedule,
+    handleCancel,
+  } = useClientBookingDetail(id, token);
 
   if (loading) return <ClientBookingPageSkeleton />;
 
@@ -52,8 +64,21 @@ export default function ClientBookingPage() {
   const allDatesSet = booking.schedules.every((s) => s.suggestedDatetime !== null);
 
   const appointment = booking.appointment ?? null;
+  const isCancelled = booking.status === "cancelled" || appointment?.status === "cancelled";
   const isPendingPayment = isConfirmed && appointment?.status === "pending_payment";
   const isPaid = isConfirmed && appointment?.status === "paid";
+
+  const policy =
+    appointment && appointment.chosenDatetime && !isCancelled
+      ? getCancellationState({
+          now: new Date(),
+          chosenDatetime: appointment.chosenDatetime,
+          status: appointment.status as "pending_payment" | "paid" | "completed" | "cancelled",
+          rescheduleCount: appointment.rescheduleCount,
+          cancellationNoticeHours: artist.cancellationNoticeHours,
+          maxReschedules: artist.maxReschedules,
+        })
+      : null;
 
   function openChooseTime(prefill: string | null) {
     setSelectedDatetime(prefill);
@@ -107,10 +132,17 @@ export default function ClientBookingPage() {
               isConfirmed={isConfirmed}
               isPaid={isPaid}
               isPendingPayment={isPendingPayment}
+              isCancelled={!!isCancelled}
+              canReschedule={!!policy?.clientCanReschedule}
+              canCancel={!!policy?.clientCanCancel}
+              withinNoticeWindow={!!policy && !policy.clientCanCancel && policy.withinNoticeWindow}
+              noticeHours={artist.cancellationNoticeHours}
               schedule={schedule}
               artistHandle={artistHandle}
               artistName={artistName}
               onOpenChooseTime={openChooseTime}
+              onOpenReschedule={() => setRescheduleOpen(true)}
+              onOpenCancel={() => setCancelOpen(true)}
             />
           </TabsContent>
 
@@ -178,9 +210,27 @@ export default function ClientBookingPage() {
           open={paymentSheetOpen}
           onOpenChange={setPaymentSheetOpen}
           appointmentId={appointment.id}
+          token={token}
           onPaymentSuccess={handlePaymentSuccess}
         />
       )}
+
+      <ChooseTimeSheet
+        open={rescheduleOpen}
+        onOpenChange={setRescheduleOpen}
+        onConfirm={(dt) => void handleReschedule(dt)}
+        submitting={actionSubmitting}
+        error={actionError}
+        prefillDatetime={appointment?.chosenDatetime ?? null}
+      />
+
+      <CancelSheet
+        open={cancelOpen}
+        onOpenChange={setCancelOpen}
+        onConfirm={(reason) => void handleCancel(reason)}
+        submitting={actionSubmitting}
+        error={actionError}
+      />
     </div>
   );
 }

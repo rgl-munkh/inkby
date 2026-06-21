@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
 import { bookingRequests, artists } from "@/lib/db/schema";
-import { eq, count, desc } from "drizzle-orm";
+import { and, eq, count, desc } from "drizzle-orm";
 import { createClient } from "@/lib/supabase/server";
 import { RequestTabs } from "@/features/dashboard-inbox/request-tabs";
 import { BOOKING_REQUEST_LIMIT } from "@/lib/constants";
@@ -20,7 +20,10 @@ export default async function DashboardPage() {
       columns: { slug: true, displayName: true, instagramUsername: true },
     }),
     db.query.bookingRequests.findMany({
-      where: eq(bookingRequests.artistId, user.id),
+      where: and(
+        eq(bookingRequests.artistId, user.id),
+        eq(bookingRequests.status, "pending")
+      ),
       with: { photos: { columns: { photoUrl: true } } },
       orderBy: [desc(bookingRequests.createdAt)],
       limit: BOOKING_REQUEST_LIMIT,
@@ -28,7 +31,12 @@ export default async function DashboardPage() {
     db
       .select({ total: count() })
       .from(bookingRequests)
-      .where(eq(bookingRequests.artistId, user.id)),
+      .where(
+        and(
+          eq(bookingRequests.artistId, user.id),
+          eq(bookingRequests.status, "pending")
+        )
+      ),
   ]);
 
   if (!artist) redirect("/login");

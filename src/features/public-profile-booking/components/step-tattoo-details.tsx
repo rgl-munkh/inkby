@@ -2,8 +2,10 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import type { Artist } from "../types";
-import { SIZES, PLACEMENTS } from "../constants";
-import { BackButton, PillSelect, QuestionCard, SmileyIcon } from "./booking-wizard-ui";
+import { SIZES } from "../constants";
+import { BackButton, QuestionCard, SmileyIcon } from "./booking-wizard-ui";
+import { SizeSelect } from "./size-select";
+import { BodyMap } from "./body-map";
 
 type StepTattooDetailsProps = {
   artist: Artist;
@@ -133,7 +135,7 @@ export function StepTattooDetails({
           title="What size are you thinking?"
           description="Gives me a sense of how much time it'll take for the appointment."
         >
-          <PillSelect options={SIZES} value={size} onChange={setSize} />
+          <SizeSelect options={SIZES} value={size} onChange={setSize} />
         </QuestionCard>
 
         <QuestionCard
@@ -141,7 +143,7 @@ export function StepTattooDetails({
           total={4}
           title="Where would you like your tattoo?"
         >
-          <PillSelect options={PLACEMENTS} value={placement} onChange={setPlacement} />
+          <BodyMap value={placement} onChange={setPlacement} />
         </QuestionCard>
 
         {error && <p className="text-xs text-center text-destructive">{error}</p>}

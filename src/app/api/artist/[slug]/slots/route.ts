@@ -1,6 +1,6 @@
 import { db } from "@/lib/db";
 import { artists, artistAvailableDates, appointments } from "@/lib/db/schema";
-import { eq, and, gte, lte } from "drizzle-orm";
+import { eq, and, gte, lte, ne } from "drizzle-orm";
 import { notFound, serverError } from "@/lib/auth";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -74,6 +74,7 @@ export async function GET(
       .where(
         and(
           eq(appointments.artistId, artist.id),
+          ne(appointments.status, "cancelled"),
           gte(appointments.chosenDatetime, windowStartTs),
           lte(appointments.chosenDatetime, windowEndTs)
         )

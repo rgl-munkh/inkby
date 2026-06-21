@@ -14,10 +14,17 @@ type AppointmentTabProps = {
   isConfirmed: boolean;
   isPaid: boolean;
   isPendingPayment: boolean;
+  isCancelled: boolean;
+  canReschedule: boolean;
+  canCancel: boolean;
+  withinNoticeWindow: boolean;
+  noticeHours: number;
   schedule: Schedule | null;
   artistHandle: string;
   artistName: string;
   onOpenChooseTime: (prefill: string | null) => void;
+  onOpenReschedule: () => void;
+  onOpenCancel: () => void;
 };
 
 export function AppointmentTab({
@@ -27,13 +34,37 @@ export function AppointmentTab({
   isConfirmed,
   isPaid,
   isPendingPayment,
+  isCancelled,
+  canReschedule,
+  canCancel,
+  withinNoticeWindow,
+  noticeHours,
   schedule,
   artistHandle,
   artistName,
   onOpenChooseTime,
+  onOpenReschedule,
+  onOpenCancel,
 }: AppointmentTabProps) {
+  const appointment = booking.appointment;
+
   return (
     <div className="px-4 pt-4 flex flex-col gap-3">
+
+      {isCancelled && (
+        <div className="rounded-xl border border-destructive/30 bg-destructive/10 p-5 flex flex-col items-center gap-2 text-center">
+          <p className="text-sm font-semibold text-destructive">Appointment cancelled</p>
+          {appointment?.cancellationReason ? (
+            <p className="text-xs text-muted-foreground">
+              Reason: {appointment.cancellationReason}
+            </p>
+          ) : (
+            <p className="text-xs text-muted-foreground">
+              This appointment is no longer scheduled. Message {artistHandle} to rebook.
+            </p>
+          )}
+        </div>
+      )}
 
       {isPending && (
         <div
@@ -184,6 +215,36 @@ export function AppointmentTab({
             )}
           </div>
         </>
+      )}
+
+      {isConfirmed && !isCancelled && (
+        <div className="flex flex-col gap-2 pt-2">
+          {(canReschedule || canCancel) && (
+            <div className="flex gap-2">
+              {canReschedule && (
+                <button
+                  onClick={onOpenReschedule}
+                  className="flex-1 rounded-full h-11 text-xs font-bold tracking-widest uppercase border border-border bg-card text-foreground transition-opacity hover:opacity-80 cursor-pointer"
+                >
+                  Reschedule
+                </button>
+              )}
+              {canCancel && (
+                <button
+                  onClick={onOpenCancel}
+                  className="flex-1 rounded-full h-11 text-xs font-bold tracking-widest uppercase border border-destructive/40 text-destructive transition-opacity hover:opacity-80 cursor-pointer"
+                >
+                  Cancel
+                </button>
+              )}
+            </div>
+          )}
+          {withinNoticeWindow && (
+            <p className="text-xs text-center text-muted-foreground">
+              Changes must be made at least {noticeHours}h in advance. Please contact {artistHandle} directly.
+            </p>
+          )}
+        </div>
       )}
     </div>
   );

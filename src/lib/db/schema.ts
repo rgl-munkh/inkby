@@ -48,6 +48,9 @@ export const artists = pgTable("artists", {
   avatarUrl: text("avatar_url"),
   bio: text("bio"),
   onboardingCompleted: boolean("onboarding_completed").default(false).notNull(),
+  // Cancellation / reschedule policy
+  cancellationNoticeHours: integer("cancellation_notice_hours").default(24).notNull(),
+  maxReschedules: integer("max_reschedules").default(2).notNull(),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
 });
@@ -108,6 +111,12 @@ export const appointments = pgTable("appointments", {
     .notNull(),
   chosenDatetime: timestamp("chosen_datetime", { withTimezone: true }).notNull(),
   status: appointmentStatusEnum("status").default("pending_payment").notNull(),
+  // Reschedule / cancellation tracking
+  rescheduleCount: integer("reschedule_count").default(0).notNull(),
+  previousDatetime: timestamp("previous_datetime", { withTimezone: true }),
+  cancelledAt: timestamp("cancelled_at", { withTimezone: true }),
+  cancelledBy: text("cancelled_by"), // "client" | "artist"
+  cancellationReason: text("cancellation_reason"),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
 });

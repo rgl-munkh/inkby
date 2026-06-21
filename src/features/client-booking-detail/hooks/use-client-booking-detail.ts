@@ -1,9 +1,16 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import type { BookingRequest } from "../types";
 
-export function useClientBookingDetail(id: string) {
+export function useClientBookingDetail(id: string, token?: string | null) {
+  // Per-booking access token (from the booking link) sent with every request.
+  const authHeaders = useMemo<Record<string, string>>(() => {
+    const h: Record<string, string> = {};
+    if (token) h["x-booking-token"] = token;
+    return h;
+  }, [token]);
+
   const [booking, setBooking] = useState<BookingRequest | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("appointment");
@@ -13,13 +20,26 @@ export function useClientBookingDetail(id: string) {
   const [submitting, setSubmitting] = useState(false);
   const [confirmError, setConfirmError] = useState("");
 
+  // Reschedule / cancel (post-confirmation) state
+  const [rescheduleOpen, setRescheduleOpen] = useState(false);
+  const [cancelOpen, setCancelOpen] = useState(false);
+  const [actionSubmitting, setActionSubmitting] = useState(false);
+  const [actionError, setActionError] = useState("");
+
+  const refresh = useCallback(async () => {
+    const data = await fetch(`/api/booking-requests/${id}`, {
+      headers: authHeaders,
+    }).then((r) => r.json());
+    setBooking(data.booking_request ?? null);
+  }, [id, authHeaders]);
+
   useEffect(() => {
-    fetch(`/api/booking-requests/${id}`)
+    fetch(`/api/booking-requests/${id}`, { headers: authHeaders })
       .then((r) => r.json())
       .then((data) => setBooking(data.booking_request ?? null))
       .catch(() => setBooking(null))
       .finally(() => setLoading(false));
-  }, [id]);
+  }, [id, authHeaders]);
 
   async function handleConfirm(datetime?: string) {
     setConfirmError("");
@@ -27,7 +47,7 @@ export function useClientBookingDetail(id: string) {
     try {
       const res = await fetch(`/api/booking-requests/${id}/confirm`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...authHeaders },
         body: JSON.stringify(datetime ? { chosen_datetime: datetime } : {}),
       });
       const data = await res.json();
@@ -36,8 +56,7 @@ export function useClientBookingDetail(id: string) {
         return;
       }
       setSheetOpen(false);
-      const refreshed = await fetch(`/api/booking-requests/${id}`).then((r) => r.json());
-      setBooking(refreshed.booking_request ?? null);
+      await refresh();
     } catch {
       setConfirmError("Network error. Please try again.");
     } finally {
@@ -51,6 +70,56 @@ export function useClientBookingDetail(id: string) {
         ? { ...prev, appointment: { ...prev.appointment, status: "paid" } }
         : prev
     );
+  }
+
+  async function handleReschedule(datetime: string) {
+    const appointmentId = booking?.appointment?.id;
+    if (!appointmentId) return;
+    setActionError("");
+    setActionSubmitting(true);
+    try {
+      const res = await fetch(`/api/appointments/${appointmentId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json", ...authHeaders },
+        body: JSON.stringify({ chosen_datetime: datetime }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setActionError(data.error ?? "Something went wrong");
+        return;
+      }
+      setRescheduleOpen(false);
+      await refresh();
+    } catch {
+      setActionError("Network error. Please try again.");
+    } finally {
+      setActionSubmitting(false);
+    }
+  }
+
+  async function handleCancel(reason?: string) {
+    const appointmentId = booking?.appointment?.id;
+    if (!appointmentId) return;
+    setActionError("");
+    setActionSubmitting(true);
+    try {
+      const res = await fetch(`/api/appointments/${appointmentId}/cancel`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", ...authHeaders },
+        body: JSON.stringify(reason ? { reason } : {}),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setActionError(data.error ?? "Something went wrong");
+        return;
+      }
+      setCancelOpen(false);
+      await refresh();
+    } catch {
+      setActionError("Network error. Please try again.");
+    } finally {
+      setActionSubmitting(false);
+    }
   }
 
   return {
@@ -68,5 +137,14 @@ export function useClientBookingDetail(id: string) {
     confirmError,
     handleConfirm,
     handlePaymentSuccess,
+    // reschedule / cancel
+    rescheduleOpen,
+    setRescheduleOpen,
+    cancelOpen,
+    setCancelOpen,
+    actionSubmitting,
+    actionError,
+    handleReschedule,
+    handleCancel,
   };
 }

@@ -11,6 +11,7 @@ type StepSuccessProps = {
   idea: string;
   photoUrls: string[];
   bookingRequestId: string | null;
+  bookingToken: string | null;
   onDone: () => void;
 };
 
@@ -22,8 +23,12 @@ export function StepSuccess({
   idea,
   photoUrls,
   bookingRequestId,
+  bookingToken,
   onDone,
 }: StepSuccessProps) {
+  const bookingHref = bookingRequestId
+    ? `/booking/${bookingRequestId}${bookingToken ? `?t=${encodeURIComponent(bookingToken)}` : ""}`
+    : null;
   return (
     <div className="flex flex-col min-h-screen items-center justify-center px-5 py-12 gap-6">
       <SmileyIcon size={64} />
@@ -77,9 +82,9 @@ export function StepSuccess({
         DONE
       </Button>
 
-      {bookingRequestId && (
+      {bookingHref && (
         <a
-          href={`/booking/${bookingRequestId}`}
+          href={bookingHref}
           className="text-xs font-medium underline underline-offset-2 text-muted-foreground"
         >
           View your booking

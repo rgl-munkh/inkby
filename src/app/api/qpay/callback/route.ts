@@ -10,13 +10,19 @@ export async function POST(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const appointmentId = searchParams.get("appointment_id");
 
+    // Verify callback authenticity when a secret is configured.
+    const expectedSecret = process.env.QPAY_CALLBACK_SECRET;
+    if (expectedSecret && searchParams.get("secret") !== expectedSecret) {
+      return badRequest("Invalid callback secret");
+    }
+
     if (!appointmentId) {
       return badRequest("appointment_id is required");
     }
 
     const payment = await db.query.payments.findFirst({
       where: eq(payments.appointmentId, appointmentId),
-      columns: { id: true, qpayInvoiceId: true, status: true },
+      columns: { id: true, qpayInvoiceId: true, status: true, amount: true },
     });
 
     if (!payment) {
@@ -33,16 +39,21 @@ export async function POST(request: NextRequest) {
 
     const qpayResult = await checkPayment(payment.qpayInvoiceId);
 
-    if (qpayResult.count > 0 && qpayResult.paid_amount > 0) {
-      await db
-        .update(payments)
-        .set({ status: "paid", paidAt: new Date() })
-        .where(eq(payments.id, payment.id));
+    // Trust QPay's reported paid_amount (not the callback body), and require the
+    // full expected deposit — reject partial/underpayment.
+    const expectedAmount = Number(payment.amount);
+    if (qpayResult.count > 0 && qpayResult.paid_amount >= expectedAmount) {
+      await db.transaction(async (tx) => {
+        await tx
+          .update(payments)
+          .set({ status: "paid", paidAt: new Date() })
+          .where(eq(payments.id, payment.id));
 
-      await db
-        .update(appointments)
-        .set({ status: "paid" })
-        .where(eq(appointments.id, appointmentId));
+        await tx
+          .update(appointments)
+          .set({ status: "paid" })
+          .where(eq(appointments.id, appointmentId));
+      });
 
       return NextResponse.json({ message: "Payment confirmed", status: "paid" });
     }

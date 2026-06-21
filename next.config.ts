@@ -1,18 +1,19 @@
 import type { NextConfig } from "next";
 
+// Restrict the image optimizer to known image hosts. Wildcards turn the
+// optimizer into an open proxy (SSRF surface).
+const supabaseHostname = process.env.NEXT_PUBLIC_SUPABASE_URL
+  ? new URL(process.env.NEXT_PUBLIC_SUPABASE_URL).hostname
+  : undefined;
+
 const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "*",
-      },
+      ...(supabaseHostname
+        ? [{ protocol: "https" as const, hostname: supabaseHostname }]
+        : []),
     ],
   },
-  env: {
-    DATABASE_URL: process.env.DATABASE_URL,
-  },
-  allowedDevOrigins: ['192.168.50.227'],
   async rewrites() {
     return [{ source: "/@:slug", destination: "/profile/:slug" }];
   },

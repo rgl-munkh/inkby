@@ -126,50 +126,52 @@ export function AvailabilitySection() {
             <p className="text-[10px] font-semibold tracking-widest uppercase text-muted-foreground">
               Add a day
             </p>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
               <input
                 type="date"
                 value={addDate}
                 min={todayStr()}
                 onChange={(e) => { setAddDate(e.target.value); setAddError(null); }}
-                className="flex-1 h-9 rounded-xl px-3 text-xs outline-none min-w-0 cursor-pointer"
+                className="w-full sm:flex-1 h-9 rounded-xl px-3 text-xs outline-none min-w-0 cursor-pointer"
                 style={{
                   background: "var(--muted)",
                   color: "var(--foreground)",
                   border: "1px solid var(--border)",
                 }}
               />
-              <input
-                type="time"
-                value={addStart}
-                onChange={(e) => setAddStart(e.target.value)}
-                className="w-24 h-9 rounded-xl px-2 text-xs outline-none cursor-pointer"
-                style={{
-                  background: "var(--muted)",
-                  color: "var(--foreground)",
-                  border: "1px solid var(--border)",
-                }}
-              />
-              <span className="text-xs text-muted-foreground shrink-0">–</span>
-              <input
-                type="time"
-                value={addEnd}
-                onChange={(e) => setAddEnd(e.target.value)}
-                className="w-24 h-9 rounded-xl px-2 text-xs outline-none cursor-pointer"
-                style={{
-                  background: "var(--muted)",
-                  color: "var(--foreground)",
-                  border: "1px solid var(--border)",
-                }}
-              />
-              <button
-                type="button"
-                onClick={handleAdd}
-                className="shrink-0 h-9 px-3 rounded-xl text-xs font-semibold cursor-pointer transition-opacity hover:opacity-80"
-                style={{ background: "var(--foreground)", color: "var(--card)" }}
-              >
-                + Add
-              </button>
+              <div className="flex items-center gap-2">
+                <input
+                  type="time"
+                  value={addStart}
+                  onChange={(e) => setAddStart(e.target.value)}
+                  className="flex-1 min-w-0 sm:flex-none sm:w-24 h-9 rounded-xl px-2 text-xs outline-none cursor-pointer"
+                  style={{
+                    background: "var(--muted)",
+                    color: "var(--foreground)",
+                    border: "1px solid var(--border)",
+                  }}
+                />
+                <span className="text-xs text-muted-foreground shrink-0">–</span>
+                <input
+                  type="time"
+                  value={addEnd}
+                  onChange={(e) => setAddEnd(e.target.value)}
+                  className="flex-1 min-w-0 sm:flex-none sm:w-24 h-9 rounded-xl px-2 text-xs outline-none cursor-pointer"
+                  style={{
+                    background: "var(--muted)",
+                    color: "var(--foreground)",
+                    border: "1px solid var(--border)",
+                  }}
+                />
+                <button
+                  type="button"
+                  onClick={handleAdd}
+                  className="shrink-0 h-9 px-3 rounded-xl text-xs font-semibold cursor-pointer transition-opacity hover:opacity-80"
+                  style={{ background: "var(--foreground)", color: "var(--card)" }}
+                >
+                  + Add
+                </button>
+              </div>
             </div>
             {addError && (
               <p className="text-xs text-destructive">{addError}</p>

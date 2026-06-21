@@ -8,6 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { useBookingRequestDetail } from "./hooks/use-booking-request-detail";
 import { AppointmentDetailsCard } from "./components/appointment-details-card";
+import { AppointmentActions } from "./components/appointment-actions";
 import { DetailSkeleton } from "./components/detail-skeleton";
 import {
   BackIconNav,
@@ -208,7 +209,22 @@ export default function RequestDetailPage() {
                     </div>
                   </>
                 ) : (
-                  <AppointmentDetailsCard request={request} schedule={latestSchedule} />
+                  <>
+                    <AppointmentDetailsCard
+                      request={request}
+                      schedule={latestSchedule}
+                      appointment={request.appointment}
+                    />
+                    {request.appointment &&
+                      request.appointment.status !== "cancelled" &&
+                      request.status !== "cancelled" && (
+                        <AppointmentActions
+                          appointmentId={request.appointment.id}
+                          currentDatetime={request.appointment.chosenDatetime}
+                          onChanged={fetchRequest}
+                        />
+                      )}
+                  </>
                 )}
               </div>
             </div>
