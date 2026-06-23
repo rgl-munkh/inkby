@@ -145,6 +145,32 @@ export function AvailabilityPanel({
         onClick={(e) => e.stopPropagation()}
       >
         <div className="px-4 py-3 shrink-0">
+          <div className="flex justify-end mb-2">
+            <button
+              onClick={onClose}
+              className="w-8 h-8 flex items-center justify-center rounded-full cursor-pointer transition-opacity hover:opacity-70"
+              style={{
+                background: "var(--muted)",
+                color: "var(--muted-foreground)",
+              }}
+              aria-label="Close"
+            >
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                aria-hidden="true"
+              >
+                <path
+                  d="M18 6L6 18M6 6l12 12"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
+              </svg>
+            </button>
+          </div>
           <div className="flex items-center justify-between mb-3">
             <button
               onClick={prevWeek}

@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { parseAmountInput } from "@/lib/domain/money";
-import { parseDuration } from "@/lib/domain/duration";
 import {
   fetchArtistAvailability,
   scheduleBookingRequest,
@@ -20,7 +19,8 @@ export function useScheduleRequestForm({
   onScheduled: () => void;
   request: ScheduleSheetBookingRequest;
 }) {
-  const [duration, setDuration] = useState("1h30m");
+  const [durationHours, setDurationHours] = useState("1");
+  const [durationMins, setDurationMins] = useState("30");
   const [lowAmount, setLowAmount] = useState("");
   const [highAmount, setHighAmount] = useState("");
   const [dates, setDates] = useState<string[]>([""]);
@@ -54,9 +54,9 @@ export function useScheduleRequestForm({
 
   async function handleSubmit() {
     setError("");
-    const durationMinutes = parseDuration(duration);
+    const durationMinutes = Number(durationHours) * 60 + Number(durationMins);
     if (!durationMinutes) {
-      setError("Invalid duration. Use format like 1h30m, 2h, or 45m");
+      setError("Select a duration of at least a few minutes");
       return;
     }
 
@@ -108,14 +108,16 @@ export function useScheduleRequestForm({
     addDate,
     availableDates,
     dates,
-    duration,
+    durationHours,
+    durationMins,
     error,
     handleSubmit,
     highAmount,
     lowAmount,
     message,
     removeDate,
-    setDuration,
+    setDurationHours,
+    setDurationMins,
     setHighAmount,
     setLowAmount,
     setMessage,

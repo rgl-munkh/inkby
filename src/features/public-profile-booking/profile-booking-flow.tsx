@@ -26,7 +26,7 @@ export function ProfileBookingFlow({
           displayName={v.displayName}
           chosenDatetime={v.chosenDatetime}
           onOpenAvailability={() => v.setShowAvailability(true)}
-          onStartBooking={() => v.setStep(1)}
+          onStartBooking={v.startBooking}
           onPickFlash={v.pickFlashDeal}
         />
       )}

@@ -12,6 +12,7 @@ const nextConfig: NextConfig = {
       ...(supabaseHostname
         ? [{ protocol: "https" as const, hostname: supabaseHostname }]
         : []),
+      { protocol: "https" as const, hostname: "images.unsplash.com" },
     ],
   },
   async rewrites() {

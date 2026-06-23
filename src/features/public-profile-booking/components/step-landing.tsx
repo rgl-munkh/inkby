@@ -139,19 +139,13 @@ export function StepLanding({
 
       <div className="flex items-end justify-between px-6 pb-6 pt-4">
         <div className="flex items-center gap-1.5">
-          <svg
-            width="14"
-            height="14"
-            viewBox="0 0 36 36"
-            fill="none"
-            aria-hidden="true"
-          >
-            <rect width="36" height="36" rx="8" fill="#1a1a1a" />
-            <path
-              d="M18 7C18 7 11 15.5 11 21a7 7 0 0 0 14 0c0-5.5-7-14-7-14Z"
-              fill="#f5e642"
-            />
-          </svg>
+          <Image
+            src="/brand/outsider.png"
+            alt="Outsider"
+            width={14}
+            height={17}
+            className="h-4 w-auto dark:invert"
+          />
           <span className="text-xs font-bold tracking-widest uppercase text-foreground">
             INKBY
           </span>

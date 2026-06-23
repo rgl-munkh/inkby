@@ -78,11 +78,8 @@ export async function POST(
       if (state.isTerminal) {
         return badRequest("This appointment can no longer be cancelled");
       }
-      if (state.withinNoticeWindow) {
-        return badRequest(
-          `Cancellations must be made at least ${appointment.artist.cancellationNoticeHours}h in advance. Please contact the artist.`
-        );
-      }
+      // Note: cancellations are allowed inside the notice window (deposit is
+      // forfeited). The window only blocks reschedules — see the PATCH route.
     }
 
     const cancelledBy = isArtist ? "artist" : "client";

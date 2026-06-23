@@ -5,11 +5,13 @@ import Link from "next/link";
 import Image from "next/image";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/icons/spinner";
 import { useClipboardCopy } from "@/hooks/use-clipboard-copy";
 import { useArtistProfile } from "./hooks/use-artist-profile";
+import { uploadAvatar, saveAvatarUrl } from "./services/profile-client";
 import { useArtistEarnings } from "./hooks/use-artist-earnings";
 import { AvailabilitySection } from "./components/availability-section";
-import { CancellationPolicySection } from "./components/cancellation-policy-section";
+import { BookingFeeSection } from "./components/booking-fee-section";
 import { ProfileSkeleton } from "./components/profile-skeleton";
 import {
   ExternalLinkIcon,
@@ -25,10 +27,38 @@ const APP_URL = (process.env.NEXT_PUBLIC_APP_URL ?? "").replace(/\/+$/, "");
 const APP_HOST = APP_URL.replace(/^https?:\/\//, "");
 
 export default function DashboardProfilePage() {
-  const { artist, loading } = useArtistProfile();
+  const { artist, loading, setArtist } = useArtistProfile();
   const { copied, copy: copyToClipboard } = useClipboardCopy();
   const [activePeriod, setActivePeriod] = useState<Period>("MONTH");
   const { earnings, earningsLoading } = useArtistEarnings(activePeriod);
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
+  const [avatarError, setAvatarError] = useState("");
+
+  async function handleAvatarChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    e.target.value = ""; // let the same file be re-selected after an error
+    if (!file) return;
+
+    setAvatarError("");
+    setUploadingAvatar(true);
+    try {
+      const { url, error } = await uploadAvatar(file);
+      if (error || !url) {
+        setAvatarError(error ?? "Upload failed");
+        return;
+      }
+      const { error: saveError } = await saveAvatarUrl(url);
+      if (saveError) {
+        setAvatarError(saveError);
+        return;
+      }
+      setArtist((prev) => (prev ? { ...prev, avatarUrl: url } : prev));
+    } catch {
+      setAvatarError("Network error. Please try again.");
+    } finally {
+      setUploadingAvatar(false);
+    }
+  }
 
   function handleCopyLink() {
     const handle = artist?.slug ?? artist?.instagramUsername ?? "";
@@ -73,7 +103,10 @@ export default function DashboardProfilePage() {
         <div className="px-4 flex flex-col gap-4 pt-3">
 
           <div className="flex flex-col items-center gap-2 pt-2 pb-1">
-            <div className="relative w-20 h-20 rounded-full overflow-hidden shrink-0 bg-card border border-border">
+            <label
+              className="group relative w-20 h-20 rounded-full overflow-hidden shrink-0 bg-card border border-border cursor-pointer"
+              aria-label="Change profile photo"
+            >
               {artist.avatarUrl ? (
                 <Image src={artist.avatarUrl} alt={displayName} fill sizes="80px" className="object-cover" />
               ) : (
@@ -81,7 +114,26 @@ export default function DashboardProfilePage() {
                   {initials}
                 </div>
               )}
-            </div>
+              <div className="absolute inset-0 flex items-center justify-center bg-black/45 text-white opacity-0 transition-opacity group-hover:opacity-100">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
+                  <circle cx="12" cy="13" r="4" stroke="currentColor" strokeWidth="1.5" />
+                </svg>
+              </div>
+              {uploadingAvatar && (
+                <div className="absolute inset-0 flex items-center justify-center bg-black/55 text-white">
+                  <Spinner />
+                </div>
+              )}
+              <input
+                type="file"
+                accept="image/jpeg,image/png,image/gif,image/webp"
+                className="sr-only"
+                onChange={handleAvatarChange}
+                disabled={uploadingAvatar}
+              />
+            </label>
+            {avatarError && <p className="text-xs text-destructive">{avatarError}</p>}
             <p className="text-base font-bold text-foreground">{displayName}</p>
             {handle && (
               <a
@@ -120,10 +172,7 @@ export default function DashboardProfilePage() {
 
           <AvailabilitySection />
 
-          <CancellationPolicySection
-            initialNoticeHours={artist.cancellationNoticeHours}
-            initialMaxReschedules={artist.maxReschedules}
-          />
+          <BookingFeeSection initialDepositAmount={artist.depositAmount} />
 
           <div className="rounded-xl border border-border p-5 flex flex-col gap-4 bg-card">
             <div className="flex items-center justify-between">

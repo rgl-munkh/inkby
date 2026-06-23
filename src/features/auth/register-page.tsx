@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
 import {
     AuthError,
     AuthPasswordInput,
@@ -10,7 +9,6 @@ import {
     AuthSubmitButton,
     AuthSwitchLink,
     AuthTextInput,
-    GoogleAuthButton,
 } from "./auth-ui";
 
 export default function RegisterPage() {
@@ -22,7 +20,6 @@ export default function RegisterPage() {
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
-    const [googleLoading, setGoogleLoading] = useState(false);
 
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
@@ -57,27 +54,8 @@ export default function RegisterPage() {
         }
     }
 
-    async function handleGoogleSignIn() {
-        setGoogleLoading(true);
-        const supabase = createClient();
-
-        const { error } = await supabase.auth.signInWithOAuth({
-            provider: "google",
-            options: {
-                redirectTo: `${window.location.origin}/api/auth/callback?next=/onboarding`,
-            },
-        });
-
-        if (error) {
-            setError(error.message);
-            setGoogleLoading(false);
-        }
-    }
-
     return (
         <AuthShell title="Create an account" subtitle="Welcome! Glad you're here.">
-            <GoogleAuthButton loading={googleLoading} onClick={handleGoogleSignIn} />
-            <div className="h-px w-full bg-border" />
             <form onSubmit={handleSubmit} className="flex w-full flex-col gap-3">
                 <AuthTextInput
                     type="email"

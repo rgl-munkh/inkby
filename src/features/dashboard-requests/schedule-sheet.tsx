@@ -75,20 +75,28 @@ export function ScheduleSheet({
     addDate,
     availableDates,
     dates,
-    duration,
+    durationHours,
+    durationMins,
     error,
     handleSubmit,
     highAmount,
     lowAmount,
     message,
     removeDate,
-    setDuration,
+    setDurationHours,
+    setDurationMins,
     setHighAmount,
     setLowAmount,
     setMessage,
     submitting,
     updateDate,
   } = useScheduleRequestForm({ open, onOpenChange, onScheduled, request });
+
+  const selectStyle = {
+    background: "var(--card)",
+    color: "var(--foreground)",
+    border: "1px solid var(--border)",
+  } as const;
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
@@ -145,26 +153,36 @@ export function ScheduleSheet({
         </div>
 
         <div className="px-5 flex flex-col gap-4 flex-1 pb-32">
-          <div className="grid grid-cols-2 gap-3">
-            <FieldBox label="Duration">
-              <input
-                type="text"
-                value={duration}
-                onChange={(e) => setDuration(e.target.value)}
-                placeholder="1h30m"
-                className="rounded-xl px-3 h-11 placeholder:text-sm outline-none w-full"
-                style={{ background: "var(--card)", color: "var(--foreground)", border: "1px solid var(--border)" }}
-              />
-            </FieldBox>
-            <FieldBox label="Deposit">
-              <div
-                className="rounded-xl px-3 h-11 flex items-center text-sm"
-                style={{ background: "var(--card)", color: "var(--muted-foreground)", border: "1px solid var(--border)" }}
+          <FieldBox label="Duration">
+            <div className="grid grid-cols-2 gap-3">
+              <select
+                value={durationHours}
+                onChange={(e) => setDurationHours(e.target.value)}
+                className="rounded-xl px-3 h-11 text-sm outline-none cursor-pointer w-full"
+                style={selectStyle}
+                aria-label="Duration hours"
               >
-                ₮0
-              </div>
-            </FieldBox>
-          </div>
+                {Array.from({ length: 13 }, (_, h) => (
+                  <option key={h} value={h}>
+                    {h} hr{h === 1 ? "" : "s"}
+                  </option>
+                ))}
+              </select>
+              <select
+                value={durationMins}
+                onChange={(e) => setDurationMins(e.target.value)}
+                className="rounded-xl px-3 h-11 text-sm outline-none cursor-pointer w-full"
+                style={selectStyle}
+                aria-label="Duration minutes"
+              >
+                {[0, 15, 30, 45].map((m) => (
+                  <option key={m} value={m}>
+                    {m} min
+                  </option>
+                ))}
+              </select>
+            </div>
+          </FieldBox>
 
           <div>
             <Label className="mb-1 text-muted-foreground text-[10px] font-semibold">PICK SPECIFIC DATE</Label>

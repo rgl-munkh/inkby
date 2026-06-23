@@ -3,7 +3,6 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { GoogleIcon } from "@/components/icons/GoogleIcon";
 import { Spinner } from "@/components/icons/spinner";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { cn } from "@/lib/utils";
@@ -25,20 +24,14 @@ const collageImages = [
 
 export function LogoIcon() {
   return (
-    <svg
-      width="36"
-      height="36"
-      viewBox="0 0 36 36"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-hidden="true"
-    >
-      <rect width="36" height="36" rx="8" fill="#1a1a1a" />
-      <path
-        d="M18 7C18 7 11 15.5 11 21a7 7 0 0 0 14 0c0-5.5-7-14-7-14Z"
-        fill="#f5e642"
-      />
-    </svg>
+    <Image
+      src="/brand/outsider.png"
+      alt="Outsider"
+      width={56}
+      height={69}
+      priority
+      className="h-14 w-auto dark:invert"
+    />
   );
 }
 
@@ -114,26 +107,6 @@ export function AuthShell({
         </div>
       </div>
     </main>
-  );
-}
-
-export function GoogleAuthButton({
-  loading,
-  onClick,
-}: {
-  loading: boolean;
-  onClick: () => void;
-}) {
-  return (
-    <Button
-      type="button"
-      onClick={onClick}
-      disabled={loading}
-      className="h-12 w-full rounded-full border border-border bg-card px-5 text-sm font-semibold text-foreground shadow-sm hover:bg-muted"
-    >
-      <GoogleIcon />
-      {loading ? "Redirecting..." : "Continue with Google"}
-    </Button>
   );
 }
 

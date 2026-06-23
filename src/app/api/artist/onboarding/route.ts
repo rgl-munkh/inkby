@@ -1,6 +1,5 @@
 import { db } from "@/lib/db";
 import { artists } from "@/lib/db/schema";
-import { eq } from "drizzle-orm";
 import { getAuthenticatedArtist, unauthorized, badRequest, serverError } from "@/lib/auth";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
@@ -39,14 +38,23 @@ export async function PUT(request: NextRequest) {
     }
 
     const [updated] = await db
-      .update(artists)
-      .set({
+      .insert(artists)
+      .values({
+        id: user.id,
         slug,
         instagramUsername: instagram_username,
         depositAmount: String(deposit_amount),
         onboardingCompleted: true,
       })
-      .where(eq(artists.id, user.id))
+      .onConflictDoUpdate({
+        target: artists.id,
+        set: {
+          slug,
+          instagramUsername: instagram_username,
+          depositAmount: String(deposit_amount),
+          onboardingCompleted: true,
+        },
+      })
       .returning();
 
     if (!updated) {

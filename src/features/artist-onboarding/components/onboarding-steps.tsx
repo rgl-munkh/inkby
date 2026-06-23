@@ -1,10 +1,10 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Spinner } from "@/components/icons/spinner";
+import { cn } from "@/lib/utils";
 import { DEPOSIT_STEP } from "@/lib/constants";
 import {
   ArrowRightIcon,
@@ -13,6 +13,40 @@ import {
   CopyIcon,
   InstagramIcon,
 } from "./onboarding-icons";
+
+function StepHeader({
+  eyebrow,
+  title,
+  subtitle,
+}: {
+  eyebrow: string;
+  title: React.ReactNode;
+  subtitle: React.ReactNode;
+}) {
+  return (
+    <div className="text-center">
+      <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+        {eyebrow}
+      </p>
+      <h1 className="mt-2 text-4xl font-extrabold leading-tight tracking-tight text-foreground">
+        {title}
+      </h1>
+      <p className="mt-3 text-sm text-muted-foreground">{subtitle}</p>
+    </div>
+  );
+}
+
+function NextButton({ onClick }: { onClick: () => void }) {
+  return (
+    <Button
+      onClick={onClick}
+      className="flex h-12 w-full cursor-pointer items-center justify-between rounded-full bg-foreground px-6 text-xs font-semibold uppercase tracking-widest text-background hover:bg-foreground/90"
+    >
+      NEXT
+      <ArrowRightIcon />
+    </Button>
+  );
+}
 
 export function ProfileStep({
   error,
@@ -29,27 +63,31 @@ export function ProfileStep({
   onSlugChange: (value: string) => void;
   slug: string;
 }) {
+  const host = typeof window !== "undefined" ? window.location.host : "inkby.mn";
+
   return (
     <>
-      <div className="text-center">
-        <h1 className="text-4xl font-extrabold leading-tight tracking-tight text-foreground">
-          Choose your<br />Inkby username
-        </h1>
-        <p className="mt-3 text-sm text-muted-foreground">
-          Match your Inkby and Instagram handles<br />for the most seamless client experience.
-        </p>
-      </div>
+      <StepHeader
+        eyebrow="Step 1 · Profile"
+        title={
+          <>
+            Choose your<br />Inkby username
+          </>
+        }
+        subtitle={
+          <>
+            Match your Inkby and Instagram handles<br />for the most seamless client experience.
+          </>
+        }
+      />
 
-      <div className="w-full flex flex-col gap-4">
+      <div className="flex w-full flex-col gap-4">
         <div className="flex flex-col gap-1.5">
-          <Label htmlFor="instagram" className="text-muted-foreground" style={{ fontSize: "11px" }}>
+          <Label htmlFor="instagram" className="text-[11px] text-muted-foreground">
             Instagram
           </Label>
-          <div
-            className="flex items-center rounded-xl overflow-hidden"
-            style={{ background: "var(--card)", border: "1px solid var(--border)" }}
-          >
-            <span className="pl-4 pr-1 shrink-0 text-sm select-none text-muted-foreground">
+          <div className="flex h-12 items-center gap-1 overflow-hidden rounded-xl border border-border bg-card px-4 transition-colors focus-within:border-foreground/40">
+            <span className="shrink-0 select-none text-sm text-muted-foreground">
               instagram.com/
             </span>
             <Input
@@ -59,24 +97,21 @@ export function ProfileStep({
               value={instagram}
               onChange={(event) => onInstagramChange(event.target.value)}
               autoFocus
-              className="flex-1 border-0 rounded-none bg-transparent h-12 px-0 focus-visible:ring-0 focus-visible:border-0 placeholder:text-sm placeholder:text-muted-foreground text-foreground"
+              className="h-full px-2 flex-1 rounded-none border-0 !bg-transparent text-foreground placeholder:text-sm placeholder:text-muted-foreground focus-visible:border-0 focus-visible:ring-0"
             />
-            <div className="pr-4">
+            <span className="shrink-0 text-muted-foreground">
               <InstagramIcon />
-            </div>
+            </span>
           </div>
         </div>
 
         <div className="flex flex-col gap-1.5">
-          <Label htmlFor="slug" className="text-muted-foreground" style={{ fontSize: "11px" }}>
+          <Label htmlFor="slug" className="text-[11px] text-muted-foreground">
             Username
           </Label>
-          <div
-            className="flex items-center rounded-xl overflow-hidden"
-            style={{ background: "var(--card)", border: "1px solid var(--border)" }}
-          >
-            <span className="pl-4 pr-1 shrink-0 text-sm select-none text-muted-foreground">
-              {typeof window !== "undefined" ? window.location.host : "inkby.mn"}/@
+          <div className="flex h-12 items-center gap-1 overflow-hidden rounded-xl border border-border bg-card px-4 transition-colors focus-within:border-foreground/40">
+            <span className="shrink-0 select-none text-sm text-muted-foreground">
+              {host}/@
             </span>
             <Input
               id="slug"
@@ -86,25 +121,20 @@ export function ProfileStep({
               onChange={(event) => onSlugChange(event.target.value)}
               minLength={2}
               maxLength={30}
-              className="flex-1 border-0 rounded-none bg-transparent h-12 px-0 pr-4 focus-visible:ring-0 focus-visible:border-0 placeholder:text-sm placeholder:text-muted-foreground text-foreground"
+              className="h-full px-2 flex-1 rounded-none border-0 !bg-transparent text-foreground placeholder:text-sm placeholder:text-muted-foreground focus-visible:border-0 focus-visible:ring-0"
             />
           </div>
         </div>
       </div>
 
-      {error && <p className="text-xs text-center text-destructive">{error}</p>}
+      {error && <p className="text-center text-xs text-destructive">{error}</p>}
 
-      <Button
-        onClick={onNext}
-        className="w-full rounded-full h-12 text-xs font-semibold tracking-widest uppercase flex items-center justify-between px-6 cursor-pointer"
-        style={{ background: "var(--foreground)", color: "var(--card)" }}
-      >
-        NEXT
-        <ArrowRightIcon />
-      </Button>
+      <NextButton onClick={onNext} />
     </>
   );
 }
+
+const DEPOSIT_PRESETS = [50000, 100000, 150000, 200000];
 
 export function DepositStep({
   depositInput,
@@ -119,77 +149,77 @@ export function DepositStep({
   onDepositChange: (value: string) => void;
   onNext: () => void;
 }) {
+  const depositValue = parseInt(depositInput.replace(/[^0-9]/g, "") || "0", 10);
+
   return (
     <>
-      <div className="text-center">
-        <h1 className="text-4xl font-extrabold leading-tight tracking-tight text-foreground">
-          How much are<br />your deposits?
-        </h1>
-        <p className="mt-3 text-sm text-muted-foreground">
-          Appointments aren&apos;t booked until the deposit is paid.
-        </p>
-      </div>
+      <StepHeader
+        eyebrow="Step 2 · Booking"
+        title={
+          <>
+            How much are<br />your deposits?
+          </>
+        }
+        subtitle="Appointments aren't booked until the deposit is paid."
+      />
 
-      <div className="flex flex-col items-center gap-4 w-full">
+      <div className="flex w-full flex-col items-center gap-4">
         <div className="flex items-center gap-4">
           <Button
             variant="secondary"
             size="icon"
             onClick={() => onAdjustDeposit(-DEPOSIT_STEP)}
-            className="rounded-full w-10 h-10 text-lg font-bold cursor-pointer shrink-0"
-            style={{ background: "var(--muted)", color: "var(--foreground)" }}
+            className="size-10 shrink-0 cursor-pointer rounded-full bg-muted text-lg font-bold text-foreground hover:bg-muted/70"
             aria-label="Decrease"
           >
             −
           </Button>
-          <div className="flex items-baseline gap-1">
-            <span className="text-5xl font-black tracking-tight text-muted-foreground">₮</span>
+          <div className="flex items-baseline justify-center gap-1 py-10">
+            <span className="text-4xl font-black tracking-tight text-muted-foreground">₮</span>
             <Input
               type="text"
               inputMode="numeric"
               value={depositInput}
               onChange={(event) => onDepositChange(event.target.value)}
-              className="text-4xl font-black tracking-tight border-0 bg-transparent focus-visible:ring-0 focus-visible:border-0 w-44 text-center h-auto p-0 placeholder:text-sm placeholder:text-muted-foreground text-foreground"
+              className="w-auto border-0 !bg-transparent p-0 text-center !text-3xl font-black tracking-tight text-foreground [field-sizing:content] focus-visible:border-0 focus-visible:ring-0"
             />
           </div>
           <Button
             variant="secondary"
             size="icon"
             onClick={() => onAdjustDeposit(DEPOSIT_STEP)}
-            className="rounded-full w-10 h-10 text-lg font-bold cursor-pointer shrink-0"
-            style={{ background: "var(--muted)", color: "var(--foreground)" }}
+            className="size-10 shrink-0 cursor-pointer rounded-full bg-muted text-lg font-bold text-foreground hover:bg-muted/70"
             aria-label="Increase"
           >
             +
           </Button>
         </div>
 
-        <Badge
-          variant="secondary"
-          className="rounded-full px-4 py-1.5 text-sm font-medium h-auto"
-          style={{ background: "var(--muted)", color: "var(--foreground)" }}
-        >
-          MNT ₮
-        </Badge>
-
-        <p
-          className="text-xs text-center rounded-xl px-4 py-3 w-full"
-          style={{ background: "var(--muted)", color: "var(--muted-foreground)" }}
-        >
-          Most tattoo artists charge ₮100,000 deposits
-        </p>
+        <div className="flex flex-wrap justify-center gap-2">
+          {DEPOSIT_PRESETS.map((preset) => {
+            const isActive = depositValue === preset;
+            return (
+              <button
+                key={preset}
+                type="button"
+                onClick={() => onDepositChange(String(preset))}
+                className={cn(
+                  "cursor-pointer rounded-full border px-4 py-1.5 text-sm font-medium transition-colors",
+                  isActive
+                    ? "border-foreground bg-foreground text-background"
+                    : "border-border text-muted-foreground hover:bg-muted",
+                )}
+              >
+                ₮{preset / 1000}k
+              </button>
+            );
+          })}
+        </div>
       </div>
 
-      {error && <p className="text-xs text-center text-destructive">{error}</p>}
+      {error && <p className="text-center text-xs text-destructive">{error}</p>}
 
-      <Button
-        onClick={onNext}
-        className="w-full rounded-full h-12 text-xs font-semibold tracking-widest uppercase flex items-center justify-between px-6 cursor-pointer"
-        style={{ background: "var(--foreground)", color: "var(--card)" }}
-      >
-        NEXT
-        <ArrowRightIcon />
-      </Button>
+      <NextButton onClick={onNext} />
     </>
   );
 }
@@ -211,74 +241,59 @@ export function LinkStep({
   profileLink: string;
   slug: string;
 }) {
+  const host = typeof window !== "undefined" ? window.location.host : "inkby.mn";
+
   return (
-    <div className="w-full rounded-2xl overflow-hidden flex flex-col sm:flex-row" style={{ minHeight: 340 }}>
-      <div
-        className="flex flex-col items-center justify-center gap-3 p-8 flex-1"
-        style={{ background: "var(--muted)" }}
-      >
-        <div
-          className="w-20 h-20 rounded-full flex items-center justify-center"
-          style={{ background: "var(--muted)" }}
-        >
+    <div className="flex w-full flex-col overflow-hidden rounded-2xl border border-border sm:flex-row sm:min-h-[340px]">
+      <div className="flex flex-1 flex-col items-center justify-center gap-3 bg-muted p-8">
+        <div className="flex size-20 items-center justify-center rounded-full border border-border bg-card text-muted-foreground">
           <CameraIcon />
         </div>
         <div className="text-center">
-          <p className="font-semibold text-base text-foreground">@{slug}</p>
-          <p className="text-xs mt-0.5 text-muted-foreground">
-            {typeof window !== "undefined" ? window.location.host : "inkby.mn"}/{slug}
+          <p className="text-base font-semibold text-foreground">@{slug}</p>
+          <p className="mt-0.5 text-xs text-muted-foreground">
+            {host}/{slug}
           </p>
         </div>
       </div>
 
-      <div
-        className="flex flex-col items-center justify-center gap-5 p-8 flex-1"
-        style={{ background: "var(--foreground)" }}
-      >
+      <div className="flex flex-1 flex-col items-center justify-center gap-5 bg-foreground p-8">
         <div className="text-center">
           <h2 className="text-2xl font-extrabold leading-tight text-background">
             Your new<br />link in bio
           </h2>
-          <p className="mt-2 text-xs text-muted-foreground">
+          <p className="mt-2 text-xs text-background/70">
             Drop your new booking link in your IG,<br />
             TikTok, newsletter, whatever, and<br />
             watch your requests roll in.
           </p>
         </div>
 
-        <div
-          className="flex items-center gap-2 rounded-full pl-4 pr-1 py-1 w-full"
-          style={{ background: "#18181b" }}
-        >
-          <span className="text-xs font-medium flex-1 truncate text-zinc-300">
+        <div className="flex w-full items-center gap-2 rounded-full bg-background py-1 pl-4 pr-1">
+          <span className="flex-1 truncate text-xs font-medium text-muted-foreground">
             {profileLink}
           </span>
           <Button
             onClick={onCopy}
             size="sm"
-            className="rounded-full flex items-center gap-1.5 px-3 text-xs font-medium cursor-pointer shrink-0 h-7"
-            style={{
-              background: copied ? "#2d6a4f" : "#27272a",
-              color: copied ? "#95d5b2" : "#d4d4d8",
-            }}
+            className={cn(
+              "h-7 shrink-0 cursor-pointer rounded-full px-3 text-xs font-medium",
+              copied
+                ? "bg-primary text-primary-foreground hover:bg-primary/90"
+                : "bg-muted text-foreground hover:bg-muted/70",
+            )}
           >
             {copied ? <CheckIcon /> : <CopyIcon />}
             {copied ? "Copied!" : "Copy"}
           </Button>
         </div>
 
-        {error && <p className="text-xs text-center text-destructive">{error}</p>}
+        {error && <p className="text-center text-xs text-destructive">{error}</p>}
 
         <Button
           onClick={onFinish}
           disabled={loading}
-          variant="outline"
-          className="w-full rounded-full h-11 text-xs font-semibold tracking-widest uppercase flex items-center justify-center gap-2 cursor-pointer"
-          style={{
-            background: "var(--card)",
-            color: "var(--foreground)",
-            borderColor: "var(--card)",
-          }}
+          className="flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-full bg-background text-xs font-semibold uppercase tracking-widest text-foreground hover:bg-background/90"
         >
           {loading && <Spinner />}
           LET&apos;S GET STARTED

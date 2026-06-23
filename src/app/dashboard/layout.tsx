@@ -29,7 +29,7 @@ export default async function DashboardLayout({
     },
   });
 
-  if (!artist) redirect("/login");
+  if (!artist) redirect("/onboarding");
   if (!artist.onboardingCompleted) redirect("/onboarding");
 
   return (

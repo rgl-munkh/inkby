@@ -135,7 +135,7 @@ export default function ClientBookingPage() {
               isCancelled={!!isCancelled}
               canReschedule={!!policy?.clientCanReschedule}
               canCancel={!!policy?.clientCanCancel}
-              withinNoticeWindow={!!policy && !policy.clientCanCancel && policy.withinNoticeWindow}
+              withinNoticeWindow={!!policy && policy.withinNoticeWindow && !policy.clientCanReschedule}
               noticeHours={artist.cancellationNoticeHours}
               schedule={schedule}
               artistHandle={artistHandle}

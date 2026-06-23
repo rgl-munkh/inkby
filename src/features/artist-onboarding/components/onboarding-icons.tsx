@@ -1,9 +1,9 @@
 export function InstagramIcon() {
   return (
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <rect x="2" y="2" width="20" height="20" rx="5" stroke="#b0aca6" strokeWidth="1.5" />
-      <circle cx="12" cy="12" r="4" stroke="#b0aca6" strokeWidth="1.5" />
-      <circle cx="17.5" cy="6.5" r="1" fill="#b0aca6" />
+      <rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" strokeWidth="1.5" />
+      <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="1.5" />
+      <circle cx="17.5" cy="6.5" r="1" fill="currentColor" />
     </svg>
   );
 }
@@ -13,11 +13,20 @@ export function CameraIcon() {
     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <path
         d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"
-        stroke="#b0aca6"
+        stroke="currentColor"
         strokeWidth="1.5"
         strokeLinejoin="round"
       />
-      <circle cx="12" cy="13" r="4" stroke="#b0aca6" strokeWidth="1.5" />
+      <circle cx="12" cy="13" r="4" stroke="currentColor" strokeWidth="1.5" />
+    </svg>
+  );
+}
+
+export function MailIcon() {
+  return (
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect x="2" y="4" width="20" height="16" rx="2" stroke="currentColor" strokeWidth="1.5" />
+      <path d="M2 8l10 6 10-6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
     </svg>
   );
 }

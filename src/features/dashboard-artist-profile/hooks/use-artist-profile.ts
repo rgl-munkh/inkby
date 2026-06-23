@@ -15,5 +15,5 @@ export function useArtistProfile() {
       .finally(() => setLoading(false));
   }, []);
 
-  return { artist, loading };
+  return { artist, loading, setArtist };
 }

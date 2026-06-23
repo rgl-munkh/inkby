@@ -241,7 +241,7 @@ export function AppointmentTab({
           )}
           {withinNoticeWindow && (
             <p className="text-xs text-center text-muted-foreground">
-              Changes must be made at least {noticeHours}h in advance. Please contact {artistHandle} directly.
+              Reschedules must be made at least {noticeHours}h in advance. Please contact {artistHandle} directly to make changes.
             </p>
           )}
         </div>

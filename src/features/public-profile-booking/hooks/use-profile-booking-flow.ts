@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import type { Artist, FlashDeal } from "../types";
 import { mapTattooSizeToApi } from "../lib/map-tattoo-size";
 import {
@@ -42,6 +42,13 @@ export function useProfileBookingFlow({
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const displayName = artist?.displayName ?? artist?.instagramUsername ?? slug;
+
+  // Reset window scroll on every step change. Steps share one window-scrolled
+  // container, so without this, advancing from a tall step (e.g. tattoo details)
+  // leaves the next step scrolled off-screen on mobile.
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }, [step]);
 
   async function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
     const files = Array.from(e.target.files ?? []);
@@ -88,9 +95,13 @@ export function useProfileBookingFlow({
     try {
       const uploadedUrls = await uploadPhotos();
       setPhotoUrls(uploadedUrls);
-      const photo_urls = selectedFlashPhotoUrl
-        ? [selectedFlashPhotoUrl, ...uploadedUrls]
-        : uploadedUrls;
+      const photo_urls = Array.from(
+        new Set(
+          selectedFlashPhotoUrl
+            ? [selectedFlashPhotoUrl, ...uploadedUrls]
+            : uploadedUrls,
+        ),
+      );
 
       const result = await createBookingRequest({
         artist_id: artist.id,
@@ -125,11 +136,17 @@ export function useProfileBookingFlow({
     }
   }
 
+  function startBooking() {
+    setSelectedFlashPhotoUrl(null);
+    setStep(1);
+  }
+
   function resetAfterSuccess() {
     setStep(0);
     setFirstName(""); setLastName(""); setPhone(""); setEmail("");
     setIdea(""); setPhotoFiles([]); setPhotoUrls([]);
     setSize(""); setPlacement(""); setError("");
+    setSelectedFlashPhotoUrl(null);
   }
 
   function pickFlashDeal(deal: FlashDeal) {
@@ -172,6 +189,7 @@ export function useProfileBookingFlow({
     submitting,
     error,
     setError,
+    startBooking,
     fileInputRef,
     handlePhotoChange,
     removePhoto,

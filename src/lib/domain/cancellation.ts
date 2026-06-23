@@ -49,8 +49,12 @@ export function getCancellationState(
     input.maxReschedules - input.rescheduleCount
   );
 
-  const clientCanCancel = !isTerminal && !isPast && !withinNoticeWindow;
-  const clientCanReschedule = clientCanCancel && reschedulesLeft > 0;
+  // Cancelling is allowed for any active (non-terminal, upcoming) appointment —
+  // a late cancel simply forfeits the deposit. The notice window only restricts
+  // self-service *reschedules*.
+  const clientCanCancel = !isTerminal && !isPast;
+  const clientCanReschedule =
+    clientCanCancel && !withinNoticeWindow && reschedulesLeft > 0;
 
   return {
     hoursUntil,

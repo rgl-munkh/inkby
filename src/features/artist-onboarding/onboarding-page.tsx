@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useOnboardingFlow } from "./hooks/use-onboarding-flow";
 import { StepIndicator } from "./components/step-indicator";
 import { DepositStep, LinkStep, ProfileStep } from "./components/onboarding-steps";
+import { MailIcon } from "./components/onboarding-icons";
 
 const collageImages = [
   {
@@ -39,36 +40,42 @@ export default function OnboardingPage() {
       </div>
 
       <div className="flex flex-1 flex-col">
-        <div className="flex items-center justify-between px-8 py-4">
-          {flow.userEmail ? (
-            <span className="text-xs flex items-center gap-1.5 text-muted-foreground">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <rect x="2" y="4" width="20" height="16" rx="2" stroke="#8a8680" strokeWidth="1.5" />
-                <path d="M2 8l10 6 10-6" stroke="#8a8680" strokeWidth="1.5" strokeLinecap="round" />
-              </svg>
-              {flow.userEmail}
-            </span>
-          ) : (
-            <span />
-          )}
+        <div className="flex items-center justify-between gap-3 px-6 py-4 sm:px-8">
+          <div className="flex items-center gap-2.5">
+            <Image
+              src="/brand/outsider.png"
+              alt="Outsider"
+              width={28}
+              height={34}
+              priority
+              className="h-7 w-auto dark:invert"
+            />
+            {flow.userEmail && (
+              <span className="hidden items-center gap-1.5 text-xs text-muted-foreground sm:flex">
+                <MailIcon />
+                {flow.userEmail}
+              </span>
+            )}
+          </div>
           <Button
             variant="outline"
             size="sm"
             onClick={flow.handleLogout}
-            className="rounded-full text-xs tracking-widest uppercase px-4 cursor-pointer"
-            style={{
-              borderColor: "var(--border)",
-              color: "var(--foreground)",
-              background: "transparent",
-            }}
+            className="cursor-pointer rounded-full border-border bg-transparent px-4 text-xs uppercase tracking-widest text-foreground hover:bg-muted"
           >
             LOGOUT
           </Button>
         </div>
 
         <div className="flex flex-1 flex-col items-center justify-center px-6 py-8">
-          <div className="flex flex-col items-center gap-8 w-full max-w-md">
-            <StepIndicator current={flow.step} />
+          <div
+            className={`flex w-full flex-col items-center gap-8 transition-[max-width] duration-300 ${
+              flow.step === 3 ? "max-w-2xl" : "max-w-md"
+            }`}
+          >
+            <div className="w-full max-w-md">
+              <StepIndicator current={flow.step} />
+            </div>
 
             {flow.step === 1 && (
               <ProfileStep

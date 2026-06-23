@@ -33,11 +33,14 @@ function sniffImageType(
   return null;
 }
 
+// reference-photos is uploaded by the public booking wizard (no session yet),
+// so it's the one bucket that allows unauthenticated uploads. Artist-owned
+// buckets still require a session.
+const PUBLIC_BUCKETS = ["reference-photos"];
+const ARTIST_BUCKETS = ["flash-deal-photos", "avatars"];
+
 export async function POST(request: NextRequest) {
   try {
-    const { user, error: authError } = await getAuthenticatedArtist();
-    if (authError || !user) return unauthorized();
-
     const formData = await request.formData();
     const file = formData.get("file") as File | null;
     const bucket = formData.get("bucket") as string | null;
@@ -50,9 +53,15 @@ export async function POST(request: NextRequest) {
       return badRequest("bucket is required (reference-photos, flash-deal-photos, avatars)");
     }
 
-    const validBuckets = ["reference-photos", "flash-deal-photos", "avatars"];
-    if (!validBuckets.includes(bucket)) {
-      return badRequest(`Invalid bucket. Must be one of: ${validBuckets.join(", ")}`);
+    if (![...PUBLIC_BUCKETS, ...ARTIST_BUCKETS].includes(bucket)) {
+      return badRequest(
+        `Invalid bucket. Must be one of: ${[...PUBLIC_BUCKETS, ...ARTIST_BUCKETS].join(", ")}`
+      );
+    }
+
+    if (!PUBLIC_BUCKETS.includes(bucket)) {
+      const { user, error: authError } = await getAuthenticatedArtist();
+      if (authError || !user) return unauthorized();
     }
 
     const maxSize = 10 * 1024 * 1024; // 10MB

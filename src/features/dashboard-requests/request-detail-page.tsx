@@ -29,14 +29,22 @@ export default function RequestDetailPage() {
   const [activeTab, setActiveTab] = useState("appointment");
   const [sheetOpen, setSheetOpen] = useState(false);
 
-  const photo = request?.photos?.[0]?.photoUrl;
+  const photos = request?.photos ?? [];
+  const [photoIndex, setPhotoIndex] = useState(0);
+  const currentPhoto = photos[photoIndex]?.photoUrl;
   const latestSchedule = request?.schedules?.[0] ?? null;
   const isPending = request?.status === "pending";
 
+  function handlePhotoScroll(e: React.UIEvent<HTMLDivElement>) {
+    const el = e.currentTarget;
+    const i = Math.round(el.scrollLeft / el.clientWidth);
+    if (i !== photoIndex) setPhotoIndex(i);
+  }
+
   function handleDownload() {
-    if (!photo) return;
+    if (!currentPhoto) return;
     const a = document.createElement("a");
-    a.href = photo;
+    a.href = currentPhoto;
     a.download = "reference.jpg";
     a.target = "_blank";
     a.click();
@@ -101,15 +109,24 @@ export default function RequestDetailPage() {
           ) : (
             <div className="flex flex-col">
               <div className="relative w-full h-72 bg-muted border-b border-border">
-                {photo ? (
-                  <Image
-                    src={photo}
-                    alt="Reference"
-                    fill
-                    priority
-                    sizes="(max-width: 640px) 100vw, 576px"
-                    className="object-cover"
-                  />
+                {photos.length > 0 ? (
+                  <div
+                    onScroll={handlePhotoScroll}
+                    className="flex h-full w-full overflow-x-auto snap-x snap-mandatory [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+                  >
+                    {photos.map((p, i) => (
+                      <div key={p.id} className="relative h-full w-full shrink-0 snap-center">
+                        <Image
+                          src={p.photoUrl}
+                          alt={`Reference ${i + 1}`}
+                          fill
+                          priority={i === 0}
+                          sizes="(max-width: 640px) 100vw, 576px"
+                          className="object-cover"
+                        />
+                      </div>
+                    ))}
+                  </div>
                 ) : (
                   <div className="w-full h-full flex items-center justify-center">
                     <svg width="40" height="40" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -119,7 +136,23 @@ export default function RequestDetailPage() {
                     </svg>
                   </div>
                 )}
-                {photo && (
+
+                {photos.length > 1 && (
+                  <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
+                    {photos.map((p, i) => (
+                      <span
+                        key={p.id}
+                        className="h-1.5 rounded-full transition-all"
+                        style={{
+                          width: i === photoIndex ? 18 : 6,
+                          background: i === photoIndex ? "#fff" : "rgba(255,255,255,0.5)",
+                        }}
+                      />
+                    ))}
+                  </div>
+                )}
+
+                {currentPhoto && (
                   <div className="absolute top-3 right-3 flex gap-2">
                     <button
                       onClick={handleDownload}
@@ -130,7 +163,7 @@ export default function RequestDetailPage() {
                       <DownloadIcon />
                     </button>
                     <button
-                      onClick={() => navigator.share?.({ url: photo })}
+                      onClick={() => navigator.share?.({ url: currentPhoto })}
                     className="w-8 h-8 rounded-full flex items-center justify-center border border-white/20 transition-opacity hover:opacity-80 cursor-pointer"
                       style={{ background: "rgba(0,0,0,0.55)", color: "white" }}
                       aria-label="Share photo"
